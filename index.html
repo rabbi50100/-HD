@@ -20,7 +20,7 @@
     <!-- Robots Meta Tag -->
     <meta name="robots" content="index, follow">
 
-    <!-- Canonical URL (সংশোধিত) -->
+    <!-- Canonical URL -->
     <link rel="canonical" href="https://hindimovie.netlify.app/" />
 
     <!-- Open Graph / Facebook -->
@@ -67,384 +67,7 @@
 
   <style>
     /* আপনার সকল CSS কোড এখানে অপরিবর্তিত থাকবে */
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      background-color: #111;
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    body.loading {
-        overflow: hidden;
-    }
-
-    body.loading > *:not(#loader) {
-        display: none;
-    }
-
-    /* --- Professional Header Styling --- */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      background-color: #1a1a1a;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-      border-bottom: 2px solid orange;
-    }
-
-    header h1 {
-      color: orange;
-      font-size: 28px;
-      font-weight: bold;
-      margin: 0;
-      letter-spacing: 1px;
-      text-shadow: 0 0 5px rgba(255,165,0,0.7);
-    }
-
-    /* --- Category Filter Styling --- */
-    .category-filters {
-      text-align: center;
-      margin: 20px 0;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 0 10px;
-    }
-    .category-filters button {
-      background-color: #333;
-      color: orange;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.3s ease;
-      white-space: nowrap;
-    }
-    .category-filters button:hover {
-      background-color: #555;
-    }
-    .category-filters button.active {
-      background-color: orange;
-      color: black;
-    }
-
-    /* --- Saved Posts Button Styling --- */
-    #saved-posts-button {
-      font-size: 16px;
-      cursor: pointer;
-      color: orange;
-      border: 1px solid orange;
-      background: none;
-      padding: 8px 15px;
-      border-radius: 5px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      font-weight: bold;
-    }
-
-    #saved-posts-button:hover {
-      background-color: orange;
-      color: #1a1a1a;
-    }
-
-
-    #search-bar {
-      margin: 20px auto;
-      max-width: 600px;
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background-color: #222;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-
-    .movie-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      max-width: 600px;
-      margin: 20px auto;
-    }
-
-    .movie-card {
-      background-color: #222;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.2s;
-      position: relative;
-    }
-
-    .movie-card:hover {
-      transform: scale(1.03);
-    }
-
-    .movie-card img {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .movie-title {
-      padding: 10px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .more-options-btn {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        font-size: 24px;
-        cursor: pointer;
-        color: orange;
-        background: none;
-        border: none;
-        padding: 2px 8px;
-        line-height: 1;
-        z-index: 10;
-    }
-
-    .options-menu {
-        display: none;
-        position: absolute;
-        top: 35px;
-        right: 8px;
-        background-color: #333;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.7);
-        z-index: 11;
-        padding: 5px 0;
-        min-width: 120px;
-        text-align: left;
-    }
-
-    .options-menu a {
-        display: block;
-        padding: 8px 15px;
-        color: white;
-        text-decoration: none;
-        font-size: 14px;
-        transition: background-color 0.2s;
-    }
-
-    .options-menu a:hover {
-        background-color: #555;
-    }
-
-    #savedPostsModal .modal-content {
-        background-color: #222;
-        text-align: left;
-        max-width: 600px;
-        padding: 20px;
-    }
-    #savedPostsModal h2 {
-        color: orange;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    #savedPostsModal .thumbnails-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 10px;
-    }
-    #savedPostsModal .thumbnail-item {
-        position: relative;
-        cursor: pointer;
-        border-radius: 5px;
-        overflow: hidden;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    #savedPostsModal .thumbnail-item:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 15px orange;
-    }
-    #savedPostsModal .thumbnail-item img {
-        width: 100%;
-        height: 120px;
-        object-fit: cover;
-        display: block;
-    }
-    #savedPostsModal .thumbnail-item .title {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(0,0,0,0.7);
-        color: white;
-        font-size: 12px;
-        padding: 5px;
-        text-align: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    #savedPostsModal .remove-saved {
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        cursor: pointer;
-        color: red;
-        font-size: 18px;
-        background: rgba(0,0,0,0.5);
-        border-radius: 50%;
-        width: 22px;
-        height: 22px;
-        line-height: 22px;
-        text-align: center;
-        z-index: 10;
-    }
-    #savedPostsModal .no-posts {
-        text-align: center;
-        color: #ccc;
-        padding: 20px;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.7);
-    }
-
-    .modal-content {
-      background-color: #222;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    .modal-content img {
-      width: 100%;
-      border-radius: 10px;
-    }
-
-    .modal-content h3 {
-      margin: 15px 0;
-      color: orange;
-    }
-
-    .modal-content a {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: orange;
-      color: black;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 5px;
-      margin-top: 10px;
-    }
-
-    .modal-content a:hover {
-      background-color: darkorange;
-    }
-
-    .close {
-      float: right;
-      font-size: 20px;
-      color: white;
-      cursor: pointer;
-    }
-
-    #loader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.8);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10000;
-        flex-direction: column;
-    }
-
-    .spinner {
-        border: 6px solid #f3f3f3;
-        border-top: 6px solid orange;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-        margin-bottom: 20px;
-    }
-    #loader p {
-        color: orange;
-        font-size: 18px;
-        margin: 0;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    .privacy-policy {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 30px;
-      background-color: #222;
-      border-radius: 10px;
-      color: #fff;
-      line-height: 1.6;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
-
-    .privacy-policy h2, .privacy-policy h3 {
-      color: orange;
-    }
-    /* ...বাকি সব CSS অপরিবর্তিত... */
-    .movie-stats {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        padding: 8px 0;
-        border-top: 1px solid #333;
-        margin-top: 5px;
-        font-size: 14px;
-    }
-
-    .download-buttons {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-        margin-top: 20px;
-    }
-    .download-buttons a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 15px;
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        border-radius: 8px;
-        transition: background-color 0.3s ease;
-        font-size: 16px;
-        gap: 8px;
-    }
-    .download-buttons a.watch-button { background-color: #d9534f; }
-    .download-buttons a.watch-button:hover { background-color: #c9302c; }
-    .download-buttons a.download-button { background-color: #5cb85c; }
-    .download-buttons a.download-button:hover { background-color: #4cae4c; }
+    body{margin:0;padding:20px;font-family:Arial,sans-serif;background-color:#111;color:#fff;overflow-x:hidden}body.loading{overflow:hidden}body.loading>*:not(#loader){display:none}header{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background-color:#1a1a1a;box-shadow:0 2px 10px rgba(0,0,0,.5);border-bottom:2px solid orange}header h1{color:orange;font-size:28px;font-weight:700;margin:0;letter-spacing:1px;text-shadow:0 0 5px rgba(255,165,0,.7)}.category-filters{text-align:center;margin:20px 0;display:flex;justify-content:center;flex-wrap:wrap;gap:8px;padding:0 10px}.category-filters button{background-color:#333;color:orange;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;font-size:14px;transition:background-color .3s ease;white-space:nowrap}.category-filters button:hover{background-color:#555}.category-filters button.active{background-color:orange;color:#000}#saved-posts-button{font-size:16px;cursor:pointer;color:orange;border:1px solid orange;background:0 0;padding:8px 15px;border-radius:5px;transition:background-color .3s ease,color .3s ease;font-weight:700}#saved-posts-button:hover{background-color:orange;color:#1a1a1a}#search-bar{margin:20px auto;max-width:600px;display:block;width:100%;padding:10px;background-color:#222;color:#fff;border:none;border-radius:6px;font-size:16px}.movie-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;max-width:600px;margin:20px auto}.movie-card{background-color:#222;border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .2s;position:relative}.movie-card:hover{transform:scale(1.03)}.movie-card img{width:100%;height:280px;object-fit:cover;display:block}.movie-title{padding:10px;text-align:center;font-weight:700}.more-options-btn{position:absolute;top:8px;right:8px;font-size:24px;cursor:pointer;color:orange;background:0 0;border:none;padding:2px 8px;line-height:1;z-index:10}.options-menu{display:none;position:absolute;top:35px;right:8px;background-color:#333;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,.7);z-index:11;padding:5px 0;min-width:120px;text-align:left}.options-menu a{display:block;padding:8px 15px;color:#fff;text-decoration:none;font-size:14px;transition:background-color .2s}.options-menu a:hover{background-color:#555}#savedPostsModal .modal-content{background-color:#222;text-align:left;max-width:600px;padding:20px}#savedPostsModal h2{color:orange;text-align:center;margin-bottom:20px}#savedPostsModal .thumbnails-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}#savedPostsModal .thumbnail-item{position:relative;cursor:pointer;border-radius:5px;overflow:hidden;transition:transform .2s,box-shadow .2s}#savedPostsModal .thumbnail-item:hover{transform:scale(1.05);box-shadow:0 0 15px orange}#savedPostsModal .thumbnail-item img{width:100%;height:120px;object-fit:cover;display:block}#savedPostsModal .thumbnail-item .title{position:absolute;bottom:0;left:0;right:0;background-color:rgba(0,0,0,.7);color:#fff;font-size:12px;padding:5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#savedPostsModal .remove-saved{position:absolute;top:2px;right:2px;cursor:pointer;color:red;font-size:18px;background:rgba(0,0,0,.5);border-radius:50%;width:22px;height:22px;line-height:22px;text-align:center;z-index:10}#savedPostsModal .no-posts{text-align:center;color:#ccc;padding:20px}.modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,.7)}.modal-content{background-color:#222;margin:10% auto;padding:20px;border-radius:10px;width:90%;max-width:400px;text-align:center}.modal-content img{width:100%;border-radius:10px}.modal-content h3{margin:15px 0;color:orange}.modal-content a{display:inline-block;padding:10px 20px;background-color:orange;color:#000;text-decoration:none;font-weight:700;border-radius:5px;margin-top:10px}.modal-content a:hover{background-color:darkorange}.close{float:right;font-size:20px;color:#fff;cursor:pointer}#loader{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:10000;flex-direction:column}.spinner{border:6px solid #f3f3f3;border-top:6px solid orange;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin-bottom:20px}#loader p{color:orange;font-size:18px;margin:0}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.privacy-policy{max-width:800px;margin:40px auto;padding:30px;background-color:#222;border-radius:10px;color:#fff;line-height:1.6;box-shadow:0 4px 15px rgba(0,0,0,.5)}.privacy-policy h2,.privacy-policy h3{color:orange}.footer-links{text-align:center;margin-top:30px;margin-bottom:20px}.footer-links a{color:orange;text-decoration:none;margin:0 10px;font-size:16px}.footer-links a:hover{text-decoration:underline}.movie-views{display:flex;justify-content:center;padding:5px 0;font-size:12px;color:#bbb;border-top:1px solid #333;margin-top:5px}.movie-views p{margin:0;display:flex;align-items:center;gap:5px}.movie-actions{text-align:center;padding:8px 0;border-top:1px solid #333;margin-top:5px}.like-btn{background:0 0;border:none;color:orange;font-size:16px;cursor:pointer;display:flex;align-items:center;gap:5px;margin:0 auto;padding:5px 10px;border-radius:5px;transition:background-color .3s ease}.like-btn:hover{background-color:#333}.like-btn:active{color:red}.movie-stats{display:flex;justify-content:space-around;align-items:center;padding:8px 0;border-top:1px solid #333;margin-top:5px;font-size:14px}.download-buttons{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin-top:20px}.download-buttons a{display:flex;align-items:center;justify-content:center;padding:12px 15px;color:#fff;text-decoration:none;font-weight:700;border-radius:8px;transition:background-color .3s ease;font-size:16px;gap:8px}.download-buttons a.watch-button{background-color:#d9534f}.download-buttons a.watch-button:hover{background-color:#c9302c}.download-buttons a.download-button{background-color:#5cb85c}.download-buttons a.download-button:hover{background-color:#4cae4c}
   </style>
 </head>
 <body>
@@ -485,7 +108,7 @@
   <div class="movie-grid" id="movie-grid"></div>
 
   <div id="privacy-policy-section" class="privacy-policy" style="display: none;">
-    <!-- প্রাইভেসি পলিসির কন্টেন্ট এখানে থাকবে -->
+    <!-- আপনার প্রাইভেসি পলিসির কন্টেন্ট এখানে যোগ করুন -->
   </div>
 
   <div class="footer-links">
@@ -519,8 +142,8 @@
     const mainContent = [document.querySelector('header'), document.querySelector('.category-filters'), document.getElementById('search-bar'), movieGrid];
 
     // --- গ্লোবাল ভ্যারিয়েবল ---
-    let allMovieData = {}; // সমস্ত মুভির ডেটা slug দিয়ে এখানে লোড হবে
-    let allMovieElements = {}; // সমস্ত মুভি কার্ডের এলিমেন্ট
+    let allMovieData = {};
+    let allMovieElements = {};
     let currentCategoryFilter = 'all';
 
     // --- Helper Functions ---
@@ -541,12 +164,10 @@
         document.querySelector('meta[name="title"]').setAttribute('content', fullTitle);
         document.querySelector('meta[name="description"]').setAttribute('content', description);
         document.querySelector('link[rel="canonical"]').setAttribute('href', url);
-        
         document.querySelector('meta[property="og:title"]').setAttribute('content', fullTitle);
         document.querySelector('meta[property="og:description"]').setAttribute('content', description);
         document.querySelector('meta[property="og:image"]').setAttribute('content', image);
         document.querySelector('meta[property="og:url"]').setAttribute('content', url);
-        
         document.querySelector('meta[property="twitter:title"]').setAttribute('content', fullTitle);
         document.querySelector('meta[property="twitter:description"]').setAttribute('content', description);
         document.querySelector('meta[property="twitter:image"]').setAttribute('content', image);
@@ -573,7 +194,6 @@
     // --- প্রধান ডেটা লোডিং এবং অ্যাপ ইনিশিয়ালাইজেশন ---
     document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('loading');
-        
         moviesRef.orderByChild('timestamp').once('value', (snapshot) => {
             document.body.classList.remove('loading');
             loader.style.display = 'none';
@@ -593,9 +213,7 @@
             } else {
                  movieGrid.innerHTML = '<p style="text-align:center;">No movies found.</p>';
             }
-
             handleRouteChange();
-
         }, (error) => {
             document.body.classList.remove('loading');
             loader.style.display = 'none';
@@ -625,18 +243,27 @@
         <div class="movie-title">${title}</div>
         <div style="text-align:center; font-size: 14px; color: orange;">[${category || 'Other'}]</div>
         <div class="movie-stats">
-          <div class="movie-views"><p>👁️ ${viewCount || 0}</p></div>
-          <div class="movie-actions"><button class="like-btn" title="Like Movie" onclick="toggleLike(event, '${key}')">❤️ <span>${likeCount || 0}</span></button></div>
+          <div class="movie-views"><p>👁️ <span id="views-${key}">${viewCount || 0}</span></p></div>
+          <div class="movie-actions"><button class="like-btn" title="Like Movie" onclick="toggleLike(event, '${key}')">❤️ <span id="likes-${key}">${likeCount || 0}</span></button></div>
         </div>
       `;
       movieGrid.appendChild(card);
       allMovieElements[key] = card;
+
+      database.ref('movies/' + key).on('value', (snapshot) => {
+        const updatedData = snapshot.val();
+        if (updatedData) {
+            const viewsElement = document.getElementById(`views-${key}`);
+            const likesElement = document.getElementById(`likes-${key}`);
+            if (viewsElement) viewsElement.innerText = updatedData.viewCount || 0;
+            if (likesElement) likesElement.innerText = updatedData.likeCount || 0;
+        }
+      });
     }
 
     function openViewer(slug, isDirectLoad = false) {
         const movieData = allMovieData[slug];
         if (!movieData) {
-            console.error("Movie not found for slug:", slug);
             window.location.href = '/'; 
             return;
         }
@@ -644,7 +271,6 @@
         const { key, title, image, link, link2, link3, category } = movieData;
         const viewerContent = document.getElementById('viewerContent');
         let viewerDownloadButtons = '';
-      
         if (link) viewerDownloadButtons += `<a href="${link}" target="_blank" class="watch-button">▶️ Watch Now</a>`;
         if (link2) viewerDownloadButtons += `<a href="${link2}" target="_blank" class="download-button">Download 720p</a>`;
         if (link3) viewerDownloadButtons += `<a href="${link3}" target="_blank" class="download-button">Download 360p</a>`;
@@ -662,26 +288,19 @@
         const newUrl = `${window.location.origin}/movie/${slug}`;
         const description = `Watch or download the movie ${title} in HD. Genre: ${category}.`;
         
-        if (!isDirectLoad) {
-            window.history.pushState({ slug: slug }, title, newUrl);
-        }
+        window.history.replaceState({ slug: slug }, title, newUrl);
         updateMetaTags(title, description, image, newUrl);
 
-        const movieRef = database.ref('movies/' + key);
-        movieRef.transaction(currentData => {
-            if (currentData) {
-                currentData.viewCount = (currentData.viewCount || 0) + 1;
-            }
-            return currentData;
-        });
+        if (!isDirectLoad) {
+            database.ref('movies/' + key + '/viewCount').transaction(currentCount => (currentCount || 0) + 1);
+        }
     }
 
     function closeModal(id) {
         document.getElementById(id).style.display = 'none';
         showMainContent(true);
-        
         if (window.location.pathname.startsWith('/movie/')) {
-            window.history.pushState({}, '', '/');
+            window.history.replaceState({}, '', '/');
         }
         resetMetaTags();
     }
@@ -694,7 +313,6 @@
             if (allMovieData[slug]) {
                 openViewer(slug, true);
             } else {
-                console.warn(`Movie with slug "${slug}" not found after data load. Redirecting.`);
                 window.history.replaceState({}, '', '/');
                 resetMetaTags();
                 showMainContent(true);
@@ -704,7 +322,9 @@
         }
     }
 
-    window.onpopstate = handleRouteChange;
+    window.onpopstate = () => {
+        closeModal('viewerModal');
+    };
 
     // --- ফিল্টার এবং সার্চ ---
     function filterMovies() {
@@ -714,7 +334,6 @@
           const category = card.getAttribute('data-category');
           const isCategoryMatch = currentCategoryFilter === 'all' || category.includes(currentCategoryFilter);
           const isSearchMatch = title.includes(query);
-          
           card.style.display = isCategoryMatch && isSearchMatch ? 'block' : 'none';
       });
     }
@@ -746,15 +365,8 @@
             alert("You have already liked this movie!");
             return;
         }
-        const movieRef = database.ref('movies/' + movieKey);
-        movieRef.transaction(currentData => {
-            if (currentData) {
-                currentData.likeCount = (currentData.likeCount || 0) + 1;
-            }
-            return currentData;
-        }).then(() => {
-            localStorage.setItem(storageKey, 'true');
-        });
+        database.ref('movies/' + movieKey + '/likeCount').transaction(currentCount => (currentCount || 0) + 1)
+        .then(() => { localStorage.setItem(storageKey, 'true'); });
     }
 
     function toggleOptionsMenu(event) {
@@ -813,8 +425,11 @@
 
     function showPrivacyPolicy(e) {
       e.preventDefault();
-      // এখানে প্রাইভেসি পলিসি দেখানোর জন্য কোড যোগ করা যেতে পারে
-      alert("Privacy Policy section is under construction.");
+      const policySection = document.getElementById('privacy-policy-section');
+      if (policySection) {
+          policySection.style.display = 'block';
+          showMainContent(false);
+      }
     }
 </script>
 
