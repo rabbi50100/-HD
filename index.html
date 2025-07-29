@@ -4,33 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie TV - Watch & Download Latest HD Movies</title>
+    
+    <!-- SEO and Meta Tags -->
     <meta name="google-site-verification" content="1mDUrmtjTiKfrYayJONYnzIhgBQcw30UZi0Q1hdhAO4" />
     <meta name="title" content="Movie TV - Watch & Download Latest HD Movies">
     <meta name="description" content="Explore and download a vast collection of the latest and classic movies in HD. Find your favorite action, comedy, horror, and romantic films easily and for free.">
     <meta name="keywords" content="movie downloader, latest movies, hd movies, download movies, free movies, action movies, comedy, horror, romantic, movie apps">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://hindimovie.netlify.app/" />
+    
+    <!-- Open Graph / Facebook Meta Tags (শেয়ার করার জন্য) -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://hindimovie.netlify.app/">
     <meta property="og:title" content="Movie TV - Watch & Download Latest HD Movies">
-    <meta property="og:description" content="Explore and download a vast collection of the latest and classic movies in HD. Find your favorite action, comedy, horror, and romantic films easily and for free.">
+    <meta property="og:description" content="Explore and download a vast collection of the latest and classic movies in HD.">
+    <!-- সমস্যা সমাধান: একটি ডিফল্ট ইমেজ যুক্ত করা হয়েছে যাতে শেয়ার করলে ছবি দেখা যায় -->
+    <meta property="og:image" content="https://i.ibb.co/6gT26t3/og-image.jpg" id="og-image-meta">
     
-    <!-- এই ট্যাগগুলো এখন জাভাস্ক্রিপ্ট দিয়ে পরিবর্তন করা হবে -->
-    <meta property="og:image" content="" id="og-image-meta">
+    <!-- Twitter Meta Tags -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://hindimovie.netlify.app/">
     <meta property="twitter:title" content="Movie TV - Watch & Download Latest HD Movies">
-    <meta property="twitter:description" content="Explore and download a vast collection of the latest and classic movies in HD. Find your favorite action, comedy, horror, and romantic films easily and for free.">
-    <meta property="twitter:image" content="" id="twitter-image-meta">
+    <meta property="twitter:description" content="Explore and download a vast collection of the latest and classic movies in HD.">
+    <!-- সমস্যা সমাধান: একটি ডিফল্ট ইমেজ যুক্ত করা হয়েছে -->
+    <meta property="twitter:image" content="https://i.ibb.co/6gT26t3/og-image.jpg" id="twitter-image-meta">
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
     
-    <!-- Ad Scripts -->
-    <script type='text/javascript' src='//pl27240886.profitableratecpm.com/d0/01/48/d001486b77c50cc7955b8de7fa77722a.js'></script>
-    <script type='text/javascript' src='//pl25592823.profitableratecpm.com/5a/44/f3/5a44f3953acebff68b2ef494fac71fea.js'></script>
-    
+    <!-- Schema Markup -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -48,7 +51,6 @@
     <style>
         html{scroll-behavior:smooth}body{margin:0;padding:20px;font-family:Arial,sans-serif;background-color:#111;color:#fff;overflow-x:hidden}body.loading{overflow:hidden}body.loading>*:not(#loader){display:none}header{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background-color:#1a1a1a;box-shadow:0 2px 10px rgba(0,0,0,.5);border-bottom:2px solid orange}header h1{color:orange;font-size:28px;font-weight:700;margin:0;letter-spacing:1px;text-shadow:0 0 5px rgba(255,165,0,.7)}.category-filters{text-align:center;margin:20px 0;display:flex;justify-content:center;flex-wrap:wrap;gap:8px;padding:0 10px}.category-filters button{background-color:#333;color:orange;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;font-size:14px;transition:background-color .3s ease;white-space:nowrap}.category-filters button:hover{background-color:#555}.category-filters button.active{background-color:orange;color:#000}#saved-posts-button{font-size:16px;cursor:pointer;color:orange;border:1px solid orange;background:0 0;padding:8px 15px;border-radius:5px;transition:background-color .3s ease,color .3s ease;font-weight:700}#saved-posts-button:hover{background-color:orange;color:#1a1a1a}#search-bar{margin:20px auto;max-width:600px;display:block;width:100%;padding:10px;background-color:#222;color:#fff;border:none;border-radius:6px;font-size:16px}.movie-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;max-width:600px;margin:20px auto}.movie-card{background-color:#222;border-radius:10px;overflow:hidden;transition:transform .2s;position:relative}.movie-card:hover{transform:scale(1.03)}.movie-card img{width:100%;height:280px;object-fit:cover;display:block;cursor:pointer}.movie-title{padding:10px;text-align:center;font-weight:700}.more-options-btn{position:absolute;top:8px;right:8px;font-size:24px;cursor:pointer;color:orange;background:0 0;border:none;padding:2px 8px;line-height:1;z-index:10}.options-menu{display:none;position:absolute;top:35px;right:8px;background-color:#333;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,.7);z-index:11;padding:5px 0;min-width:120px;text-align:left}.options-menu a{display:block;padding:8px 15px;color:#fff;text-decoration:none;font-size:14px;transition:background-color .2s}.options-menu a:hover{background-color:#555}#savedPostsModal .modal-content{background-color:#222;text-align:left;max-width:600px;padding:20px}#savedPostsModal h2{color:orange;text-align:center;margin-bottom:20px}#savedPostsModal .thumbnails-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}#savedPostsModal .thumbnail-item{position:relative;cursor:pointer;border-radius:5px;overflow:hidden;transition:transform .2s,box-shadow .2s}#savedPostsModal .thumbnail-item:hover{transform:scale(1.05);box-shadow:0 0 15px orange}#savedPostsModal .thumbnail-item img{width:100%;height:120px;object-fit:cover;display:block}#savedPostsModal .thumbnail-item .title{position:absolute;bottom:0;left:0;right:0;background-color:rgba(0,0,0,.7);color:#fff;font-size:12px;padding:5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#savedPostsModal .remove-saved{position:absolute;top:2px;right:2px;cursor:pointer;color:red;font-size:18px;background:rgba(0,0,0,.5);border-radius:50%;width:22px;height:22px;line-height:22px;text-align:center;z-index:10}#savedPostsModal .no-posts{text-align:center;color:#ccc;padding:20px}.modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,.7)}.modal-content{background-color:#222;margin:10% auto;padding:20px;border-radius:10px;width:90%;max-width:450px;text-align:center}.modal-content img{max-width:250px;height:auto;border-radius:10px;display:block;margin:0 auto 15px}.movie-description{font-size:14px;color:#ccc;line-height:1.5;margin-top:10px;margin-bottom:20px;text-align:left;padding:0 10px}.modal-content h3{margin:15px 0;color:orange}.modal-content a{display:inline-block;padding:10px 20px;background-color:orange;color:#000;text-decoration:none;font-weight:700;border-radius:5px;margin-top:10px}.modal-content a:hover{background-color:darkorange}.close{float:right;font-size:20px;color:#fff;cursor:pointer}#loader{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:10000;flex-direction:column}.spinner{border:6px solid #f3f3f3;border-top:6px solid orange;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin-bottom:20px}#loader p{color:orange;font-size:18px;margin:0}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.privacy-policy{max-width:800px;margin:40px auto;padding:30px;background-color:#222;border-radius:10px;color:#fff;line-height:1.6;box-shadow:0 4px 15px rgba(0,0,0,.5)}.privacy-policy h2,.privacy-policy h3{color:orange}.footer-links{text-align:center;margin-top:30px;margin-bottom:20px}.footer-links a{color:orange;text-decoration:none;margin:0 10px;font-size:16px}.footer-links a:hover{text-decoration:underline}.movie-views{display:flex;justify-content:center;padding:5px 0;font-size:12px;color:#bbb;border-top:1px solid #333;margin-top:5px}.movie-views p{margin:0;display:flex;align-items:center;gap:5px}.movie-actions{text-align:center;padding:8px 0;border-top:1px solid #333;margin-top:5px}.like-btn{background:0 0;border:none;color:orange;font-size:16px;cursor:pointer;display:flex;align-items:center;gap:5px;margin:0 auto;padding:5px 10px;border-radius:5px;transition:background-color .3s ease}.like-btn:hover{background-color:#333}.like-btn:active{color:red}.movie-stats{display:flex;justify-content:space-around;align-items:center;padding:8px 0;border-top:1px solid #333;margin-top:5px;font-size:14px}.download-buttons{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin-top:20px}.download-buttons a{display:flex;align-items:center;justify-content:center;padding:12px 15px;color:#fff;text-decoration:none;font-weight:700;border-radius:8px;transition:background-color .3s ease;font-size:16px;gap:8px}.download-buttons a.watch-button{background-color:#d9534f}.download-buttons a.watch-button:hover{background-color:#c9302c}.download-buttons a.download-button{background-color:#5cb85c}.download-buttons a.download-button:hover{background-color:#4cae4c}
         #app-install-banner{position:fixed;bottom:0;left:0;width:100%;background-color:#1a1a1a;box-shadow:0 -2px 10px rgba(0,0,0,.5);z-index:1001;padding:15px;box-sizing:border-box;display:none;align-items:center;justify-content:space-between;gap:15px}.app-info{display:flex;align-items:center;gap:15px}.app-icon{width:50px;height:50px;border-radius:10px}.app-text{color:#fff}.app-text h4{margin:0 0 5px 0;color:orange}.app-text p{margin:0;font-size:14px;color:#ccc}.banner-actions{display:flex;align-items:center;gap:15px}.download-app-btn{background-color:orange;color:#111;padding:8px 16px;border-radius:5px;text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap}.close-banner-btn{font-size:24px;color:#888;cursor:pointer;background:0 0;border:none}
-        .native-ad-card{background-color:#2a2a2a;border-radius:10px;overflow:hidden;position:relative;border:1px solid orange;padding:10px}.native-ad-card a{text-decoration:none;color:inherit;display:block}.native-ad-card img{width:100%;height:180px;object-fit:cover;display:block;border-radius:8px}.native-ad-card .ad-badge{position:absolute;top:15px;left:15px;background:rgba(0,0,0,.7);color:#fff;padding:3px 8px;font-size:10px;border-radius:3px;font-weight:700;z-index:1}.native-ad-card .ad-title{font-weight:700;color:orange;margin:10px 0 5px 0}.native-ad-card .ad-desc{font-size:14px;color:#ccc;line-height:1.4}
     </style>
 </head>
 <body>
@@ -102,14 +104,12 @@
     const database = firebase.database();
     const moviesRef = database.ref('movies');
     const settingsRef = database.ref('siteSettings');
-    const nativeAdRef = database.ref('nativeAd');
 
     let allMovieData = {};
     let allMovieElements = {};
     let currentCategoryFilter = 'all';
     let lastClickedCardElement = null;
     let siteSettings = {};
-    let nativeAdData = null;
 
     document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('loading');
@@ -120,12 +120,9 @@
             mainOgImageUrl: 'https://i.ibb.co/6gT26t3/og-image.jpg'
         };
 
-        Promise.all([
-            settingsRef.once('value'),
-            nativeAdRef.once('value')
-        ]).then(([settingsSnapshot, adSnapshot]) => {
+        // শুধুমাত্র সেটিংস ডেটা লোড করা হচ্ছে
+        settingsRef.once('value').then(settingsSnapshot => {
             siteSettings = { ...defaultSettings, ...settingsSnapshot.val() };
-            nativeAdData = adSnapshot.val();
 
             const appIconImg = document.getElementById('app-icon-img');
             const downloadAppLink = document.getElementById('download-app-link');
@@ -136,7 +133,7 @@
             setupAppBanner();
             loadMovies();
         }).catch(error => {
-            console.error("Error fetching initial data:", error);
+            console.error("Error fetching settings:", error);
             siteSettings = defaultSettings;
             resetMetaTags();
             setupAppBanner();
@@ -154,6 +151,7 @@
     }
 
     function loadMovies() {
+        // এই ফাংশনটি Firebase থেকে সমস্ত মুভির ডেটা একবারে নিয়ে আসে।
         moviesRef.orderByChild('timestamp').once('value', snapshot => {
             document.body.classList.remove('loading');
             document.getElementById('loader').style.display = 'none';
@@ -162,24 +160,13 @@
             
             const moviesArray = [];
             snapshot.forEach(child => { moviesArray.push({ key: child.key, ...child.val() }); });
-            moviesArray.reverse();
-
-            if (nativeAdData && nativeAdData.isEnabled && nativeAdData.position > 0) {
-                const adIndex = nativeAdData.position - 1;
-                if (adIndex >= 0 && adIndex <= moviesArray.length) {
-                    moviesArray.splice(adIndex, 0, { isAdPlaceholder: true });
-                }
-            }
+            moviesArray.reverse(); // নতুন মুভিগুলি প্রথমে দেখানোর জন্য
 
             if (moviesArray.length > 0) {
                 moviesArray.forEach(item => {
-                    if (item.isAdPlaceholder) {
-                        addNativeAdCard(nativeAdData);
-                    } else {
-                        item.slug = createSlug(item.title);
-                        allMovieData[item.slug] = item;
-                        addMovieCard(item);
-                    }
+                    item.slug = createSlug(item.title);
+                    allMovieData[item.slug] = item;
+                    addMovieCard(item);
                 });
             } else {
                 movieGrid.innerHTML = '<p style="text-align:center;">No movies found.</p>';
@@ -188,33 +175,47 @@
         });
     }
 
-    function addNativeAdCard(adData) {
-        const movieGrid = document.getElementById('movie-grid');
-        const adCard = document.createElement('div');
-        adCard.className = 'native-ad-card';
-        adCard.innerHTML = `
-            <a href="${adData.destinationUrl}" target="_blank" rel="noopener sponsored">
-                <span class="ad-badge">Ad</span>
-                <img src="${adData.imageUrl}" alt="${adData.title}">
-                <div class="ad-title">${adData.title}</div>
-                <div class="ad-desc">${adData.description}</div>
-            </a>
-        `;
-        movieGrid.appendChild(adCard);
-    }
-
     function resetMetaTags() {
         const defaultTitle = "Movie TV - Watch & Download Latest HD Movies";
         const defaultDesc = "Explore and download a vast collection of the latest and classic movies in HD.";
         const defaultUrl = window.location.origin;
+        // অ্যাডমিন প্যানেল থেকে পাওয়া ছবিটি ব্যবহার করা হচ্ছে
         updateMetaTags("Movie TV", defaultDesc, siteSettings.mainOgImageUrl, defaultUrl);
         document.title = defaultTitle;
     }
     
-    function updateMetaTags(t,e,a,o){const n=`${t} - Movie TV`;document.title=n;const s=document.querySelector('meta[name="title"]'),i=document.querySelector('meta[name="description"]'),r=document.querySelector('link[rel="canonical"]'),d=document.querySelector('meta[property="og:title"]'),l=document.querySelector('meta[property="og:description"]'),c=document.getElementById("og-image-meta"),m=document.querySelector('meta[property="og:url"]'),p=document.querySelector('meta[property="twitter:title"]'),u=document.querySelector('meta[property="twitter:description"]'),g=document.getElementById("twitter-image-meta"),y=document.querySelector('meta[property="twitter:url"]');s&&s.setAttribute("content",n),i&&i.setAttribute("content",e),r&&r.setAttribute("href",o),d&&d.setAttribute("content",n),l&&l.setAttribute("content",e),c&&c.setAttribute("content",a),m&&m.setAttribute("content",o),p&&p.setAttribute("content",n),u&&u.setAttribute("content",e),g&&g.setAttribute("content",a),y&&y.setAttribute("content",o)}
-    
-    // (আপনার বাকি সকল ফাংশন অপরিবর্তিত থাকবে)
-    function createSlug(t){return t?t.toLowerCase().replace(/ /g,"-").replace(/[^\w-]+/g,""):""}function escapeQuotes(t){return"string"!=typeof t?"":t.replace(/'/g,"\\'").replace(/"/g,'\\"')}function addMovieCard(t){const{key:e,title:a,image:o,slug:n,category:s,viewCount:i,likeCount:r}=t,d=document.createElement("div");d.className="movie-card",d.setAttribute("data-key",e),d.setAttribute("data-title",a.toLowerCase()),d.setAttribute("data-category",(s||"other").toLowerCase()),d.setAttribute("data-slug",n),d.innerHTML=`\n <button class="more-options-btn" onclick="toggleOptionsMenu(event)">…</button>\n <div class="options-menu" id="options-menu-${e}">\n <a href="#" onclick="savePostToLocalStorage(event, '${e}', '${escapeQuotes(a)}', '${escapeQuotes(o)}', '${escapeQuotes(t.link)}', '${escapeQuotes(t.link2)}', '${escapeQuotes(t.link3)}', '${escapeQuotes(s)}')">Save Post</a>\n </div>\n <div class="movie-content-wrapper">\n <img src="${o}" alt="${a}">\n </div>\n <div class="movie-title">${a}</div>\n <div style="text-align:center; font-size: 14px; color: orange;">[${s||"Other"}]</div>\n <div class="movie-stats">\n <div class="movie-views"><p>👁️ <span id="views-${e}">${i||0}</span></p></div>\n <div class="movie-actions"><button class="like-btn" title="Like Movie" onclick="toggleLike(event, '${e}')">❤️ <span id="likes-${e}">${r||0}</span></button></div>\n </div>\n `;const l=d.querySelector(".movie-content-wrapper");l.addEventListener("click",()=>{lastClickedCardElement=d,openViewer(n)}),document.getElementById("movie-grid").appendChild(d),allMovieElements[e]=d,database.ref("movies/"+e).on("value",t=>{const a=t.val();if(a){const o=document.getElementById(`views-${e}`),n=document.getElementById(`likes-${e}`);o&&(o.innerText=a.viewCount||0),n&&(n.innerText=a.likeCount||0)}})}
+    function updateMetaTags(title, desc, imageUrl, url) {
+        const fullTitle = `${title} - Movie TV`;
+        document.title = fullTitle;
+
+        const metaTitle = document.querySelector('meta[name="title"]');
+        const metaDesc = document.querySelector('meta[name="description"]');
+        const canonicalLink = document.querySelector('link[rel="canonical"]');
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        const ogImage = document.getElementById('og-image-meta');
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        const twitterTitle = document.querySelector('meta[property="twitter:title"]');
+        const twitterDesc = document.querySelector('meta[property="twitter:description"]');
+        const twitterImage = document.getElementById('twitter-image-meta');
+        const twitterUrl = document.querySelector('meta[property="twitter:url"]');
+
+        if (metaTitle) metaTitle.setAttribute('content', fullTitle);
+        if (metaDesc) metaDesc.setAttribute('content', desc);
+        if (canonicalLink) canonicalLink.setAttribute('href', url);
+        if (ogTitle) ogTitle.setAttribute('content', fullTitle);
+        if (ogDesc) ogDesc.setAttribute('content', desc);
+        if (ogImage) ogImage.setAttribute('content', imageUrl);
+        if (ogUrl) ogUrl.setAttribute('content', url);
+        if (twitterTitle) twitterTitle.setAttribute('content', fullTitle);
+        if (twitterDesc) twitterDesc.setAttribute('content', desc);
+        if (twitterImage) twitterImage.setAttribute('content', imageUrl);
+        if (twitterUrl) twitterUrl.setAttribute('content', url);
+    }
+
+    function createSlug(t){return t?t.toLowerCase().replace(/ /g,"-").replace(/[^\w-]+/g,""):""}
+    function escapeQuotes(t){return"string"!=typeof t?"":t.replace(/'/g,"\\'").replace(/"/g,'\\"')}
+    function addMovieCard(t){const{key:e,title:a,image:o,slug:n,category:s,viewCount:i,likeCount:r}=t,d=document.createElement("div");d.className="movie-card",d.setAttribute("data-key",e),d.setAttribute("data-title",a.toLowerCase()),d.setAttribute("data-category",(s||"other").toLowerCase()),d.setAttribute("data-slug",n),d.innerHTML=`\n <button class="more-options-btn" onclick="toggleOptionsMenu(event)">…</button>\n <div class="options-menu" id="options-menu-${e}">\n <a href="#" onclick="savePostToLocalStorage(event, '${e}', '${escapeQuotes(a)}', '${escapeQuotes(o)}', '${escapeQuotes(t.link)}', '${escapeQuotes(t.link2)}', '${escapeQuotes(t.link3)}', '${escapeQuotes(s)}')">Save Post</a>\n </div>\n <div class="movie-content-wrapper">\n <img src="${o}" alt="${a}">\n </div>\n <div class="movie-title">${a}</div>\n <div style="text-align:center; font-size: 14px; color: orange;">[${s||"Other"}]</div>\n <div class="movie-stats">\n <div class="movie-views"><p>👁️ <span id="views-${e}">${i||0}</span></p></div>\n <div class="movie-actions"><button class="like-btn" title="Like Movie" onclick="toggleLike(event, '${e}')">❤️ <span id="likes-${e}">${r||0}</span></button></div>\n </div>\n `;const l=d.querySelector(".movie-content-wrapper");l.addEventListener("click",()=>{lastClickedCardElement=d,openViewer(n)}),document.getElementById("movie-grid").appendChild(d),allMovieElements[e]=d,database.ref("movies/"+e).on("value",t=>{const a=t.val();if(a){const o=document.getElementById(`views-${e}`),n=document.getElementById(`likes-${e}`);o&&(o.innerText=a.viewCount||0),n&&(n.innerText=a.likeCount||0)}})}
     function closeModal(t){document.getElementById(t).style.display="none",showMainContent(!0),lastClickedCardElement&&lastClickedCardElement.scrollIntoView({behavior:"smooth",block:"center"}),window.location.pathname.startsWith("/movie/")&&window.history.replaceState({},"","/"),resetMetaTags()}
     function showMainContent(t){[document.querySelector("header"),document.querySelector(".category-filters"),document.getElementById("search-bar"),document.getElementById("movie-grid")].forEach(e=>{e&&(e.style.display=t?"movie-grid"===e.id?"grid":"flex":"none")}),document.getElementById("search-bar").style.display=t?"block":"none"}
     function handleRouteChange(){const t=window.location.pathname;t.startsWith("/movie/")?allMovieData[t.substring(7)]?openViewer(t.substring(7),!0):(window.history.replaceState({},"","/"),resetMetaTags(),showMainContent(!0)):showMainContent(!0)}
@@ -233,4 +234,4 @@
 </script>
 
 </body>
-      </html>
+        </html>
