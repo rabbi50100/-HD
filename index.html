@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie - Watch & Download Latest HD Movies</title>
+    <title>Movie TV - Watch & Download Latest HD Movies</title>
     
     <!-- SEO and Meta Tags -->
     <meta name="google-site-verification" content="1mDUrmtjTiKfrYayJONYnzIhgBQcw30UZi0Q1hdhAO4" />
@@ -18,14 +18,14 @@
     <meta property="og:url" content="https://hindimovie.netlify.app/">
     <meta property="og:title" content="Movie TV - Watch & Download Latest HD Movies">
     <meta property="og:description" content="Explore and download a vast collection of the latest and classic movies in HD.">
-    <meta property="og:image" content="https://i.ibb.co/6gT26t3/og-image.jpg" id="og-image-meta">
+    <meta property="og:image" content="https://i.postimg.cc/0yCyzmhm/IMG-20250730-220406.jpg" id="og-image-meta">
     
     <!-- Twitter Meta Tags -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://hindimovie.netlify.app/">
     <meta property="twitter:title" content="Movie TV - Watch & Download Latest HD Movies">
     <meta property="twitter:description" content="Explore and download a vast collection of the latest and classic movies in HD.">
-    <meta property="twitter:image" content="https://i.ibb.co/6gT26t3/og-image.jpg" id="twitter-image-meta">
+    <meta property="twitter:image" content="https://i.postimg.cc/0yCyzmhm/IMG-20250730-220406.jpg" id="twitter-image-meta">
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
@@ -49,22 +49,13 @@
     <style>
         html{scroll-behavior:smooth}body{margin:0;padding:20px;font-family:Arial,sans-serif;background-color:#111;color:#fff;overflow-x:hidden}body.loading{overflow:hidden}body.loading>*:not(#loader){display:none}header{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background-color:#1a1a1a;box-shadow:0 2px 10px rgba(0,0,0,.5);border-bottom:2px solid orange}header h1{color:orange;font-size:28px;font-weight:700;margin:0;letter-spacing:1px;text-shadow:0 0 5px rgba(255,165,0,.7)}.category-filters{text-align:center;margin:20px 0;display:flex;justify-content:center;flex-wrap:wrap;gap:8px;padding:0 10px}.category-filters button{background-color:#333;color:orange;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;font-size:14px;transition:background-color .3s ease;white-space:nowrap}.category-filters button:hover{background-color:#555}.category-filters button.active{background-color:orange;color:#000}#search-bar{margin:20px auto;max-width:600px;display:block;width:100%;padding:10px;background-color:#222;color:#fff;border:none;border-radius:6px;font-size:16px}.movie-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;max-width:600px;margin:20px auto}.movie-card{background-color:#222;border-radius:10px;overflow:hidden;transition:transform .2s;position:relative}.movie-card:hover{transform:scale(1.03)}.movie-card img{width:100%;height:280px;object-fit:cover;display:block;cursor:pointer}.movie-title{padding:10px;text-align:center;font-weight:700}.more-options-btn{position:absolute;top:8px;right:8px;font-size:24px;cursor:pointer;color:orange;background:0 0;border:none;padding:2px 8px;line-height:1;z-index:10}.options-menu{display:none;position:absolute;top:35px;right:8px;background-color:#333;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,.7);z-index:11;padding:5px 0;min-width:120px;text-align:left}.options-menu a{display:block;padding:8px 15px;color:#fff;text-decoration:none;font-size:14px;transition:background-color .2s}.options-menu a:hover{background-color:#555}#savedPostsModal .modal-content{background-color:#222;text-align:left;max-width:600px;padding:20px}#savedPostsModal h2{color:orange;text-align:center;margin-bottom:20px}#savedPostsModal .thumbnails-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}#savedPostsModal .thumbnail-item{position:relative;cursor:pointer;border-radius:5px;overflow:hidden;transition:transform .2s,box-shadow .2s}#savedPostsModal .thumbnail-item:hover{transform:scale(1.05);box-shadow:0 0 15px orange}#savedPostsModal .thumbnail-item img{width:100%;height:120px;object-fit:cover;display:block}#savedPostsModal .thumbnail-item .title{position:absolute;bottom:0;left:0;right:0;background-color:rgba(0,0,0,.7);color:#fff;font-size:12px;padding:5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#savedPostsModal .remove-saved{position:absolute;top:2px;right:2px;cursor:pointer;color:red;font-size:18px;background:rgba(0,0,0,.5);border-radius:50%;width:22px;height:22px;line-height:22px;text-align:center;z-index:10}#savedPostsModal .no-posts{text-align:center;color:#ccc;padding:20px}.modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,.7)}.modal-content{background-color:#222;margin:10% auto;padding:20px;border-radius:10px;width:90%;max-width:450px;text-align:center}.modal-content img{max-width:250px;height:auto;border-radius:10px;display:block;margin:0 auto 15px}.movie-details p{color:#aaa;margin:5px 0;font-size:14px;text-align:left;padding:0 10px}.movie-details strong{color:orange}.movie-description{font-size:14px;color:#ccc;line-height:1.5;margin-top:10px;margin-bottom:20px;text-align:left;padding:0 10px}.modal-content h3{margin:15px 0;color:orange}.modal-content a{display:inline-block;padding:10px 20px;background-color:orange;color:#000;text-decoration:none;font-weight:700;border-radius:5px;margin-top:10px}.modal-content a:hover{background-color:darkorange}.close{float:right;font-size:28px;font-weight:bold;color:#fff;cursor:pointer}.close:hover{color:#ccc}#loader{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:10000;flex-direction:column}.spinner{border:6px solid #f3f3f3;border-top:6px solid orange;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;margin-bottom:20px}#loader p{color:orange;font-size:18px;margin:0}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.privacy-policy{max-width:800px;margin:40px auto;padding:30px;background-color:#222;border-radius:10px;color:#fff;line-height:1.6;box-shadow:0 4px 15px rgba(0,0,0,.5); display: none;}.privacy-policy h2,.privacy-policy h3{color:orange}.footer-links{text-align:center;margin-top:30px;margin-bottom:20px}.footer-links a{color:orange;text-decoration:none;margin:0 10px;font-size:16px}.footer-links a:hover{text-decoration:underline}.movie-views{display:flex;justify-content:center;padding:5px 0;font-size:12px;color:#bbb;border-top:1px solid #333;margin-top:5px}.movie-views p{margin:0;display:flex;align-items:center;gap:5px}.movie-actions{text-align:center;padding:8px 0;border-top:1px solid #333;margin-top:5px}.like-btn{background:0 0;border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;gap:5px;margin:0 auto;padding:5px 10px;border-radius:5px;transition:background-color .3s ease,color .3s ease}.like-btn:hover{background-color:#333}.like-btn.liked{color:red}.movie-stats{display:flex;justify-content:space-around;align-items:center;padding:8px 0;border-top:1px solid #333;margin-top:5px;font-size:14px}.download-buttons{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin-top:20px}.download-buttons a{display:flex;align-items:center;justify-content:center;padding:12px 15px;color:#fff;text-decoration:none;font-weight:700;border-radius:8px;transition:background-color .3s ease;font-size:16px;gap:8px}.download-buttons a.watch-button{background-color:#d9534f}.download-buttons a.watch-button:hover{background-color:#c9302c}.download-buttons a.download-button{background-color:#5cb85c}.download-buttons a.download-button:hover{background-color:#4cae4c}#app-install-banner{position:fixed;bottom:0;left:0;width:100%;background-color:#1a1a1a;box-shadow:0 -2px 10px rgba(0,0,0,.5);z-index:1001;padding:15px;box-sizing:border-box;display:none;align-items:center;justify-content:space-between;gap:15px}.app-info{display:flex;align-items:center;gap:15px}.app-icon{width:50px;height:50px;border-radius:10px}.app-text{color:#fff}.app-text h4{margin:0 0 5px 0;color:orange}.app-text p{margin:0;font-size:14px;color:#ccc}.banner-actions{display:flex;align-items:center;gap:15px}.download-app-btn{background-color:orange;color:#111;padding:8px 16px;border-radius:5px;text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap}.close-banner-btn{font-size:24px;color:#888;cursor:pointer;background:0 0;border:none}
 
-        /* --- নতুন নেভিগেশন এবং ফলো বাটনের জন্য CSS --- */
-        .header-actions { display: flex; align-items: center; gap: 10px; }
+        /* --- নতুন নেভিগেশন আইকন এবং সাইড মেনুর জন্য CSS --- */
+        .header-actions { display: flex; align-items: center; }
         .header-icon-btn { background: none; border: none; cursor: pointer; padding: 5px; line-height: 0; }
         .header-icon-btn svg { width: 28px; height: 28px; fill: #FFFFFF; transition: opacity 0.2s; }
         .header-icon-btn:hover svg { opacity: 0.8; }
-        
-        #follow-btn {
-            background-color: orange; color: #111; border: none; padding: 8px 16px;
-            border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 14px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        #follow-btn.following {
-            background-color: #555; color: #fff;
-        }
 
-        .side-menu { position: fixed; top: 0; right: -230px; width: 220px; height: 100%; background-color: #1f1f1f; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 10001; transition: right 0.4s ease-in-out; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; }
+        .side-menu { position: fixed; top: 0; right: -230px; width: 220px; /* প্রস্থ আরও কমানো হয়েছে */ height: 100%; background-color: #1f1f1f; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 10001; transition: right 0.4s ease-in-out; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; }
         .side-menu.open { right: 0; }
         .side-menu .menu-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 15px; }
         .side-menu .menu-header h2 { color: orange; margin: 0; font-size: 22px; }
@@ -77,10 +68,8 @@
 </head>
 <body>
     <header>
-        <h1>🎬 Movie</h1>
+        <h1>🎬 Movie TV</h1>
         <div class="header-actions">
-            <!-- নতুন ফলো বাটন যোগ করা হয়েছে -->
-            <button id="follow-btn" title="Get notified about new movies">Follow</button>
             <button id="menu-btn" class="header-icon-btn" title="Open Menu">
                 <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 0 24 24" width="28px" fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
             </button>
@@ -93,6 +82,7 @@
             <button class="close-menu-btn" title="Close Menu">×</button>
         </div>
         <nav>
+            <!-- নতুন এবং উন্নত প্রফেশনাল আইকন -->
             <a href="#" id="menu-saved-list-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#e0e0e0"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 10.5l-2.5-1.5L13 14.5V4h5v10.5z"/></svg>
                 <span>Saved List</span>
@@ -163,7 +153,7 @@
             
             resetMetaTags();
             setupAppBanner();
-            loadMovies();
+            loadMovies(); // This will now trigger handleRouteChange at the end
         }).catch(error => {
             console.error("Error fetching settings:", error);
             siteSettings = defaultSettings;
@@ -173,7 +163,6 @@
         });
 
         setupMenuControls();
-        setupFollowButton(); // নতুন ফলো বাটনের ফাংশন কল
     });
     
     function setupAppBanner() {
@@ -184,44 +173,6 @@
             closeBannerBtn.addEventListener('click', () => { installBanner.style.display = 'none'; });
         }
     }
-
-    // --- নতুন ফাংশন: ফলো বাটনের জন্য ---
-    function setupFollowButton() {
-        const followBtn = document.getElementById('follow-btn');
-        const followStatus = localStorage.getItem('followStatus');
-
-        if (followStatus === 'following') {
-            followBtn.textContent = 'Following';
-            followBtn.classList.add('following');
-        }
-
-        followBtn.addEventListener('click', () => {
-            if (localStorage.getItem('followStatus') !== 'following') {
-                askNotificationPermission();
-            }
-        });
-    }
-
-    function askNotificationPermission() {
-        const followBtn = document.getElementById('follow-btn');
-        if (!('Notification' in window)) {
-            alert('This browser does not support desktop notification');
-            return;
-        }
-
-        Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-                localStorage.setItem('followStatus', 'following');
-                followBtn.textContent = 'Following';
-                followBtn.classList.add('following');
-                alert('Thanks for following! You will now be notified of new movies.');
-                // এখানে Firebase Cloud Messaging (FCM) থেকে টোকেন নিয়ে ডেটাবেসে সেভ করার কোড যোগ করতে হবে
-            } else {
-                alert('You have disabled notifications. Please enable them in your browser settings to get updates.');
-            }
-        });
-    }
-    // --- শেষ ---
 
     function setupMenuControls() {
         const menuBtn = document.getElementById('menu-btn');
@@ -242,10 +193,16 @@
         elements.forEach(el => {
             if (el) {
                 if (shouldShow) {
-                    if (el.tagName === 'HEADER' || el.classList.contains('category-filters')) { el.style.display = 'flex'; }
-                    else if (el.classList.contains('movie-grid')) { el.style.display = 'grid'; }
-                    else { el.style.display = 'block'; }
-                } else { el.style.display = 'none'; }
+                    if (el.tagName === 'HEADER' || el.classList.contains('category-filters')) {
+                        el.style.display = 'flex';
+                    } else if (el.classList.contains('movie-grid')) {
+                        el.style.display = 'grid';
+                    } else {
+                        el.style.display = 'block';
+                    }
+                } else {
+                    el.style.display = 'none';
+                }
             }
         });
         document.getElementById('privacy-policy-section').style.display = 'none';
@@ -254,10 +211,18 @@
     function closeModal(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) modal.style.display = "none";
+        
+        // Restore main content view and URL
         showMainContent(true);
         if (modalId === 'viewerModal') {
-            if (lastClickedCardElement) { lastClickedCardElement.scrollIntoView({ behavior: "smooth", block: "center" }); }
-            if (window.location.pathname.startsWith("/movie/")) { window.history.replaceState({}, "", "/"); resetMetaTags(); }
+            if (lastClickedCardElement) {
+                lastClickedCardElement.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+            // Check if the current path is a movie path before changing it
+            if (window.location.pathname.startsWith("/movie/")) {
+                window.history.replaceState({}, "", "/");
+                resetMetaTags();
+            }
         }
     }
 
@@ -275,7 +240,10 @@
                 const thumb = document.createElement("div");
                 thumb.className = "thumbnail-item";
                 thumb.innerHTML = `<img src="${item.image}" alt="${item.title}"><div class="title">${item.title}</div><span class="remove-saved" onclick="removeSavedPost(event, '${key}')">×</span>`;
-                thumb.onclick = () => { closeModal('savedPostsModal'); openViewer(createSlug(item.title)); };
+                thumb.onclick = () => {
+                    closeModal('savedPostsModal');
+                    openViewer(createSlug(item.title));
+                };
                 container.appendChild(thumb);
             }
         }
@@ -294,16 +262,21 @@
             const moviesArray = [];
             snapshot.forEach(child => { moviesArray.push({ key: child.key, ...child.val() }); });
             moviesArray.reverse();
+
             if (moviesArray.length > 0) {
                 moviesArray.forEach(item => {
-                    item.slug = createSlug(item.title);
-                    allMovieData[item.slug] = item;
-                    addMovieCard(item);
+                    // Ensure title exists before creating slug
+                    if (item.title) {
+                        item.slug = createSlug(item.title);
+                        allMovieData[item.slug] = item;
+                        addMovieCard(item);
+                    }
                 });
                 filterMovies(); 
             } else {
                 movieGrid.innerHTML = '<p style="text-align:center;">No movies found.</p>';
             }
+            // After all movies are loaded and processed, handle routing.
             handleRouteChange();
         });
     }
@@ -311,13 +284,16 @@
     function resetMetaTags() {
         const defaultTitle = "Movie TV - Watch & Download Latest HD Movies";
         const defaultDesc = "Explore and download a vast collection of the latest and classic movies in HD.";
-        const defaultUrl = window.location.origin;
+        const defaultUrl = window.location.origin; // Use origin for the base URL
+        
         updateMetaTags("Movie TV", defaultDesc, siteSettings.mainOgImageUrl, defaultUrl);
         document.title = defaultTitle;
     }
     
     function updateMetaTags(title, desc, imageUrl, url) {
-        const fullTitle = `${title} - Movie TV`; document.title = fullTitle;
+        const fullTitle = `${title} - Movie TV`;
+        document.title = fullTitle;
+        
         const metaTitle = document.querySelector('meta[name="title"]');
         const metaDesc = document.querySelector('meta[name="description"]');
         const canonicalLink = document.querySelector('link[rel="canonical"]');
@@ -329,6 +305,7 @@
         const twitterDesc = document.querySelector('meta[property="twitter:description"]');
         const twitterImage = document.getElementById('twitter-image-meta');
         const twitterUrl = document.querySelector('meta[property="twitter:url"]');
+
         if (metaTitle) metaTitle.setAttribute('content', fullTitle);
         if (metaDesc) metaDesc.setAttribute('content', desc);
         if (canonicalLink) canonicalLink.setAttribute('href', url);
@@ -341,6 +318,7 @@
         if (twitterImage) twitterImage.setAttribute('content', imageUrl);
         if (twitterUrl) twitterUrl.setAttribute('content', url);
     }
+
 
     function createSlug(t){return t?t.toLowerCase().replace(/ /g,"-").replace(/[^\w-]+/g,""):""}
     function escapeQuotes(t){return"string"!=typeof t?"":t.replace(/'/g,"\\'").replace(/"/g,'\\"')}
@@ -361,22 +339,51 @@
             </div>`;
         const likeButton = d.querySelector('.like-btn'), heartIcon = likeButton.querySelector('.heart-icon');
         if (localStorage.getItem(`likedMovie_${e}`)) { likeButton.classList.add('liked'); heartIcon.innerHTML = '❤️'; }
-        d.querySelector(".movie-content-wrapper").addEventListener("click",()=>{lastClickedCardElement=d; openViewer(n)});
+        
+        d.querySelector(".movie-content-wrapper").addEventListener("click",()=>{
+            lastClickedCardElement = d;
+            openViewer(n);
+        });
         document.getElementById("movie-grid").appendChild(d);
         allMovieElements[e]=d;
         database.ref("movies/"+e).on("value",t=>{const a=t.val();if(a){const o=document.getElementById(`views-${e}`),n=document.getElementById(`likes-${e}`);o&&(o.innerText=a.viewCount||0);n&&(n.innerText=a.likeCount||0)}});
     }
-
-    function handleRouteChange(){const t=window.location.pathname;t.startsWith("/movie/")?allMovieData[t.substring(7)]?openViewer(t.substring(7),!0):(window.history.replaceState({},"","/"),resetMetaTags(),showMainContent(!0)):showMainContent(!0)}
     
+    // *** NEW/MODIFIED: Handles routing for direct access and history navigation ***
+    function handleRouteChange() {
+        const path = window.location.pathname;
+        if (path.startsWith("/movie/")) {
+            const slug = path.substring(7); // Extracts slug from "/movie/slug"
+            if (allMovieData[slug]) {
+                openViewer(slug, true); // true indicates a direct load
+            } else {
+                // If slug doesn't exist, redirect to home
+                window.history.replaceState({}, "", "/");
+                resetMetaTags();
+                showMainContent(true);
+            }
+        } else {
+            // It's the home page
+            showMainContent(true);
+        }
+    }
+    
+    // *** MODIFIED: Updates URL, Meta Tags and handles view count ***
     function openViewer(slug, isDirectLoad = false) {
         const movieData = allMovieData[slug];
-        if (!movieData) { window.location.href = "/"; return; }
+        if (!movieData) { 
+            console.error("Movie data not found for slug:", slug);
+            window.location.href = "/"; // Redirect if movie not found
+            return; 
+        }
+
         const { key, title, image, link, link2, link3, category, description, director, cast, releaseDate } = movieData;
+
         let buttonsHTML = "";
         if (link) buttonsHTML += `<a href="${link}" target="_blank" class="watch-button">▶️ Watch Now</a>`;
         if (link2) buttonsHTML += `<a href="${link2}" target="_blank" class="download-button">Download 720p</a>`;
         if (link3) buttonsHTML += `<a href="${link3}" target="_blank" class="download-button">Download 360p</a>`;
+
         const viewerContent = document.getElementById("viewerContent");
         viewerContent.innerHTML = `
             <span class="close" onclick="closeModal('viewerModal')">×</span>
@@ -390,14 +397,23 @@
             </div>
             <p class="movie-description">${description || "No description available."}</p>
             <div class="download-buttons">${buttonsHTML}</div>`;
+
         showMainContent(false);
         document.getElementById('viewerModal').style.display = "block";
+        
+        // Update URL and Meta Tags for SEO
         const movieUrl = `${window.location.origin}/movie/${slug}`;
         const metaDesc = `${description || `Watch or download the movie ${title}.`} Director: ${director || 'N/A'}, Cast: ${cast || 'N/A'}.`;
-        window.history.replaceState({ slug: slug }, title, movieUrl);
+        
+        window.history.pushState({ slug: slug }, title, movieUrl);
         updateMetaTags(title, metaDesc, image, movieUrl);
-        if (!isDirectLoad) { database.ref('movies/' + key + '/viewCount').transaction(currentViews => (currentViews || 0) + 1); }
+
+        // Increment view count only if it's a user click, not a direct load/refresh
+        if (!isDirectLoad) {
+            database.ref('movies/' + key + '/viewCount').transaction(currentViews => (currentViews || 0) + 1);
+        }
     }
+
 
     function filterMovies() {
         const searchQuery = document.getElementById("search-bar").value.toLowerCase();
@@ -436,8 +452,17 @@
     function savePostToLocalStorage(t,e,a,o,n,s,i,r){t.preventDefault();const d={key:e,title:a,image:o,link:n,link2:s,link3:i,category:r};localStorage.setItem(`savedMovie_${e}`,JSON.stringify(d)),alert(`"${a}" has been saved!`),t.target.closest(".options-menu").style.display="none"}
     function removeSavedPost(t,e){t.stopPropagation(),confirm("Are you sure you want to remove this post?")&&(localStorage.removeItem(e),t.target.parentElement.remove())}
     function showPrivacyPolicy(t){t.preventDefault();const e=document.getElementById("privacy-policy-section");if(e){e.innerHTML='<h2>Privacy Policy</h2><p>Your privacy is important to us. This is a sample policy.</p><button onclick="closeModal(\'privacy-policy-section\')">Close</button>';showMainContent(false);e.style.display="block";}}
-    window.onpopstate=()=>{closeModal("viewerModal")};
+    
+    // *** NEW: Handles browser back/forward buttons ***
+    window.onpopstate = (event) => {
+        const modal = document.getElementById('viewerModal');
+        if (modal.style.display === "block") {
+            closeModal('viewerModal');
+        }
+        handleRouteChange();
+    };
+
 </script>
 
 </body>
-        </html>
+    </html>
