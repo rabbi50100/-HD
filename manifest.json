@@ -1,0 +1,9 @@
+{
+  "name": "Movie TV",
+  "short_name": "Movie TV",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#111",
+  "theme_color": "#111",
+  "gcm_sender_id": "103953800507"
+}
