@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- এই টাইটেলটি শুধু হোমপেজের জন্য -->
     <title>Movie TV - Watch & Download Latest HD Movies</title>
     
     <!-- SEO and Meta Tags -->
@@ -19,14 +18,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     
-    <!-- Open Graph / Facebook Meta Tags (এগুলো ডায়নামিকভাবে পরিবর্তন হবে) -->
+    <!-- Open Graph / Facebook Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://hindimovie.netlify.app/">
     <meta property="og:title" content="Movie TV - Watch & Download Latest HD Movies">
     <meta property="og:description" content="Explore and download a vast collection of the latest and classic movies in HD.">
     <meta property="og:image" content="https://i.postimg.cc/0yCyzmhm/IMG-20250730-220406.jpg" id="og-image-meta">
     
-    <!-- Twitter Meta Tags (এগুলো ডায়নামিকভাবে পরিবর্তন হবে) -->
+    <!-- Twitter Meta Tags -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://hindimovie.netlify.app/">
     <meta property="twitter:title" content="Movie TV - Watch & Download Latest HD Movies">
@@ -192,20 +191,20 @@
 
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = "none";
+        showMainContent(true);
         
         if (modalId === 'viewerModal') {
+            // সমাধান ৩: ক্লোজ করার পর সঠিক জায়গায় ফিরে যাওয়া
             if (lastClickedMovieSlug) {
                 const cardToScrollTo = document.querySelector(`.movie-card[data-slug='${lastClickedMovieSlug}']`);
                 if (cardToScrollTo) {
                     cardToScrollTo.scrollIntoView({ behavior: "smooth", block: "center" });
                 }
-                lastClickedMovieSlug = null;
+                lastClickedMovieSlug = null; // রিসেট করা
             }
-            // URL এবং মেটা ট্যাগ হোমপেজের জন্য রিসেট করুন
             window.history.pushState({}, "", "/");
             resetMetaTagsToHome();
         }
-        showMainContent(true);
     }
 
     function showSavedPosts() {
@@ -259,7 +258,7 @@
     function resetMetaTagsToHome() {
         const homeTitle = "Movie TV - Watch & Download Latest HD Movies";
         const homeDesc = "Explore and download a vast collection of the latest and classic movies in HD.";
-        const homeUrl = window.location.origin;
+        const homeUrl = window.location.origin + '/';
         updateMetaTags(homeTitle, homeDesc, siteSettings.mainOgImageUrl, homeUrl);
     }
     
@@ -268,12 +267,10 @@
         document.querySelector('meta[name="title"]').setAttribute('content', title);
         document.querySelector('meta[name="description"]').setAttribute('content', desc);
         document.querySelector('link[rel="canonical"]').setAttribute('href', url);
-        // Open Graph / Facebook
         document.querySelector('meta[property="og:title"]').setAttribute('content', title);
         document.querySelector('meta[property="og:description"]').setAttribute('content', desc);
         document.getElementById('og-image-meta').setAttribute('content', imageUrl);
         document.querySelector('meta[property="og:url"]').setAttribute('content', url);
-        // Twitter
         document.querySelector('meta[property="twitter:title"]').setAttribute('content', title);
         document.querySelector('meta[property="twitter:description"]').setAttribute('content', desc);
         document.getElementById('twitter-image-meta').setAttribute('content', imageUrl);
@@ -290,6 +287,7 @@
         d.innerHTML = `<button class="more-options-btn" onclick="toggleOptionsMenu(event)">…</button><div class="options-menu" id="options-menu-${e}"><a href="#" onclick="savePostToLocalStorage(event, '${e}', '${escapeQuotes(a)}', '${escapeQuotes(o)}', '${escapeQuotes(t.link)}', '${escapeQuotes(t.link2)}', '${escapeQuotes(t.link3)}', '${escapeQuotes(s)}')">Save Post</a></div><div class="movie-content-wrapper"><img src="${o}" alt="${a}"></div><div class="movie-title">${a}</div><div style="text-align:center; font-size: 14px; color: orange;">[${s||"Other"}]</div><div class="movie-stats"><div class="movie-views"><p>👁️ <span id="views-${e}">${i||0}</span></p></div><div class="movie-actions"><button class="like-btn" title="Like Movie" onclick="toggleLike(event, '${e}')"><span class="heart-icon">♡</span> <span id="likes-${e}">${r||0}</span></button></div></div>`;
         const likeButton = d.querySelector('.like-btn'), heartIcon = likeButton.querySelector('.heart-icon');
         if (localStorage.getItem(`likedMovie_${e}`)) { likeButton.classList.add('liked'); heartIcon.innerHTML = '❤️'; }
+        // সমাধান ৩: ক্লিক করার সময় মুভির slug সেভ করা
         d.querySelector(".movie-content-wrapper").addEventListener("click",()=>{ lastClickedMovieSlug = n; openViewer(n); });
         document.getElementById("movie-grid").appendChild(d);
         database.ref(`movies/${e}/viewCount`).on('value', snap => { const viewsSpan = document.getElementById(`views-${e}`); if (viewsSpan) viewsSpan.innerText = snap.val() || 0; });
@@ -331,14 +329,11 @@
         showMainContent(false);
         document.getElementById('viewerModal').style.display = "block";
 
-        // ---- গুরুত্বপূর্ণ পরিবর্তন এখানে ----
         const movieUrl = `${window.location.origin}/movie/${slug}`;
-        const shareTitle = `${title}`; // শেয়ারের জন্য টাইটেল
-        const shareDescription = "Watch & Download Latest HD Movies"; // শেয়ারের জন্য আপনার নির্দিষ্ট বর্ণনা
+        const shareTitle = `${title}`;
+        const shareDescription = "Watch & Download Latest HD Movies"; // সমাধান ১: শেয়ারের জন্য নির্দিষ্ট বর্ণনা
         
-        // URL পরিবর্তন করুন
         window.history.pushState({ slug: slug }, shareTitle, movieUrl);
-        // শেয়ার করার জন্য মেটা ট্যাগ আপডেট করুন
         updateMetaTags(shareTitle, shareDescription, image, movieUrl);
         
         if (!isDirectLoad) { 
@@ -347,9 +342,8 @@
 
         document.getElementById('share-btn')?.addEventListener('click', (event) => {
             event.preventDefault();
-            const shareData = { title: title, text: shareDescription, url: window.location.href };
             if (navigator.share) {
-                navigator.share(shareData).catch(error => console.error('Error sharing:', error));
+                navigator.share({ title: title, text: shareDescription, url: window.location.href });
             } else {
                 navigator.clipboard.writeText(window.location.href).then(() => alert('Share link copied to clipboard!'));
             }
@@ -361,8 +355,19 @@
         document.querySelectorAll('.movie-card').forEach(card => {
             const title = card.getAttribute("data-title");
             const category = card.getAttribute("data-category");
-            const isCategoryMatch = currentCategoryFilter === 'all' || category.includes(currentCategoryFilter);
-            card.style.display = title.includes(searchQuery) && isCategoryMatch ? "block" : "none";
+            const isSearchMatch = title.includes(searchQuery);
+            
+            // সমাধান ২: আপকামিং মুভির জন্য নতুন ফিল্টার লজিক
+            let isCategoryMatch;
+            if (currentCategoryFilter === 'upcoming') {
+                isCategoryMatch = (category === 'upcoming');
+            } else if (currentCategoryFilter === 'all') {
+                isCategoryMatch = (category !== 'upcoming');
+            } else {
+                isCategoryMatch = (category.includes(currentCategoryFilter) && category !== 'upcoming');
+            }
+            
+            card.style.display = isSearchMatch && isCategoryMatch ? "block" : "none";
         });
     }
 
