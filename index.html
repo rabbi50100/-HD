@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script type='text/javascript' src='//pl24867056.profitableratecpm.com/3a/69/d1/3a69d11472d2ab7730e620c747eb79ef.js'></script>
+<script type='text/javascript' src='//pl24867056.profitableratecpm.com/3a/69/d1/3a69d11472d2ab7730e620c747eb79ef.js'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie TV - Watch & Download Latest HD Movies</title>
@@ -119,6 +119,34 @@
       measurementId: "G-RHPWTHQHS2"
     };
     firebase.initializeApp(firebaseConfig);
+
+    //============== নতুন ট্র্যাকিং কোড শুরু ==============//
+    function logVisitorAnalytics() {
+        if (sessionStorage.getItem('visitorLogged')) { return; }
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                const referrer = document.referrer;
+                let source = 'Direct';
+                if (referrer.includes('facebook.com')) {
+                    source = 'Facebook';
+                } else if (referrer.includes('google.com')) {
+                    source = 'Google';
+                } else if (referrer) {
+                    source = 'Other';
+                }
+                const analyticsData = {
+                    country: data.country_name || 'Unknown',
+                    source: source,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                };
+                database.ref('analytics/visits').push(analyticsData);
+                sessionStorage.setItem('visitorLogged', 'true');
+            }).catch(error => { console.error('Error fetching visitor location:', error); });
+    }
+    //============== নতুন ট্র্যাকিং কোড শেষ ==============//
+
+
     const database = firebase.database();
     const moviesRef = database.ref('movies');
     const settingsRef = database.ref('siteSettings');
@@ -129,6 +157,9 @@
     let siteSettings = {};
 
     document.addEventListener('DOMContentLoaded', () => {
+        // নতুন ট্র্যাকিং ফাংশন চালু করা হচ্ছে
+        logVisitorAnalytics();
+
         document.body.classList.add('loading');
         
         const defaultSettings = {
@@ -158,6 +189,7 @@
         setupMenuControls();
     });
     
+    // বাকি সব কোড অপরিবর্তিত
     function setupAppBanner() {
         const installBanner = document.getElementById('app-install-banner');
         const closeBannerBtn = document.getElementById('close-banner');
@@ -166,7 +198,6 @@
             closeBannerBtn.addEventListener('click', () => { installBanner.style.display = 'none'; });
         }
     }
-
     function setupMenuControls() {
         const menuBtn = document.getElementById('menu-btn');
         const sideMenu = document.getElementById('side-menu');
@@ -180,7 +211,6 @@
             sideMenu.classList.remove('open');
         });
     }
-
     function showMainContent(shouldShow) {
         document.querySelector('header').style.display = shouldShow ? 'flex' : 'none';
         document.querySelector('.category-filters').style.display = shouldShow ? 'flex' : 'none';
@@ -189,25 +219,21 @@
         document.querySelector('.footer-links').style.display = shouldShow ? 'block' : 'none';
         document.getElementById('privacy-policy-section').style.display = 'none';
     }
-
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = "none";
         showMainContent(true);
-        
         if (modalId === 'viewerModal') {
-            // সমাধান ৩: ক্লোজ করার পর সঠিক জায়গায় ফিরে যাওয়া
             if (lastClickedMovieSlug) {
                 const cardToScrollTo = document.querySelector(`.movie-card[data-slug='${lastClickedMovieSlug}']`);
                 if (cardToScrollTo) {
                     cardToScrollTo.scrollIntoView({ behavior: "smooth", block: "center" });
                 }
-                lastClickedMovieSlug = null; // রিসেট করা
+                lastClickedMovieSlug = null;
             }
             window.history.pushState({}, "", "/");
             resetMetaTagsToHome();
         }
     }
-
     function showSavedPosts() {
         const modal = document.getElementById('savedPostsModal');
         const container = document.getElementById('saved-posts-list');
@@ -234,7 +260,6 @@
         showMainContent(false);
         modal.style.display = "block";
     }
-
     function loadAndDisplayMovies() {
         moviesRef.once('value', snapshot => {
             document.body.classList.remove('loading');
@@ -255,14 +280,12 @@
             handleDirectUrlAccess();
         });
     }
-
     function resetMetaTagsToHome() {
         const homeTitle = "Movie TV - Watch & Download Latest HD Movies";
         const homeDesc = "Explore and download a vast collection of the latest and classic movies in HD.";
         const homeUrl = window.location.origin + '/';
         updateMetaTags(homeTitle, homeDesc, siteSettings.mainOgImageUrl, homeUrl);
     }
-    
     function updateMetaTags(title, desc, imageUrl, url) {
         document.title = title;
         document.querySelector('meta[name="title"]').setAttribute('content', title);
@@ -277,10 +300,8 @@
         document.getElementById('twitter-image-meta').setAttribute('content', imageUrl);
         document.querySelector('meta[property="twitter:url"]').setAttribute('content', url);
     }
-
     function createSlug(t){return t?t.toLowerCase().replace(/ /g,"-").replace(/[^\w-]+/g,""):""}
     function escapeQuotes(t){return"string"!=typeof t?"":t.replace(/'/g,"\\'").replace(/"/g,'\\"')}
-    
     function addMovieCard(t) {
         const {key:e, title:a, image:o, slug:n, category:s, viewCount:i, likeCount:r} = t;
         const d = document.createElement("div");
@@ -288,13 +309,11 @@
         d.innerHTML = `<button class="more-options-btn" onclick="toggleOptionsMenu(event)">…</button><div class="options-menu" id="options-menu-${e}"><a href="#" onclick="savePostToLocalStorage(event, '${e}', '${escapeQuotes(a)}', '${escapeQuotes(o)}', '${escapeQuotes(t.link)}', '${escapeQuotes(t.link2)}', '${escapeQuotes(t.link3)}', '${escapeQuotes(s)}')">Save Post</a></div><div class="movie-content-wrapper"><img src="${o}" alt="${a}"></div><div class="movie-title">${a}</div><div style="text-align:center; font-size: 14px; color: orange;">[${s||"Other"}]</div><div class="movie-stats"><div class="movie-views"><p>👁️ <span id="views-${e}">${i||0}</span></p></div><div class="movie-actions"><button class="like-btn" title="Like Movie" onclick="toggleLike(event, '${e}')"><span class="heart-icon">♡</span> <span id="likes-${e}">${r||0}</span></button></div></div>`;
         const likeButton = d.querySelector('.like-btn'), heartIcon = likeButton.querySelector('.heart-icon');
         if (localStorage.getItem(`likedMovie_${e}`)) { likeButton.classList.add('liked'); heartIcon.innerHTML = '❤️'; }
-        // সমাধান ৩: ক্লিক করার সময় মুভির slug সেভ করা
         d.querySelector(".movie-content-wrapper").addEventListener("click",()=>{ lastClickedMovieSlug = n; openViewer(n); });
         document.getElementById("movie-grid").appendChild(d);
         database.ref(`movies/${e}/viewCount`).on('value', snap => { const viewsSpan = document.getElementById(`views-${e}`); if (viewsSpan) viewsSpan.innerText = snap.val() || 0; });
         database.ref(`movies/${e}/likeCount`).on('value', snap => { const likesSpan = document.getElementById(`likes-${e}`); if (likesSpan) likesSpan.innerText = snap.val() || 0; });
     }
-
     function handleDirectUrlAccess(){
         const path = window.location.pathname;
         if(path.startsWith("/movie/")){
@@ -307,40 +326,31 @@
             }
         }
     }
-    
     function openViewer(slug, isDirectLoad = false) {
         const movieData = allMovieData[slug];
         if (!movieData) { return; }
         const { key, title, image, link, link2, link3, category, description, director, cast, releaseDate } = movieData;
-        
         let messagesHTML = '';
         if (siteSettings.bengaliMessage || siteSettings.hindiMessage) {
             messagesHTML += `<div class="user-message-container">${siteSettings.bengaliMessage ? `<p class="user-message">${siteSettings.bengaliMessage}</p>` : ''}${siteSettings.hindiMessage ? `<p class="user-message">${siteSettings.hindiMessage}</p>` : ''}</div>`;
         }
-        
         let buttonsHTML = "";
         if (link) buttonsHTML += `<a href="${link}" target="_blank" class="watch-button">▶️ Watch Now</a>`;
         if (link2) buttonsHTML += `<a href="${link2}" target="_blank" class="download-button">Watch 720p</a>`;
         if (link3) buttonsHTML += `<a href="${link3}" target="_blank" class="download-button">Watch 360p</a>`;
         buttonsHTML += `<a href="#" id="share-btn" class="download-button" style="background-color:#007bff; display: flex; align-items: center; justify-content: center; gap: 8px;"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg><span>Share</span></a>`;
-        
         const viewerContent = document.getElementById("viewerContent");
         viewerContent.innerHTML = `<span class="close" onclick="closeModal('viewerModal')">×</span><img src="${image}" alt="${title}"><h3>${title}</h3><div class="movie-details">${director ? `<p><strong>Director:</strong> ${director}</p>` : ''}${cast ? `<p><strong>Cast:</strong> ${cast}</p>` : ''}${releaseDate ? `<p><strong>Release Date:</strong> ${releaseDate}</p>` : ''}<p><strong>Genre:</strong> ${category || "N/A"}</p></div><p class="movie-description">${description || "No description available."}</p>${messagesHTML}<div class="download-buttons">${buttonsHTML}</div>`;
-            
         showMainContent(false);
         document.getElementById('viewerModal').style.display = "block";
-
         const movieUrl = `${window.location.origin}/movie/${slug}`;
         const shareTitle = `${title}`;
-        const shareDescription = "Watch & Download Latest HD Movies"; // সমাধান ১: শেয়ারের জন্য নির্দিষ্ট বর্ণনা
-        
+        const shareDescription = "Watch & Download Latest HD Movies";
         window.history.pushState({ slug: slug }, shareTitle, movieUrl);
         updateMetaTags(shareTitle, shareDescription, image, movieUrl);
-        
         if (!isDirectLoad) { 
             database.ref('movies/' + key + '/viewCount').transaction(currentViews => (currentViews || 0) + 1);
         }
-
         document.getElementById('share-btn')?.addEventListener('click', (event) => {
             event.preventDefault();
             if (navigator.share) {
@@ -350,15 +360,12 @@
             }
         });
     }
-
     function filterMovies() {
         const searchQuery = document.getElementById("search-bar").value.toLowerCase();
         document.querySelectorAll('.movie-card').forEach(card => {
             const title = card.getAttribute("data-title");
             const category = card.getAttribute("data-category");
             const isSearchMatch = title.includes(searchQuery);
-            
-            // সমাধান ২: আপকামিং মুভির জন্য নতুন ফিল্টার লজিক
             let isCategoryMatch;
             if (currentCategoryFilter === 'upcoming') {
                 isCategoryMatch = (category === 'upcoming');
@@ -367,21 +374,17 @@
             } else {
                 isCategoryMatch = (category.includes(currentCategoryFilter) && category !== 'upcoming');
             }
-            
             card.style.display = isSearchMatch && isCategoryMatch ? "block" : "none";
         });
     }
-
     function filterByCategory(category, event) {
         currentCategoryFilter = category.toLowerCase();
         document.querySelectorAll(".category-filters button").forEach(button => button.classList.remove("active"));
         event.target.classList.add("active");
         filterMovies();
     }
-
     window.onclick=function(t){if(t.target.classList.contains("modal"))closeModal(t.target.id); const e=document.getElementById('side-menu'),a=document.getElementById('menu-btn');if(e.classList.contains('open')&&!e.contains(t.target)&&!a.contains(t.target))e.classList.remove('open');document.querySelectorAll(".options-menu").forEach(e=>{if(e.style.display==='block'&&!e.contains(t.target)&&!t.target.classList.contains("more-options-btn"))e.style.display="none"})}
     window.onpopstate=function(event){closeModal('viewerModal');};
-    
     function toggleLike(t,e){t.stopPropagation();const o=`likedMovie_${e}`,n=t.currentTarget;if(!n.classList.contains("liked")){n.classList.add("liked");const t=n.querySelector(".heart-icon");t&&(t.innerHTML="❤️"),localStorage.setItem(o,"true"),database.ref(`movies/${e}/likeCount`).transaction(t=>(t||0)+1)}}
     function toggleOptionsMenu(t){t.stopPropagation();const e=t.target.nextElementSibling,o="block"===e.style.display;document.querySelectorAll(".options-menu").forEach(t=>t.style.display="none"),e.style.display=o?"none":"block"}
     function savePostToLocalStorage(t,e,o,n,s,a,i,l){t.preventDefault();const c={key:e,title:o,image:n,link:s,link2:a,link3:i,category:l};localStorage.setItem(`savedMovie_${e}`,JSON.stringify(c)),alert(`"${o}" has been saved!`),t.target.closest(".options-menu").style.display="none"}
@@ -390,4 +393,4 @@
 </script>
 
 </body>
-        </html>
+                                  </html>
