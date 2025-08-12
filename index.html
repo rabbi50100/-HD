@@ -192,9 +192,19 @@
 
     function closeActiveModal(fromPopState = false) {
         if (!activeModal) return;
+
+        // Stop video if viewer modal is closing
+        if (activeModal === 'viewerModal') {
+            const iframe = document.querySelector('#viewerModal iframe');
+            if (iframe) {
+                iframe.src = ''; // This stops the video
+            }
+        }
+
         document.getElementById(activeModal).style.display = 'none';
         showMainContent(true);
         resetMetaTagsToHome();
+        
         if (!fromPopState && window.location.hash) {
             window.history.back();
         }
@@ -361,4 +371,4 @@
 </script>
 
 </body>
-        </html>
+    </html>
