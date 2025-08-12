@@ -195,7 +195,7 @@
         if (!activeModal) return;
         if (activeModal === 'viewerModal') {
             const iframe = document.querySelector('#viewerModal iframe');
-            if (iframe) iframe.src = '';
+            if (iframe) iframe.src = 'about:blank';
         }
         document.getElementById(activeModal).style.display = 'none';
         showMainContent(true);
@@ -271,7 +271,7 @@
     function displayViewerContent(movieData) {
         const { title, image, link, link2, link3, intermediateLink, category, description, director, cast, releaseDate } = movieData;
         const viewerContent = document.getElementById('viewerContent');
-        viewerContent.innerHTML = ''; // Clear previous content
+        viewerContent.innerHTML = ''; // Clear previous content to remove old ad scripts
 
         let buttonsHtml = '';
         if (intermediateLink) { buttonsHtml += `<a href="${intermediateLink}" target="_blank" class="watch-button">▶️ Watch Now</a>`; } 
@@ -289,15 +289,17 @@
         let userMessageHtml = '';
         if (siteSettings.bengaliMessage || siteSettings.hindiMessage) { userMessageHtml += `<div class="user-message-container"><p class="user-message">${siteSettings.bengaliMessage}</p><p class="user-message">${siteSettings.hindiMessage}</p></div>`; }
         
-        const adContainerHtml = `<div class="modal-ad-container"><div id="container-45752cf9decf76008d2cd4626cc5dfec"></div></div>`;
+        const adContainerHtml = `<div class="modal-ad-container"><div id="container-65be6a2621d7693d87b0f676520a24e4"></div></div>`;
         
         viewerContent.innerHTML = `<span class="close" onclick="closeActiveModal()">×</span><div id="media-display-area"><img src="${image}" alt="${title}"></div><h3>${title}</h3><div class="download-buttons">${buttonsHtml}</div>${adContainerHtml}${detailsTable}<p class="movie-description">${description || "No description available."}</p>${userMessageHtml}`;
 
+        // Create and append the ad script dynamically
         const adScript = document.createElement('script');
         adScript.async = true;
         adScript.setAttribute('data-cfasync', 'false');
-        adScript.src = "//pl27095207.profitableratecpm.com/45752cf9decf76008d2cd4626cc5dfec/invoke.js";
-        const adContainer = document.getElementById('container-45752cf9decf76008d2cd4626cc5dfec');
+        adScript.src = "//pl27213977.profitableratecpm.com/65be6a2621d7693d87b0f676520a24e4/invoke.js";
+        
+        const adContainer = viewerContent.querySelector('#container-65be6a2621d7693d87b0f676520a24e4');
         if (adContainer) {
             adContainer.appendChild(adScript);
         }
@@ -311,9 +313,7 @@
         card.setAttribute('data-slug', slug);
         card.setAttribute('data-title', title.toLowerCase());
         card.setAttribute('data-category', (category || 'other').toLowerCase());
-
         const movieJsonString = JSON.stringify(movie).replace(/'/g, "&apos;").replace(/"/g, '&quot;');
-
         card.innerHTML = `
             <button class="more-options-btn" onclick="toggleOptionsMenu(event)">
                 <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -357,7 +357,7 @@
         filterMovies();
     }
     function createSlug(e){ return e ? e.toLowerCase().replace(/ /g,"-").replace(/[^\w-]+/g,"") : ""; }
-    function updateMetaTags(title, desc, image, url) { document.title = title; document.querySelector('meta[name="description"]').setAttribute("content", desc || ''); /* Update other meta tags similarly... */ }
+    function updateMetaTags(title, desc, image, url) { document.title = title; document.querySelector('meta[name="description"]').setAttribute("content", desc || ''); /* ... */ }
     function resetMetaTagsToHome() { updateMetaTags("Movie TV", "...", siteSettings.mainOgImageUrl, window.location.origin + window.location.pathname); }
     function toggleLike(e,t){ e.stopPropagation(); const n=`likedMovie_${t}`,o=e.currentTarget; if(!o.classList.contains("liked")){ o.classList.add("liked");o.querySelector(".heart-icon").innerHTML="❤️";localStorage.setItem(n,"true");database.ref(`movies/${t}/likeCount`).transaction(e=>(e||0)+1); } }
     function toggleOptionsMenu(e){ e.stopPropagation(); const t=e.target.closest('.more-options-btn').nextElementSibling; document.querySelectorAll(".options-menu").forEach(menu=>menu.style.display="none"); t.style.display="block"; }
@@ -374,4 +374,4 @@
 </script>
 
 </body>
-        </html>
+    </html>
