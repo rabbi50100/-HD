@@ -206,7 +206,7 @@
             const iframe = document.querySelector('#viewerModal iframe');
             if (iframe) iframe.src = 'about:blank';
             if (redirectTimer) clearTimeout(redirectTimer);
-            redirectTimer = null; // Clear the timer ID
+            redirectTimer = null;
         }
         document.getElementById(activeModal).style.display = 'none';
         showMainContent(true);
@@ -342,6 +342,7 @@
         card.setAttribute('data-title', title.toLowerCase());
         card.setAttribute('data-category', (category || 'other').toLowerCase());
         const movieJsonString = JSON.stringify(movie).replace(/'/g, "&apos;");
+
         card.innerHTML = `
             <button class="more-options-btn">
                 <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -412,4 +413,4 @@
     function showPrivacyPolicy(){ alert("Privacy Policy is under development."); }
 </script>
 </body>
-    </html>
+        </html>
