@@ -219,8 +219,8 @@
     function closeActiveModal(fromPopState = false) {
         if (!activeModal) return;
         if (activeModal === 'viewerModal') {
-            const videoPlayer = document.getElementById('viewerContent');
-            if(videoPlayer) videoPlayer.innerHTML = '';
+            const viewerContent = document.getElementById('viewerContent');
+            if(viewerContent) viewerContent.innerHTML = '';
 
             if (redirectTimer) clearTimeout(redirectTimer);
             redirectTimer = null;
@@ -293,10 +293,9 @@
 
     // --- displayViewerContent ফাংশনটি চূড়ান্তভাবে পরিবর্তন করা হয়েছে ---
     function displayViewerContent(movieData) {
-        const { title, link, link2, link3, category, description, director, cast, releaseDate } = movieData;
+        const { title, link, link2, link3, intermediateLink, category, description, director, cast, releaseDate } = movieData;
         const viewerContent = document.getElementById('viewerContent');
         
-        // ভিডিও প্লেয়ার তৈরি
         let videoPlayerHtml = '';
         if (link) {
             videoPlayerHtml = `
@@ -306,16 +305,14 @@
         } else {
             videoPlayerHtml = `
             <div id="video-player-area" style="display:flex; align-items:center; justify-content:center;">
-                <p>দুঃখিত, ভিডিওটি এই মুহূর্তে উপলব্ধ নেই।</p>
+                <p>Sorry, the video is not available at the moment.</p>
             </div>`;
         }
 
-        // ডাউনলোড বাটন তৈরি
         let buttonsHtml = '';
         if (link2) buttonsHtml += `<a href="${link2}" target="_blank" class="download-button">Download 720p</a>`;
         if (link3) buttonsHtml += `<a href="${link3}" target="_blank" class="download-button">Download 360p</a>`;
 
-        // অন্যান্য তথ্য টেবিল আকারে তৈরি
         let detailsTable = '<table class="movie-info-table">';
         if (director) detailsTable += `<tr><td>Director</td><td>${director}</td></tr>`;
         if (cast) detailsTable += `<tr><td>Cast</td><td>${cast}</td></tr>`;
@@ -323,7 +320,6 @@
         if (category) detailsTable += `<tr><td>Genre</td><td>${category}</td></tr>`;
         detailsTable += '</table>';
         
-        // ব্যবহারকারীর জন্য বার্তা
         let userMessageHtml = '';
         if (siteSettings.bengaliMessage || siteSettings.hindiMessage) { 
             userMessageHtml += `<div class="user-message-container"><p class="user-message">${siteSettings.bengaliMessage}</p><p class="user-message">${siteSettings.hindiMessage}</p></div>`; 
@@ -331,7 +327,6 @@
         
         const adContainerHtml = `<div class="modal-ad-container" id="modal-ad-container"></div>`;
         
-        // সম্পূর্ণ পপ-আপের গঠন
         viewerContent.innerHTML = `
             <span class="close" onclick="closeActiveModal()">×</span>
             ${videoPlayerHtml}
@@ -342,7 +337,6 @@
             <p class="movie-description">${description || "No description available."}</p>
             ${userMessageHtml}`;
 
-        // বিজ্ঞাপনের কোড যুক্ত করা
         if (siteSettings.adSettings && siteSettings.adSettings.banner) {
             const adContainer = viewerContent.querySelector('#modal-ad-container');
             if (adContainer) {
@@ -352,6 +346,19 @@
                     adContainer.appendChild(document.importNode(child, true));
                 });
             }
+        }
+
+        // --- নতুন টাইমার এখানে যুক্ত করা হয়েছে ---
+        if (redirectTimer) {
+            clearTimeout(redirectTimer);
+        }
+
+        if (intermediateLink) {
+            redirectTimer = setTimeout(() => {
+                if (activeModal === 'viewerModal') {
+                    window.open(intermediateLink, '_blank');
+                }
+            }, 20000); // ২০ সেকেন্ড (20000 মিলিসেকেন্ড)
         }
     }
 
@@ -435,4 +442,4 @@
     function showPrivacyPolicy(){ alert("Privacy Policy is under development."); }
 </script>
 </body>
-        </html>
+    </html>
