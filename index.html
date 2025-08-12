@@ -158,11 +158,11 @@
             document.getElementById('app-icon-img').src = siteSettings.appIconUrl;
             document.getElementById('download-app-link').href = siteSettings.appDownloadUrl;
             
-            // Inject Pop-under Ad if it exists
             if (siteSettings.adSettings && siteSettings.adSettings.popUnder) {
                 const adContainer = document.createElement('div');
                 adContainer.innerHTML = siteSettings.adSettings.popUnder;
-                document.head.appendChild(adContainer.firstChild);
+                const script = adContainer.querySelector('script');
+                if (script) document.head.appendChild(script);
             }
 
             loadAndDisplayMovies();
@@ -275,11 +275,18 @@
 
     function playVideoInModal(event, videoUrl, redirectUrl) {
         event.preventDefault();
-        document.getElementById('media-display-area').innerHTML = `<iframe src="${videoUrl}" scrolling="no" frameborder="0" allowfullscreen="true"></iframe>`;
+        const mediaArea = document.getElementById('media-display-area');
+        mediaArea.innerHTML = `<iframe src="${videoUrl}" scrolling="no" frameborder="0" allowfullscreen="true"></iframe>`;
+        
         if (redirectUrl) {
             if (redirectTimer) clearTimeout(redirectTimer);
-            redirectTimer = setTimeout(() => {
-                window.open(redirectUrl, '_blank');
+            const iframe = mediaArea.querySelector('iframe');
+            
+            // Wait for the iframe to potentially start playing
+            setTimeout(() => {
+                if (redirectTimer !== null) { // Check if modal is still open
+                    window.open(redirectUrl, '_blank');
+                }
             }, 5000); // 5 seconds
         }
     }
@@ -321,19 +328,8 @@
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = siteSettings.adSettings.banner;
                 Array.from(tempDiv.children).forEach(child => {
-                    if (child.tagName === 'SCRIPT') {
-                        const script = document.createElement('script');
-                        script.type = 'text/javascript';
-                        if (child.src) {
-                            script.src = child.src;
-                            script.async = child.async;
-                        } else {
-                            script.innerHTML = child.innerHTML;
-                        }
-                        adContainer.appendChild(script);
-                    } else {
-                        adContainer.appendChild(child);
-                    }
+                    const node = document.importNode(child, true);
+                    adContainer.appendChild(node);
                 });
             }
         }
@@ -348,6 +344,7 @@
         card.setAttribute('data-title', title.toLowerCase());
         card.setAttribute('data-category', (category || 'other').toLowerCase());
         const movieJsonString = JSON.stringify(movie).replace(/'/g, "&apos;");
+
         card.innerHTML = `
             <button class="more-options-btn">
                 <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
