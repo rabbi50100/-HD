@@ -66,6 +66,7 @@
         .user-message-container { margin: 15px 0; padding: 10px; border: 1px dashed orange; border-radius: 8px; background-color: #2a2a2a; }
         .user-message { margin: 5px 0; padding: 0; font-size: 14px; color: #f0f0f0; line-height: 1.5; text-align: left; }
         .movie-info-table{width:100%;margin-top:15px;border-collapse:collapse;font-size:14px}.movie-info-table td{padding:8px 5px;text-align:left;border-bottom:1px solid #333;vertical-align:top}.movie-info-table tr:last-child td{border-bottom:none}.movie-info-table td:first-child{color:orange;font-weight:700;width:110px}
+        .modal-ad-container{margin:15px 0;padding:10px 0;border-top:1px solid #333;border-bottom:1px solid #333}
     </style>
 </head>
 <body>
@@ -192,19 +193,13 @@
 
     function closeActiveModal(fromPopState = false) {
         if (!activeModal) return;
-
-        // Stop video if viewer modal is closing
         if (activeModal === 'viewerModal') {
             const iframe = document.querySelector('#viewerModal iframe');
-            if (iframe) {
-                iframe.src = ''; // This stops the video
-            }
+            if (iframe) iframe.src = '';
         }
-
         document.getElementById(activeModal).style.display = 'none';
         showMainContent(true);
         resetMetaTagsToHome();
-        
         if (!fromPopState && window.location.hash) {
             window.history.back();
         }
@@ -221,16 +216,14 @@
     }
     
     function showSavedPosts() {
-        const container = document.getElementById("saved-posts-list");
-        const noPostsMsg = document.getElementById("no-saved-posts-message");
+        const container = document.getElementById("saved-posts-list"), noPostsMsg = document.getElementById("no-saved-posts-message");
         container.innerHTML = "";
         let hasPosts = false;
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if (key.startsWith("savedMovie_")) {
                 hasPosts = true;
-                const post = JSON.parse(localStorage.getItem(key));
-                const item = document.createElement('div');
+                const post = JSON.parse(localStorage.getItem(key)), item = document.createElement('div');
                 item.className = 'thumbnail-item';
                 item.innerHTML = `<img src="${post.image}" alt="${post.title}"><div class="title">${post.title}</div><span class="remove-saved" onclick="removeSavedPost(event, '${key}')">×</span>`;
                 item.onclick = e => { if (e.target.classList.contains('remove-saved')) return; closeActiveModal(); openViewer(createSlug(post.title)); };
@@ -264,11 +257,10 @@
     }
     
     function showMainContent(show) {
-        document.querySelector("header").style.display = show ? "flex" : "none";
-        document.querySelector(".category-filters").style.display = show ? "flex" : "none";
-        document.querySelector("#search-bar").style.display = show ? "block" : "none";
-        document.querySelector(".movie-grid").style.display = show ? "grid" : "none";
-        document.querySelector(".footer-links").style.display = show ? "block" : "none";
+        ["header", ".category-filters", "#search-bar", ".movie-grid", ".footer-links"].forEach(sel => {
+            const el = document.querySelector(sel);
+            if (el) el.style.display = show ? "" : "none";
+        });
     }
 
     function playVideoInModal(event, videoUrl) {
@@ -278,12 +270,12 @@
 
     function displayViewerContent(movieData) {
         const { title, image, link, link2, link3, intermediateLink, category, description, director, cast, releaseDate } = movieData;
+        const viewerContent = document.getElementById('viewerContent');
+        viewerContent.innerHTML = ''; // Clear previous content
+
         let buttonsHtml = '';
-        if (intermediateLink) {
-             buttonsHtml += `<a href="${intermediateLink}" target="_blank" class="watch-button">▶️ Watch Now</a>`;
-        } else if (link) {
-            buttonsHtml += `<a href="#" onclick="playVideoInModal(event, '${link}')" class="watch-button">▶️ Watch Now</a>`;
-        }
+        if (intermediateLink) { buttonsHtml += `<a href="${intermediateLink}" target="_blank" class="watch-button">▶️ Watch Now</a>`; } 
+        else if (link) { buttonsHtml += `<a href="#" onclick="playVideoInModal(event, '${link}')" class="watch-button">▶️ Watch Now</a>`; }
         if (link2) buttonsHtml += `<a href="${link2}" target="_blank" class="download-button">Download 720p</a>`;
         if (link3) buttonsHtml += `<a href="${link3}" target="_blank" class="download-button">Download 360p</a>`;
 
@@ -293,37 +285,50 @@
         if (releaseDate) detailsTable += `<tr><td>Release Date</td><td>${releaseDate}</td></tr>`;
         if (category) detailsTable += `<tr><td>Genre</td><td>${category}</td></tr>`;
         detailsTable += '</table>';
-
+        
         let userMessageHtml = '';
-        if (siteSettings.bengaliMessage || siteSettings.hindiMessage) {
-            userMessageHtml += `<div class="user-message-container"><p class="user-message">${siteSettings.bengaliMessage}</p><p class="user-message">${siteSettings.hindiMessage}</p></div>`;
+        if (siteSettings.bengaliMessage || siteSettings.hindiMessage) { userMessageHtml += `<div class="user-message-container"><p class="user-message">${siteSettings.bengaliMessage}</p><p class="user-message">${siteSettings.hindiMessage}</p></div>`; }
+        
+        const adContainerHtml = `<div class="modal-ad-container"><div id="container-45752cf9decf76008d2cd4626cc5dfec"></div></div>`;
+        
+        viewerContent.innerHTML = `<span class="close" onclick="closeActiveModal()">×</span><div id="media-display-area"><img src="${image}" alt="${title}"></div><h3>${title}</h3><div class="download-buttons">${buttonsHtml}</div>${adContainerHtml}${detailsTable}<p class="movie-description">${description || "No description available."}</p>${userMessageHtml}`;
+
+        const adScript = document.createElement('script');
+        adScript.async = true;
+        adScript.setAttribute('data-cfasync', 'false');
+        adScript.src = "//pl27095207.profitableratecpm.com/45752cf9decf76008d2cd4626cc5dfec/invoke.js";
+        const adContainer = document.getElementById('container-45752cf9decf76008d2cd4626cc5dfec');
+        if (adContainer) {
+            adContainer.appendChild(adScript);
         }
-        document.getElementById('viewerContent').innerHTML = `<span class="close" onclick="closeActiveModal()">×</span><div id="media-display-area"><img src="${image}" alt="${title}"></div><h3>${title}</h3><div class="download-buttons">${buttonsHtml}</div>${detailsTable}<p class="movie-description">${description || "No description available."}</p>${userMessageHtml}`;
     }
 
     function addMovieCard(movie) {
-        const { key, title, image, slug, category, link, link2, link3, intermediateLink, viewCount = 0, likeCount = 0 } = movie;
+        const { key, title, image, slug, category, ...rest } = movie;
         const grid = document.getElementById('movie-grid');
         const card = document.createElement('div');
         card.className = 'movie-card';
         card.setAttribute('data-slug', slug);
         card.setAttribute('data-title', title.toLowerCase());
         card.setAttribute('data-category', (category || 'other').toLowerCase());
+
+        const movieJsonString = JSON.stringify(movie).replace(/'/g, "&apos;").replace(/"/g, '&quot;');
+
         card.innerHTML = `
             <button class="more-options-btn" onclick="toggleOptionsMenu(event)">
                 <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </button>
             <div class="options-menu">
-                <a href="#" onclick="savePostToLocalStorage(event, '${key}', '${escapeQuotes(title)}', '${escapeQuotes(image)}', '${escapeQuotes(link)}', '${escapeQuotes(link2)}', '${escapeQuotes(link3)}', '${escapeQuotes(intermediateLink)}', '${escapeQuotes(category)}')">Save Post</a>
+                <a href="#" onclick='savePostToLocalStorage(event, ${movieJsonString})'>Save Post</a>
             </div>
             <div class="movie-content-wrapper" onclick="openViewer('${slug}')"><img src="${image}" alt="${title}"></div>
             <div class="movie-title">${title}</div>
             <div style="text-align:center; font-size: 14px; color: orange;">[${category || "Other"}]</div>
             <div class="movie-stats">
-                <div class="movie-views"><p>👁️ <span id="views-${key}">${viewCount}</span></p></div>
+                <div class="movie-views"><p>👁️ <span id="views-${key}">${movie.viewCount || 0}</span></p></div>
                 <div class="movie-actions">
                     <button class="like-btn ${localStorage.getItem(`likedMovie_${key}`) ? 'liked' : ''}" onclick="toggleLike(event, '${key}')">
-                        <span class="heart-icon">${localStorage.getItem(`likedMovie_${key}`) ? '❤️' : '♡'}</span> <span id="likes-${key}">${likeCount}</span>
+                        <span class="heart-icon">${localStorage.getItem(`likedMovie_${key}`) ? '❤️' : '♡'}</span> <span id="likes-${key}">${movie.likeCount || 0}</span>
                     </button>
                 </div>
             </div>`;
@@ -351,17 +356,15 @@
         event.target.classList.add("active");
         filterMovies();
     }
-    function escapeQuotes(str) { return typeof str !== 'string' ? '' : str.replace(/'/g, "\\'").replace(/"/g, '\\"'); }
     function createSlug(e){ return e ? e.toLowerCase().replace(/ /g,"-").replace(/[^\w-]+/g,"") : ""; }
     function updateMetaTags(title, desc, image, url) { document.title = title; document.querySelector('meta[name="description"]').setAttribute("content", desc || ''); /* Update other meta tags similarly... */ }
-    function resetMetaTagsToHome() { updateMetaTags("Movie TV - Watch & Download Latest HD Movies", "Explore and download...", siteSettings.mainOgImageUrl, window.location.origin + window.location.pathname); }
+    function resetMetaTagsToHome() { updateMetaTags("Movie TV", "...", siteSettings.mainOgImageUrl, window.location.origin + window.location.pathname); }
     function toggleLike(e,t){ e.stopPropagation(); const n=`likedMovie_${t}`,o=e.currentTarget; if(!o.classList.contains("liked")){ o.classList.add("liked");o.querySelector(".heart-icon").innerHTML="❤️";localStorage.setItem(n,"true");database.ref(`movies/${t}/likeCount`).transaction(e=>(e||0)+1); } }
     function toggleOptionsMenu(e){ e.stopPropagation(); const t=e.target.closest('.more-options-btn').nextElementSibling; document.querySelectorAll(".options-menu").forEach(menu=>menu.style.display="none"); t.style.display="block"; }
-    function savePostToLocalStorage(event, key, title, image, link, link2, link3, intermediateLink, category) {
+    function savePostToLocalStorage(event, movieObject) {
         event.preventDefault();
-        const postData = { key, title, image, link, link2, link3, intermediateLink, category };
-        localStorage.setItem(`savedMovie_${key}`, JSON.stringify(postData));
-        alert(`"${title}" has been saved!`);
+        localStorage.setItem(`savedMovie_${movieObject.key}`, JSON.stringify(movieObject));
+        alert(`"${movieObject.title}" has been saved!`);
         event.target.closest(".options-menu").style.display = "none";
     }
     function setupAppBanner(){ const e=document.getElementById("app-install-banner"),t=document.getElementById("close-banner"); if(e&&t){setTimeout(()=>{e.style.display="flex"},5e3);t.addEventListener("click",()=>{e.style.display="none"});} }
@@ -371,4 +374,4 @@
 </script>
 
 </body>
-    </html>
+        </html>
