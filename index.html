@@ -67,17 +67,7 @@
         .movie-info-table{width:100%;margin-top:15px;border-collapse:collapse;font-size:14px}.movie-info-table td{padding:8px 5px;text-align:left;border-bottom:1px solid #333;vertical-align:top}.movie-info-table tr:last-child td{border-bottom:none}.movie-info-table td:first-child{color:orange;font-weight:700;width:110px}
         .modal-ad-container{margin:15px 0;padding:10px 0;border-top:1px solid #333;border-bottom:1px solid #333; display: flex; justify-content: center;}
     
-        /* --- নতুন স্টাইল যুক্ত করা হয়েছে --- */
-        #small-poster-area {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        #small-poster-area img {
-            max-width: 150px; /* পোস্টারের আকার ছোট করা হয়েছে */
-            height: auto;
-            border-radius: 8px;
-            border: 2px solid #444;
-        }
+        /* --- ভিডিও প্লেয়ারের জন্য স্টাইল --- */
         #video-player-area {
             width: 100%;
             aspect-ratio: 16 / 9; /* ভিডিওর জন্য স্ট্যান্ডার্ড অনুপাত */
@@ -229,8 +219,7 @@
     function closeActiveModal(fromPopState = false) {
         if (!activeModal) return;
         if (activeModal === 'viewerModal') {
-            // ভিডিও প্লেয়ারকে খালি করে দেওয়া হচ্ছে যাতে ব্যাকগ্রাউন্ডে অডিও না চলে
-            const videoPlayer = document.getElementById('video-player-area');
+            const videoPlayer = document.getElementById('viewerContent');
             if(videoPlayer) videoPlayer.innerHTML = '';
 
             if (redirectTimer) clearTimeout(redirectTimer);
@@ -302,40 +291,31 @@
         });
     }
 
-    // --- 'playVideoInModal' ফাংশন পরিবর্তন করা হয়েছে ---
-    function playVideoInModal(event, videoUrl, redirectUrl) {
-        event.preventDefault();
-        const videoPlayer = document.getElementById('video-player-area'); // এখন ভিডিও প্লেয়ারকে টার্গেট করা হচ্ছে
-        videoPlayer.innerHTML = `<iframe src="${videoUrl}?autoplay=1" scrolling="no" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe>`;
-        
-        if (redirectUrl) {
-            if (redirectTimer) clearTimeout(redirectTimer);
-            redirectTimer = setTimeout(() => {
-                if(activeModal === 'viewerModal') { 
-                   window.open(redirectUrl, '_blank');
-                }
-            }, 20000); // 20 seconds
-        }
-    }
-
-    // --- 'displayViewerContent' ফাংশন পরিবর্তন করা হয়েছে ---
+    // --- displayViewerContent ফাংশনটি চূড়ান্তভাবে পরিবর্তন করা হয়েছে ---
     function displayViewerContent(movieData) {
-        const { title, image, link, link2, link3, intermediateLink, category, description, director, cast, releaseDate } = movieData;
+        const { title, link, link2, link3, category, description, director, cast, releaseDate } = movieData;
         const viewerContent = document.getElementById('viewerContent');
-        viewerContent.innerHTML = '';
-
-        let watchButtonHtml = '';
-        const redirectUrl = intermediateLink || '';
-        if (link) {
-            watchButtonHtml = `<a href="#" onclick="playVideoInModal(event, '${link}', '${redirectUrl}')" class="watch-button">▶️ Watch Now</a>`;
-        } else if (intermediateLink) {
-            watchButtonHtml = `<a href="${intermediateLink}" target="_blank" class="watch-button">▶️ Watch Now</a>`;
-        }
         
-        let buttonsHtml = watchButtonHtml;
+        // ভিডিও প্লেয়ার তৈরি
+        let videoPlayerHtml = '';
+        if (link) {
+            videoPlayerHtml = `
+            <div id="video-player-area">
+                <iframe src="${link}?autoplay=1" scrolling="no" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe>
+            </div>`;
+        } else {
+            videoPlayerHtml = `
+            <div id="video-player-area" style="display:flex; align-items:center; justify-content:center;">
+                <p>দুঃখিত, ভিডিওটি এই মুহূর্তে উপলব্ধ নেই।</p>
+            </div>`;
+        }
+
+        // ডাউনলোড বাটন তৈরি
+        let buttonsHtml = '';
         if (link2) buttonsHtml += `<a href="${link2}" target="_blank" class="download-button">Download 720p</a>`;
         if (link3) buttonsHtml += `<a href="${link3}" target="_blank" class="download-button">Download 360p</a>`;
 
+        // অন্যান্য তথ্য টেবিল আকারে তৈরি
         let detailsTable = '<table class="movie-info-table">';
         if (director) detailsTable += `<tr><td>Director</td><td>${director}</td></tr>`;
         if (cast) detailsTable += `<tr><td>Cast</td><td>${cast}</td></tr>`;
@@ -343,23 +323,18 @@
         if (category) detailsTable += `<tr><td>Genre</td><td>${category}</td></tr>`;
         detailsTable += '</table>';
         
+        // ব্যবহারকারীর জন্য বার্তা
         let userMessageHtml = '';
-        if (siteSettings.bengaliMessage || siteSettings.hindiMessage) { userMessageHtml += `<div class="user-message-container"><p class="user-message">${siteSettings.bengaliMessage}</p><p class="user-message">${siteSettings.hindiMessage}</p></div>`; }
+        if (siteSettings.bengaliMessage || siteSettings.hindiMessage) { 
+            userMessageHtml += `<div class="user-message-container"><p class="user-message">${siteSettings.bengaliMessage}</p><p class="user-message">${siteSettings.hindiMessage}</p></div>`; 
+        }
         
         const adContainerHtml = `<div class="modal-ad-container" id="modal-ad-container"></div>`;
         
-        // --- পপ-আপের গঠন এখানে পরিবর্তন করা হয়েছে ---
+        // সম্পূর্ণ পপ-আপের গঠন
         viewerContent.innerHTML = `
             <span class="close" onclick="closeActiveModal()">×</span>
-            
-            <!-- পোস্টার ছবি দেখানোর জন্য নতুন div -->
-            <div id="small-poster-area">
-                <img src="${image}" alt="${title}">
-            </div>
-
-            <!-- ভিডিও প্লেয়ারের জন্য নতুন div -->
-            <div id="video-player-area"></div>
-
+            ${videoPlayerHtml}
             <h3>${title}</h3>
             <div class="download-buttons">${buttonsHtml}</div>
             ${adContainerHtml}
@@ -367,14 +342,14 @@
             <p class="movie-description">${description || "No description available."}</p>
             ${userMessageHtml}`;
 
+        // বিজ্ঞাপনের কোড যুক্ত করা
         if (siteSettings.adSettings && siteSettings.adSettings.banner) {
             const adContainer = viewerContent.querySelector('#modal-ad-container');
             if (adContainer) {
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = siteSettings.adSettings.banner;
                 Array.from(tempDiv.children).forEach(child => {
-                    const node = document.importNode(child, true);
-                    adContainer.appendChild(node);
+                    adContainer.appendChild(document.importNode(child, true));
                 });
             }
         }
