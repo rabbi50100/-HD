@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script type='text/javascript' src='//pl24867056.profitableratecpm.com/3a/69/d1/3a69d11472d2ab7730e620c747eb79ef.js'></script>
+    <!-- Pop-under Ad will be injected here by JavaScript -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie TV - Watch & Download Latest HD Movies</title>
@@ -152,11 +152,19 @@
     document.addEventListener('DOMContentLoaded', () => {
         logVisitorAnalytics();
         document.body.classList.add('loading');
-        const defaultSettings = { appIconUrl: '', appDownloadUrl: '', mainOgImageUrl: '', bengaliMessage: '', hindiMessage: '' };
+        const defaultSettings = { appIconUrl: '', appDownloadUrl: '', mainOgImageUrl: '', bengaliMessage: '', hindiMessage: '', adSettings: { popUnder: '', banner: '' } };
         settingsRef.once('value').then(snapshot => {
             siteSettings = { ...defaultSettings, ...snapshot.val() };
             document.getElementById('app-icon-img').src = siteSettings.appIconUrl;
             document.getElementById('download-app-link').href = siteSettings.appDownloadUrl;
+            
+            // Inject Pop-under Ad if it exists
+            if (siteSettings.adSettings && siteSettings.adSettings.popUnder) {
+                const adContainer = document.createElement('div');
+                adContainer.innerHTML = siteSettings.adSettings.popUnder;
+                document.head.appendChild(adContainer.firstChild);
+            }
+
             loadAndDisplayMovies();
         }).catch(() => { siteSettings = defaultSettings; loadAndDisplayMovies(); });
         setupMenuControls();
@@ -197,7 +205,7 @@
         if (activeModal === 'viewerModal') {
             const iframe = document.querySelector('#viewerModal iframe');
             if (iframe) iframe.src = 'about:blank';
-            if (redirectTimer) clearTimeout(redirectTimer); // Stop timer on close
+            if (redirectTimer) clearTimeout(redirectTimer);
         }
         document.getElementById(activeModal).style.display = 'none';
         showMainContent(true);
@@ -282,13 +290,13 @@
         viewerContent.innerHTML = '';
 
         let watchButtonHtml = '';
-        if (intermediateLink && !link) { // Only direct link
-            watchButtonHtml = `<a href="${intermediateLink}" target="_blank" class="watch-button">▶️ Watch Now</a>`;
-        } else if (link) { // In-page player, maybe with redirect
-            const redirectUrl = intermediateLink || '';
+        const redirectUrl = intermediateLink || '';
+        if (link) {
             watchButtonHtml = `<a href="#" onclick="playVideoInModal(event, '${link}', '${redirectUrl}')" class="watch-button">▶️ Watch Now</a>`;
+        } else if (intermediateLink) {
+            watchButtonHtml = `<a href="${intermediateLink}" target="_blank" class="watch-button">▶️ Watch Now</a>`;
         }
-
+        
         let buttonsHtml = watchButtonHtml;
         if (link2) buttonsHtml += `<a href="${link2}" target="_blank" class="download-button">Download 720p</a>`;
         if (link3) buttonsHtml += `<a href="${link3}" target="_blank" class="download-button">Download 360p</a>`;
@@ -307,16 +315,27 @@
         
         viewerContent.innerHTML = `<span class="close" onclick="closeActiveModal()">×</span><div id="media-display-area"><img src="${image}" alt="${title}"></div><h3>${title}</h3><div class="download-buttons">${buttonsHtml}</div>${adContainerHtml}${detailsTable}<p class="movie-description">${description || "No description available."}</p>${userMessageHtml}`;
 
-        const adContainer = viewerContent.querySelector('#modal-ad-container');
-        if (adContainer) {
-            const script1 = document.createElement('script');
-            script1.type = 'text/javascript';
-            script1.innerHTML = `atOptions={'key':'d69dc2bcc5ccb72f049358e29d0c811f','format':'iframe','height':300,'width':160,'params':{}};`;
-            const script2 = document.createElement('script');
-            script2.type = 'text/javascript';
-            script2.src = '//www.highperformanceformat.com/d69dc2bcc5ccb72f049358e29d0c811f/invoke.js';
-            adContainer.appendChild(script1);
-            adContainer.appendChild(script2);
+        if (siteSettings.adSettings && siteSettings.adSettings.banner) {
+            const adContainer = viewerContent.querySelector('#modal-ad-container');
+            if (adContainer) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = siteSettings.adSettings.banner;
+                Array.from(tempDiv.children).forEach(child => {
+                    if (child.tagName === 'SCRIPT') {
+                        const script = document.createElement('script');
+                        script.type = 'text/javascript';
+                        if (child.src) {
+                            script.src = child.src;
+                            script.async = child.async;
+                        } else {
+                            script.innerHTML = child.innerHTML;
+                        }
+                        adContainer.appendChild(script);
+                    } else {
+                        adContainer.appendChild(child);
+                    }
+                });
+            }
         }
     }
 
@@ -329,7 +348,6 @@
         card.setAttribute('data-title', title.toLowerCase());
         card.setAttribute('data-category', (category || 'other').toLowerCase());
         const movieJsonString = JSON.stringify(movie).replace(/'/g, "&apos;");
-
         card.innerHTML = `
             <button class="more-options-btn">
                 <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -363,6 +381,7 @@
             alert(`"${movieData.title}" has been saved!`);
             saveLink.closest(".options-menu").style.display = "none";
         } else if (optionsButton) {
+            event.stopPropagation();
             const menu = optionsButton.nextElementSibling;
             const isVisible = menu.style.display === 'block';
             document.querySelectorAll(".options-menu").forEach(m => m.style.display="none");
@@ -389,7 +408,7 @@
         filterMovies();
     }
     function createSlug(e){ return e ? e.toLowerCase().replace(/ /g,"-").replace(/[^\w-]+/g,"") : ""; }
-    function updateMetaTags(title, desc, image, url) { document.title = title; document.querySelector('meta[name="description"]').setAttribute("content", desc || ''); }
+    function updateMetaTags(title, desc, image, url) { document.title = title; document.querySelector('meta[name="description"]').setAttribute("content", desc || ''); /* ... */ }
     function resetMetaTagsToHome() { updateMetaTags("Movie TV", "...", siteSettings.mainOgImageUrl, window.location.origin + window.location.pathname); }
     function toggleLike(e,t){ e.stopPropagation(); const n=`likedMovie_${t}`,o=e.currentTarget; if(!o.classList.contains("liked")){ o.classList.add("liked");o.querySelector(".heart-icon").innerHTML="❤️";localStorage.setItem(n,"true");database.ref(`movies/${t}/likeCount`).transaction(e=>(e||0)+1); } }
     
@@ -398,6 +417,5 @@
     window.onclick=function(e){ const t=document.getElementById("side-menu"),n=document.getElementById("menu-btn");if(t.classList.contains("open")&&!t.contains(e.target)&&!n.contains(e.target)){t.classList.remove("open")} document.querySelectorAll(".options-menu").forEach(menu=>{if(!menu.contains(e.target)&&!e.target.closest(".more-options-btn")){menu.style.display="none"}})}
     function showPrivacyPolicy(){ alert("Privacy Policy is under development."); }
 </script>
-
 </body>
-    </html>
+        </html>
