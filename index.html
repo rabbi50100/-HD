@@ -206,6 +206,7 @@
             const iframe = document.querySelector('#viewerModal iframe');
             if (iframe) iframe.src = 'about:blank';
             if (redirectTimer) clearTimeout(redirectTimer);
+            redirectTimer = null; // Clear the timer ID
         }
         document.getElementById(activeModal).style.display = 'none';
         showMainContent(true);
@@ -276,15 +277,15 @@
     function playVideoInModal(event, videoUrl, redirectUrl) {
         event.preventDefault();
         const mediaArea = document.getElementById('media-display-area');
-        mediaArea.innerHTML = `<iframe src="${videoUrl}" scrolling="no" frameborder="0" allowfullscreen="true"></iframe>`;
+        mediaArea.innerHTML = `<iframe src="${videoUrl}?autoplay=1" scrolling="no" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe>`;
         
         if (redirectUrl) {
             if (redirectTimer) clearTimeout(redirectTimer);
             redirectTimer = setTimeout(() => {
-                if(activeModal === 'viewerModal') { // Only redirect if modal is still open
+                if(activeModal === 'viewerModal') { 
                    window.open(redirectUrl, '_blank');
                 }
-            }, 5000); // 5 seconds
+            }, 20000); // 20 seconds
         }
     }
 
@@ -341,7 +342,6 @@
         card.setAttribute('data-title', title.toLowerCase());
         card.setAttribute('data-category', (category || 'other').toLowerCase());
         const movieJsonString = JSON.stringify(movie).replace(/'/g, "&apos;");
-
         card.innerHTML = `
             <button class="more-options-btn">
                 <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -412,4 +412,4 @@
     function showPrivacyPolicy(){ alert("Privacy Policy is under development."); }
 </script>
 </body>
-        </html>
+    </html>
