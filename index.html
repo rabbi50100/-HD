@@ -280,12 +280,9 @@
         
         if (redirectUrl) {
             if (redirectTimer) clearTimeout(redirectTimer);
-            const iframe = mediaArea.querySelector('iframe');
-            
-            // Wait for the iframe to potentially start playing
-            setTimeout(() => {
-                if (redirectTimer !== null) { // Check if modal is still open
-                    window.open(redirectUrl, '_blank');
+            redirectTimer = setTimeout(() => {
+                if(activeModal === 'viewerModal') { // Only redirect if modal is still open
+                   window.open(redirectUrl, '_blank');
                 }
             }, 5000); // 5 seconds
         }
