@@ -18,7 +18,7 @@
     
     <!-- Google Fonts for Professional Look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     
     <!-- Open Graph / Facebook Meta Tags -->
@@ -205,8 +205,9 @@
     function closeActiveModal(fromPopState = false) {
         if (!activeModal) return;
         if (activeModal === 'viewerModal') {
-            const iframe = document.querySelector('#viewerModal iframe');
-            if (iframe) iframe.src = 'about:blank';
+            // The line below was removed to allow background playback.
+            // const iframe = document.querySelector('#viewerModal iframe');
+            // if (iframe) iframe.src = 'about:blank';
             if (redirectTimer) clearTimeout(redirectTimer);
             redirectTimer = null;
         }
