@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script type='text/javascript' src='//pl24867056.profitableratecpm.com/3a/69/d1/3a69d11472d2ab7730e620c747eb79ef.js'></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie TV - Watch & Download Latest HD Movies</title>
@@ -119,54 +118,6 @@
       measurementId: "G-RHPWTHQHS2"
     };
     firebase.initializeApp(firebaseConfig);
-
-    //============== নতুন এবং উন্নত ট্র্যাকিং কোড শুরু ==============//
-    function logVisitorAnalytics() {
-        // একই সেশনে যেন বারবার ডেটা না পাঠায়, তার জন্য এই চেকিং
-        if (sessionStorage.getItem('visitorLogged')) {
-            return;
-        }
-    
-        const referrer = document.referrer;
-        let source = 'Direct'; // যদি কোনো সোর্স না থাকে, তবে ডিফল্ট 'Direct'
-    
-        if (referrer) {
-            try {
-                // URL অবজেক্ট ব্যবহার করে সঠিকভাবে হোস্টনেইম বের করা হচ্ছে
-                let hostname = new URL(referrer).hostname;
-                // সাধারণ সাবডোমেইন (www, m, l) বাদ দেওয়া হচ্ছে, যাতে সোর্স গ্রুপ করা সহজ হয়
-                hostname = hostname.replace(/^(www\.|m\.|l\.)/, '');
-                source = hostname;
-            } catch (e) {
-                // যদি রেফারার কোনো অ্যাপ বা অবৈধ লিঙ্ক হয়
-                source = 'Other/App';
-            }
-        }
-    
-        const analyticsData = {
-            source: source,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-        };
-    
-        // লোকেশন ডেটা আলাদাভাবে আনা হচ্ছে, যাতে মূল ট্র্যাকিং ব্লক না হয়
-        fetch('https://ipapi.co/json/')
-            .then(response => response.json())
-            .then(data => {
-                analyticsData.country = data.country_name || 'Unknown';
-                // সম্পূর্ণ ডেটা Firebase-এ পাঠানো হচ্ছে
-                database.ref('analytics/visits').push(analyticsData);
-                sessionStorage.setItem('visitorLogged', 'true');
-            }).catch(error => {
-                console.error('Error fetching visitor location:', error);
-                // যদি লোকেশন পেতে সমস্যা হয়, তবুও সোর্স ডেটা পাঠানো হবে
-                analyticsData.country = 'Unknown';
-                database.ref('analytics/visits').push(analyticsData);
-                sessionStorage.setItem('visitorLogged', 'true');
-            });
-    }
-    //============== নতুন এবং উন্নত ট্র্যাকিং কোড শেষ ==============//
-
-
     const database = firebase.database();
     const moviesRef = database.ref('movies');
     const settingsRef = database.ref('siteSettings');
@@ -177,9 +128,6 @@
     let siteSettings = {};
 
     document.addEventListener('DOMContentLoaded', () => {
-        // নতুন ট্র্যাকিং ফাংশন চালু করা হচ্ছে
-        logVisitorAnalytics();
-
         document.body.classList.add('loading');
         
         const defaultSettings = {
@@ -209,9 +157,236 @@
         setupMenuControls();
     });
     
-    // बाकी सब কোড অপরিবর্তিত
-    function setupAppBanner(){const e=document.getElementById("app-install-banner"),t=document.getElementById("close-banner");e&&t&&(setTimeout(()=>{e.style.display="flex"},5e3),t.addEventListener("click",()=>{e.style.display="none"}))}function setupMenuControls(){const e=document.getElementById("menu-btn"),t=document.getElementById("side-menu"),n=t.querySelector(".close-menu-btn"),o=document.getElementById("menu-saved-list-btn");e.addEventListener("click",()=>t.classList.add("open")),n.addEventListener("click",()=>t.classList.remove("open")),o.addEventListener("click",e=>{e.preventDefault(),showSavedPosts(),t.classList.remove("open")})}function showMainContent(e){document.querySelector("header").style.display=e?"flex":"none",document.querySelector(".category-filters").style.display=e?"flex":"none",document.querySelector("#search-bar").style.display=e?"block":"none",document.querySelector(".movie-grid").style.display=e?"grid":"none",document.querySelector(".footer-links").style.display=e?"block":"none",document.getElementById("privacy-policy-section").style.display="none"}function closeModal(e){if(document.getElementById(e).style.display="none",showMainContent(!0),"viewerModal"===e){if(lastClickedMovieSlug){const e=document.querySelector(`.movie-card[data-slug='${lastClickedMovieSlug}']`);e&&e.scrollIntoView({behavior:"smooth",block:"center"})}lastClickedMovieSlug=null,window.history.pushState({},"","/")/resetMetaTagsToHome()}}function showSavedPosts(){const e=document.getElementById("savedPostsModal"),t=document.getElementById("saved-posts-list"),n=document.getElementById("no-saved-posts-message");t.innerHTML="";let o=!1;for(let s=0;s<localStorage.length;s++){const i=localStorage.key(s);if(i.startsWith("savedMovie_")){o=!0;const s=JSON.parse(localStorage.getItem(i)),a=document.createElement("div");a.className="thumbnail-item",a.innerHTML=`<img src="${s.image}" alt="${s.title}"><div class="title">${s.title}</div><span class="remove-saved" onclick="removeSavedPost(event, '${i}')">×</span>`,a.onclick=()=>{closeModal("savedPostsModal"),openViewer(createSlug(s.title))},t.appendChild(a)}}n.style.display=o?"none":"block",t.style.display=o?"grid":"none",showMainContent(!1),e.style.display="block"}function loadAndDisplayMovies(){moviesRef.once("value",e=>{document.body.classList.remove("loading"),document.getElementById("loader").style.display="none";const t=[];e.forEach(e=>{t.push({key:e.key,...e.val()})}),t.sort((e,t)=>(t.timestamp||0)-(e.timestamp||0)),t.forEach(e=>{e.slug=createSlug(e.title),allMovieData[e.slug]=e,addMovieCard(e)}),filterMovies(),handleDirectUrlAccess()})}function resetMetaTagsToHome(){const e="Movie TV - Watch & Download Latest HD Movies",t="Explore and download a vast collection of the latest and classic movies in HD.",n=window.location.origin+"/";updateMetaTags(e,t,siteSettings.mainOgImageUrl,n)}function updateMetaTags(e,t,n,o){document.title=e,document.querySelector('meta[name="title"]').setAttribute("content",e),document.querySelector('meta[name="description"]').setAttribute("content",t),document.querySelector('link[rel="canonical"]').setAttribute("href",o),document.querySelector('meta[property="og:title"]').setAttribute("content",e),document.querySelector('meta[property="og:description"]').setAttribute("content",t),document.getElementById("og-image-meta").setAttribute("content",n),document.querySelector('meta[property="og:url"]').setAttribute("content",o),document.querySelector('meta[property="twitter:title"]').setAttribute("content",e),document.querySelector('meta[property="twitter:description"]').setAttribute("content",t),document.getElementById("twitter-image-meta").setAttribute("content",n),document.querySelector('meta[property="twitter:url"]').setAttribute("content",o)}function createSlug(e){return e?e.toLowerCase().replace(/ /g,"-").replace(/[^\w-]+/g,""):""}function escapeQuotes(e){return"string"!=typeof e?"":e.replace(/'/g,"\\'").replace(/"/g,'\\"')}function addMovieCard(e){const{key:t,title:n,image:o,slug:s,category:a,viewCount:i,likeCount:r}=e,c=document.createElement("div");c.className="movie-card",c.setAttribute("data-key",t),c.setAttribute("data-title",n.toLowerCase()),c.setAttribute("data-category",(a||"other").toLowerCase()),c.setAttribute("data-slug",s),c.innerHTML=`<button class="more-options-btn" onclick="toggleOptionsMenu(event)">…</button><div class="options-menu" id="options-menu-${t}"><a href="#" onclick="savePostToLocalStorage(event, '${t}', '${escapeQuotes(n)}', '${escapeQuotes(o)}', '${escapeQuotes(e.link)}', '${escapeQuotes(e.link2)}', '${escapeQuotes(e.link3)}', '${escapeQuotes(a)}')">Save Post</a></div><div class="movie-content-wrapper"><img src="${o}" alt="${n}"></div><div class="movie-title">${n}</div><div style="text-align:center; font-size: 14px; color: orange;">[${a||"Other"}]</div><div class="movie-stats"><div class="movie-views"><p>👁️ <span id="views-${t}">${i||0}</span></p></div><div class="movie-actions"><button class="like-btn" title="Like Movie" onclick="toggleLike(event, '${t}')"><span class="heart-icon">♡</span> <span id="likes-${t}">${r||0}</span></button></div></div>`;const d=c.querySelector(".like-btn"),l=d.querySelector(".heart-icon");localStorage.getItem(`likedMovie_${t}`)&&(d.classList.add("liked"),l.innerHTML="❤️"),c.querySelector(".movie-content-wrapper").addEventListener("click",()=>{lastClickedMovieSlug=s,openViewer(s)}),document.getElementById("movie-grid").appendChild(c),database.ref(`movies/${t}/viewCount`).on("value",e=>{const n=document.getElementById(`views-${t}`);n&&(n.innerText=e.val()||0)}),database.ref(`movies/${t}/likeCount`).on("value",e=>{const n=document.getElementById(`likes-${t}`);n&&(n.innerText=e.val()||0)})}function handleDirectUrlAccess(){const e=window.location.pathname;e.startsWith("/movie/")&&allMovieData[e.substring(7)]?openViewer(e.substring(7),!0):(window.history.replaceState({},"","/"),resetMetaTagsToHome())}function openViewer(e,t=!1){const n=allMovieData[e];if(!n)return;const{key:o,title:s,image:a,link:i,link2:r,link3:d,category:l,description:c,director:u,cast:p,releaseDate:m}=n;let g="";(siteSettings.bengaliMessage||siteSettings.hindiMessage)&&(g+=`<div class="user-message-container">${siteSettings.bengaliMessage?`<p class="user-message">${siteSettings.bengaliMessage}</p>`:""}${siteSettings.hindiMessage?`<p class="user-message">${siteSettings.hindiMessage}</p>`:""}</div>`);let h="";i&&(h+=`<a href="${i}" target="_blank" class="watch-button">▶️ Watch Now</a>`),r&&(h+=`<a href="${r}" target="_blank" class="download-button">Watch 720p</a>`),d&&(h+=`<a href="${d}" target="_blank" class="download-button">Watch 360p</a>`),h+='<a href="#" id="share-btn" class="download-button" style="background-color:#007bff; display: flex; align-items: center; justify-content: center; gap: 8px;"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg><span>Share</span></a>';const y=document.getElementById("viewerContent");y.innerHTML=`<span class="close" onclick="closeModal('viewerModal')">×</span><img src="${a}" alt="${s}"><h3>${s}</h3><div class="movie-details">${u?`<p><strong>Director:</strong> ${u}</p>`:""}${p?`<p><strong>Cast:</strong> ${p}</p>`:""}${m?`<p><strong>Release Date:</strong> ${m}</p>`:""}<p><strong>Genre:</strong> ${l||"N/A"}</p></div><p class="movie-description">${c||"No description available."}</p>${g}<div class="download-buttons">${h}</div>`,showMainContent(!1),document.getElementById("viewerModal").style.display="block";const w=`${window.location.origin}/movie/${e}`,v=`${s}`,f="Watch & Download Latest HD Movies";window.history.pushState({slug:e},v,w),updateMetaTags(v,f,a,w),t||database.ref("movies/"+o+"/viewCount").transaction(e=>(e||0)+1),document.getElementById("share-btn")?.addEventListener("click",e=>{e.preventDefault(),navigator.share?navigator.share({title:s,text:f,url:window.location.href}):navigator.clipboard.writeText(window.location.href).then(()=>alert("Share link copied to clipboard!"))})}function filterMovies(){const e=document.getElementById("search-bar").value.toLowerCase();document.querySelectorAll(".movie-card").forEach(t=>{const n=t.getAttribute("data-title"),o=t.getAttribute("data-category"),s=n.includes(e);let a;a="upcoming"===currentCategoryFilter?o==="upcoming":"all"===currentCategoryFilter?"upcoming"!==o:o.includes(currentCategoryFilter)&&"upcoming"!==o,t.style.display=s&&a?"block":"none"})}function filterByCategory(e,t){currentCategoryFilter=e.toLowerCase(),document.querySelectorAll(".category-filters button").forEach(e=>e.classList.remove("active")),t.target.classList.add("active"),filterMovies()}window.onclick=function(e){if(e.target.classList.contains("modal"))closeModal(e.target.id);const t=document.getElementById("side-menu"),n=document.getElementById("menu-btn");t.classList.contains("open")&&!t.contains(e.target)&&!n.contains(e.target)&&t.classList.remove("open"),document.querySelectorAll(".options-menu").forEach(t=>{t.style.display==="block"&&!t.contains(e.target)&&!e.target.classList.contains("more-options-btn")&&(t.style.display="none")})},window.onpopstate=function(e){closeModal("viewerModal")};function toggleLike(e,t){e.stopPropagation();const n=`likedMovie_${t}`,o=e.currentTarget;if(!o.classList.contains("liked")){o.classList.add("liked");const e=o.querySelector(".heart-icon");e&&(e.innerHTML="❤️"),localStorage.setItem(n,"true"),database.ref(`movies/${t}/likeCount`).transaction(e=>(e||0)+1)}}function toggleOptionsMenu(e){e.stopPropagation();const t=e.target.nextElementSibling,n="block"===t.style.display;document.querySelectorAll(".options-menu").forEach(e=>e.style.display="none"),t.style.display=n?"none":"block"}function savePostToLocalStorage(e,t,n,o,s,a,i,r){e.preventDefault();const c={key:t,title:n,image:o,link:s,link2:a,link3:i,category:r};localStorage.setItem(`savedMovie_${t}`,JSON.stringify(c)),alert(`"${n}" has been saved!`),e.target.closest(".options-menu").style.display="none"}function removeSavedPost(e,t){e.stopPropagation(),confirm("Are you sure you want to remove this post?")&&(localStorage.removeItem(t),e.target.parentElement.remove())}function showPrivacyPolicy(e){e.preventDefault();const t=document.getElementById("privacy-policy-section");t&&(t.innerHTML='<h2>Privacy Policy</h2><p>Your privacy is important to us. This is a sample policy.</p><button onclick="closeModal(\'privacy-policy-section\')">Close</button>',showMainContent(!1),t.style.display="block")}
+    function setupAppBanner() {
+        const installBanner = document.getElementById('app-install-banner');
+        const closeBannerBtn = document.getElementById('close-banner');
+        if (installBanner && closeBannerBtn) {
+            setTimeout(() => { installBanner.style.display = 'flex'; }, 5000);
+            closeBannerBtn.addEventListener('click', () => { installBanner.style.display = 'none'; });
+        }
+    }
+
+    function setupMenuControls() {
+        const menuBtn = document.getElementById('menu-btn');
+        const sideMenu = document.getElementById('side-menu');
+        const closeMenuBtn = sideMenu.querySelector('.close-menu-btn');
+        const menuSavedListBtn = document.getElementById('menu-saved-list-btn');
+        menuBtn.addEventListener('click', () => sideMenu.classList.add('open'));
+        closeMenuBtn.addEventListener('click', () => sideMenu.classList.remove('open'));
+        menuSavedListBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSavedPosts();
+            sideMenu.classList.remove('open');
+        });
+    }
+
+    function showMainContent(shouldShow) {
+        document.querySelector('header').style.display = shouldShow ? 'flex' : 'none';
+        document.querySelector('.category-filters').style.display = shouldShow ? 'flex' : 'none';
+        document.querySelector('#search-bar').style.display = shouldShow ? 'block' : 'none';
+        document.querySelector('.movie-grid').style.display = shouldShow ? 'grid' : 'none';
+        document.querySelector('.footer-links').style.display = shouldShow ? 'block' : 'none';
+        document.getElementById('privacy-policy-section').style.display = 'none';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = "none";
+        showMainContent(true);
+        
+        if (modalId === 'viewerModal') {
+            // সমাধান ৩: ক্লোজ করার পর সঠিক জায়গায় ফিরে যাওয়া
+            if (lastClickedMovieSlug) {
+                const cardToScrollTo = document.querySelector(`.movie-card[data-slug='${lastClickedMovieSlug}']`);
+                if (cardToScrollTo) {
+                    cardToScrollTo.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+                lastClickedMovieSlug = null; // রিসেট করা
+            }
+            window.history.pushState({}, "", "/");
+            resetMetaTagsToHome();
+        }
+    }
+
+    function showSavedPosts() {
+        const modal = document.getElementById('savedPostsModal');
+        const container = document.getElementById('saved-posts-list');
+        const noPostsMsg = document.getElementById('no-saved-posts-message');
+        container.innerHTML = '';
+        let hasPosts = false;
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith("savedMovie_")) {
+                hasPosts = true;
+                const item = JSON.parse(localStorage.getItem(key));
+                const thumb = document.createElement("div");
+                thumb.className = "thumbnail-item";
+                thumb.innerHTML = `<img src="${item.image}" alt="${item.title}"><div class="title">${item.title}</div><span class="remove-saved" onclick="removeSavedPost(event, '${key}')">×</span>`;
+                thumb.onclick = () => {
+                    closeModal('savedPostsModal');
+                    openViewer(createSlug(item.title));
+                };
+                container.appendChild(thumb);
+            }
+        }
+        noPostsMsg.style.display = hasPosts ? "none" : "block";
+        container.style.display = hasPosts ? "grid" : "none";
+        showMainContent(false);
+        modal.style.display = "block";
+    }
+
+    function loadAndDisplayMovies() {
+        moviesRef.once('value', snapshot => {
+            document.body.classList.remove('loading');
+            document.getElementById('loader').style.display = 'none';
+            const moviesArray = [];
+            snapshot.forEach(child => {
+                moviesArray.push({ key: child.key, ...child.val() });
+            });
+            moviesArray.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            
+            moviesArray.forEach(item => {
+                item.slug = createSlug(item.title);
+                allMovieData[item.slug] = item;
+                addMovieCard(item);
+            });
+            
+            filterMovies();
+            handleDirectUrlAccess();
+        });
+    }
+
+    function resetMetaTagsToHome() {
+        const homeTitle = "Movie TV - Watch & Download Latest HD Movies";
+        const homeDesc = "Explore and download a vast collection of the latest and classic movies in HD.";
+        const homeUrl = window.location.origin + '/';
+        updateMetaTags(homeTitle, homeDesc, siteSettings.mainOgImageUrl, homeUrl);
+    }
+    
+    function updateMetaTags(title, desc, imageUrl, url) {
+        document.title = title;
+        document.querySelector('meta[name="title"]').setAttribute('content', title);
+        document.querySelector('meta[name="description"]').setAttribute('content', desc);
+        document.querySelector('link[rel="canonical"]').setAttribute('href', url);
+        document.querySelector('meta[property="og:title"]').setAttribute('content', title);
+        document.querySelector('meta[property="og:description"]').setAttribute('content', desc);
+        document.getElementById('og-image-meta').setAttribute('content', imageUrl);
+        document.querySelector('meta[property="og:url"]').setAttribute('content', url);
+        document.querySelector('meta[property="twitter:title"]').setAttribute('content', title);
+        document.querySelector('meta[property="twitter:description"]').setAttribute('content', desc);
+        document.getElementById('twitter-image-meta').setAttribute('content', imageUrl);
+        document.querySelector('meta[property="twitter:url"]').setAttribute('content', url);
+    }
+
+    function createSlug(t){return t?t.toLowerCase().replace(/ /g,"-").replace(/[^\w-]+/g,""):""}
+    function escapeQuotes(t){return"string"!=typeof t?"":t.replace(/'/g,"\\'").replace(/"/g,'\\"')}
+    
+    function addMovieCard(t) {
+        const {key:e, title:a, image:o, slug:n, category:s, viewCount:i, likeCount:r} = t;
+        const d = document.createElement("div");
+        d.className="movie-card"; d.setAttribute("data-key",e); d.setAttribute("data-title",a.toLowerCase()); d.setAttribute("data-category",(s||"other").toLowerCase()); d.setAttribute("data-slug",n);
+        d.innerHTML = `<button class="more-options-btn" onclick="toggleOptionsMenu(event)">…</button><div class="options-menu" id="options-menu-${e}"><a href="#" onclick="savePostToLocalStorage(event, '${e}', '${escapeQuotes(a)}', '${escapeQuotes(o)}', '${escapeQuotes(t.link)}', '${escapeQuotes(t.link2)}', '${escapeQuotes(t.link3)}', '${escapeQuotes(s)}')">Save Post</a></div><div class="movie-content-wrapper"><img src="${o}" alt="${a}"></div><div class="movie-title">${a}</div><div style="text-align:center; font-size: 14px; color: orange;">[${s||"Other"}]</div><div class="movie-stats"><div class="movie-views"><p>👁️ <span id="views-${e}">${i||0}</span></p></div><div class="movie-actions"><button class="like-btn" title="Like Movie" onclick="toggleLike(event, '${e}')"><span class="heart-icon">♡</span> <span id="likes-${e}">${r||0}</span></button></div></div>`;
+        const likeButton = d.querySelector('.like-btn'), heartIcon = likeButton.querySelector('.heart-icon');
+        if (localStorage.getItem(`likedMovie_${e}`)) { likeButton.classList.add('liked'); heartIcon.innerHTML = '❤️'; }
+        // সমাধান ৩: ক্লিক করার সময় মুভির slug সেভ করা
+        d.querySelector(".movie-content-wrapper").addEventListener("click",()=>{ lastClickedMovieSlug = n; openViewer(n); });
+        document.getElementById("movie-grid").appendChild(d);
+        database.ref(`movies/${e}/viewCount`).on('value', snap => { const viewsSpan = document.getElementById(`views-${e}`); if (viewsSpan) viewsSpan.innerText = snap.val() || 0; });
+        database.ref(`movies/${e}/likeCount`).on('value', snap => { const likesSpan = document.getElementById(`likes-${e}`); if (likesSpan) likesSpan.innerText = snap.val() || 0; });
+    }
+
+    function handleDirectUrlAccess(){
+        const path = window.location.pathname;
+        if(path.startsWith("/movie/")){
+            const slug = path.substring(7);
+            if(allMovieData[slug]){
+                openViewer(slug, true);
+            } else {
+                window.history.replaceState({}, "", "/");
+                resetMetaTagsToHome();
+            }
+        }
+    }
+    
+    function openViewer(slug, isDirectLoad = false) {
+        const movieData = allMovieData[slug];
+        if (!movieData) { return; }
+        const { key, title, image, link, link2, link3, category, description, director, cast, releaseDate } = movieData;
+        
+        let messagesHTML = '';
+        if (siteSettings.bengaliMessage || siteSettings.hindiMessage) {
+            messagesHTML += `<div class="user-message-container">${siteSettings.bengaliMessage ? `<p class="user-message">${siteSettings.bengaliMessage}</p>` : ''}${siteSettings.hindiMessage ? `<p class="user-message">${siteSettings.hindiMessage}</p>` : ''}</div>`;
+        }
+        
+        let buttonsHTML = "";
+        if (link) buttonsHTML += `<a href="${link}" target="_blank" class="watch-button">▶️ Watch Now</a>`;
+        if (link2) buttonsHTML += `<a href="${link2}" target="_blank" class="download-button">Watch 720p</a>`;
+        if (link3) buttonsHTML += `<a href="${link3}" target="_blank" class="download-button">Watch 360p</a>`;
+        buttonsHTML += `<a href="#" id="share-btn" class="download-button" style="background-color:#007bff; display: flex; align-items: center; justify-content: center; gap: 8px;"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg><span>Share</span></a>`;
+        
+        const viewerContent = document.getElementById("viewerContent");
+        viewerContent.innerHTML = `<span class="close" onclick="closeModal('viewerModal')">×</span><img src="${image}" alt="${title}"><h3>${title}</h3><div class="movie-details">${director ? `<p><strong>Director:</strong> ${director}</p>` : ''}${cast ? `<p><strong>Cast:</strong> ${cast}</p>` : ''}${releaseDate ? `<p><strong>Release Date:</strong> ${releaseDate}</p>` : ''}<p><strong>Genre:</strong> ${category || "N/A"}</p></div><p class="movie-description">${description || "No description available."}</p>${messagesHTML}<div class="download-buttons">${buttonsHTML}</div>`;
+            
+        showMainContent(false);
+        document.getElementById('viewerModal').style.display = "block";
+
+        const movieUrl = `${window.location.origin}/movie/${slug}`;
+        const shareTitle = `${title}`;
+        const shareDescription = "Watch & Download Latest HD Movies"; // সমাধান ১: শেয়ারের জন্য নির্দিষ্ট বর্ণনা
+        
+        window.history.pushState({ slug: slug }, shareTitle, movieUrl);
+        updateMetaTags(shareTitle, shareDescription, image, movieUrl);
+        
+        if (!isDirectLoad) { 
+            database.ref('movies/' + key + '/viewCount').transaction(currentViews => (currentViews || 0) + 1);
+        }
+
+        document.getElementById('share-btn')?.addEventListener('click', (event) => {
+            event.preventDefault();
+            if (navigator.share) {
+                navigator.share({ title: title, text: shareDescription, url: window.location.href });
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => alert('Share link copied to clipboard!'));
+            }
+        });
+    }
+
+    function filterMovies() {
+        const searchQuery = document.getElementById("search-bar").value.toLowerCase();
+        document.querySelectorAll('.movie-card').forEach(card => {
+            const title = card.getAttribute("data-title");
+            const category = card.getAttribute("data-category");
+            const isSearchMatch = title.includes(searchQuery);
+            
+            // সমাধান ২: আপকামিং মুভির জন্য নতুন ফিল্টার লজিক
+            let isCategoryMatch;
+            if (currentCategoryFilter === 'upcoming') {
+                isCategoryMatch = (category === 'upcoming');
+            } else if (currentCategoryFilter === 'all') {
+                isCategoryMatch = (category !== 'upcoming');
+            } else {
+                isCategoryMatch = (category.includes(currentCategoryFilter) && category !== 'upcoming');
+            }
+            
+            card.style.display = isSearchMatch && isCategoryMatch ? "block" : "none";
+        });
+    }
+
+    function filterByCategory(category, event) {
+        currentCategoryFilter = category.toLowerCase();
+        document.querySelectorAll(".category-filters button").forEach(button => button.classList.remove("active"));
+        event.target.classList.add("active");
+        filterMovies();
+    }
+
+    window.onclick=function(t){if(t.target.classList.contains("modal"))closeModal(t.target.id); const e=document.getElementById('side-menu'),a=document.getElementById('menu-btn');if(e.classList.contains('open')&&!e.contains(t.target)&&!a.contains(t.target))e.classList.remove('open');document.querySelectorAll(".options-menu").forEach(e=>{if(e.style.display==='block'&&!e.contains(t.target)&&!t.target.classList.contains("more-options-btn"))e.style.display="none"})}
+    window.onpopstate=function(event){closeModal('viewerModal');};
+    
+    function toggleLike(t,e){t.stopPropagation();const o=`likedMovie_${e}`,n=t.currentTarget;if(!n.classList.contains("liked")){n.classList.add("liked");const t=n.querySelector(".heart-icon");t&&(t.innerHTML="❤️"),localStorage.setItem(o,"true"),database.ref(`movies/${e}/likeCount`).transaction(t=>(t||0)+1)}}
+    function toggleOptionsMenu(t){t.stopPropagation();const e=t.target.nextElementSibling,o="block"===e.style.display;document.querySelectorAll(".options-menu").forEach(t=>t.style.display="none"),e.style.display=o?"none":"block"}
+    function savePostToLocalStorage(t,e,o,n,s,a,i,l){t.preventDefault();const c={key:e,title:o,image:n,link:s,link2:a,link3:i,category:l};localStorage.setItem(`savedMovie_${e}`,JSON.stringify(c)),alert(`"${o}" has been saved!`),t.target.closest(".options-menu").style.display="none"}
+    function removeSavedPost(t,e){t.stopPropagation(),confirm("Are you sure you want to remove this post?")&&(localStorage.removeItem(e),t.target.parentElement.remove())}
+    function showPrivacyPolicy(t){t.preventDefault();const e=document.getElementById("privacy-policy-section");e&&(e.innerHTML='<h2>Privacy Policy</h2><p>Your privacy is important to us. This is a sample policy.</p><button onclick="closeModal(\'privacy-policy-section\')">Close</button>',showMainContent(!1),e.style.display="block")}
 </script>
 
 </body>
-        </html>
+    </html>
