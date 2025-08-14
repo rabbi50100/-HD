@@ -195,13 +195,12 @@
         showMainContent(true);
         
         if (modalId === 'viewerModal') {
-            // সমাধান ৩: ক্লোজ করার পর সঠিক জায়গায় ফিরে যাওয়া
             if (lastClickedMovieSlug) {
                 const cardToScrollTo = document.querySelector(`.movie-card[data-slug='${lastClickedMovieSlug}']`);
                 if (cardToScrollTo) {
                     cardToScrollTo.scrollIntoView({ behavior: "smooth", block: "center" });
                 }
-                lastClickedMovieSlug = null; // রিসেট করা
+                lastClickedMovieSlug = null; 
             }
             window.history.pushState({}, "", "/");
             resetMetaTagsToHome();
@@ -288,7 +287,6 @@
         d.innerHTML = `<button class="more-options-btn" onclick="toggleOptionsMenu(event)">…</button><div class="options-menu" id="options-menu-${e}"><a href="#" onclick="savePostToLocalStorage(event, '${e}', '${escapeQuotes(a)}', '${escapeQuotes(o)}', '${escapeQuotes(t.link)}', '${escapeQuotes(t.link2)}', '${escapeQuotes(t.link3)}', '${escapeQuotes(s)}')">Save Post</a></div><div class="movie-content-wrapper"><img src="${o}" alt="${a}"></div><div class="movie-title">${a}</div><div style="text-align:center; font-size: 14px; color: orange;">[${s||"Other"}]</div><div class="movie-stats"><div class="movie-views"><p>👁️ <span id="views-${e}">${i||0}</span></p></div><div class="movie-actions"><button class="like-btn" title="Like Movie" onclick="toggleLike(event, '${e}')"><span class="heart-icon">♡</span> <span id="likes-${e}">${r||0}</span></button></div></div>`;
         const likeButton = d.querySelector('.like-btn'), heartIcon = likeButton.querySelector('.heart-icon');
         if (localStorage.getItem(`likedMovie_${e}`)) { likeButton.classList.add('liked'); heartIcon.innerHTML = '❤️'; }
-        // সমাধান ৩: ক্লিক করার সময় মুভির slug সেভ করা
         d.querySelector(".movie-content-wrapper").addEventListener("click",()=>{ lastClickedMovieSlug = n; openViewer(n); });
         document.getElementById("movie-grid").appendChild(d);
         database.ref(`movies/${e}/viewCount`).on('value', snap => { const viewsSpan = document.getElementById(`views-${e}`); if (viewsSpan) viewsSpan.innerText = snap.val() || 0; });
@@ -332,7 +330,10 @@
 
         const movieUrl = `${window.location.origin}/movie/${slug}`;
         const shareTitle = `${title}`;
-        const shareDescription = "Watch & Download Latest HD Movies"; // সমাধান ১: শেয়ারের জন্য নির্দিষ্ট বর্ণনা
+        
+        // ★★★★★ প্রধান পরিবর্তনটি এখানে করা হয়েছে ★★★★★
+        // এখন প্রতিটি সিনেমার নিজস্ব বর্ণনা শেয়ার প্রিভিউতে দেখা যাবে।
+        const shareDescription = description || "No description available."; 
         
         window.history.pushState({ slug: slug }, shareTitle, movieUrl);
         updateMetaTags(shareTitle, shareDescription, image, movieUrl);
@@ -358,7 +359,6 @@
             const category = card.getAttribute("data-category");
             const isSearchMatch = title.includes(searchQuery);
             
-            // সমাধান ২: আপকামিং মুভির জন্য নতুন ফিল্টার লজিক
             let isCategoryMatch;
             if (currentCategoryFilter === 'upcoming') {
                 isCategoryMatch = (category === 'upcoming');
@@ -390,4 +390,4 @@
 </script>
 
 </body>
-        </html>
+    </html>
