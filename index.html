@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie TV - Watch & Download Latest HD Movies</title>
-    
+
     <!-- SEO and Meta Tags -->
     <meta name="google-site-verification" content="1mDUrmtjTiKfrYayJONYnzIhgBQcw30UZi0Q1hdhAO4" />
     <meta name="title" content="Movie TV - Watch & Download Latest HD Movies">
@@ -12,19 +12,14 @@
     <meta name="keywords" content="movie downloader, latest movies, hd movies, download movies, free movies, action movies, comedy, horror, romantic, movie apps, upcoming movies, movie reviews">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://hindimovie.netlify.app/" />
-    
-    <!-- Google Fonts for Professional Look -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-    
+
     <!-- Open Graph / Facebook Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://hindimovie.netlify.app/">
     <meta property="og:title" content="Movie TV - Watch & Download Latest HD Movies">
     <meta property="og:description" content="Explore and download a vast collection of the latest and classic movies in HD.">
     <meta property="og:image" content="https://i.postimg.cc/0yCyzmhm/IMG-20250730-220406.jpg" id="og-image-meta">
-    
+
     <!-- Twitter Meta Tags -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://hindimovie.netlify.app/">
@@ -32,10 +27,15 @@
     <meta property="twitter:description" content="Explore and download a vast collection of the latest and classic movies in HD.">
     <meta property="twitter:image" content="https://i.postimg.cc/0yCyzmhm/IMG-20250730-220406.jpg" id="twitter-image-meta">
 
+    <!-- Google Fonts for Professional Look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-    
+
     <!-- Schema Markup -->
     <script type="application/ld+json">
     {
@@ -69,7 +69,7 @@
             </button>
         </div>
     </header>
-  
+
     <div id="side-menu" class="side-menu">
         <div class="menu-header">
             <h2>Menu</h2>
@@ -129,7 +129,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('loading');
-        
+
         const defaultSettings = {
             appIconUrl: 'https://i.ibb.co/6gT26t3/og-image.jpg',
             appDownloadUrl: '#',
@@ -142,7 +142,7 @@
             siteSettings = { ...defaultSettings, ...settingsSnapshot.val() };
             document.getElementById('app-icon-img').src = siteSettings.appIconUrl;
             document.getElementById('download-app-link').href = siteSettings.appDownloadUrl;
-            
+
             resetMetaTagsToHome();
             setupAppBanner();
             loadAndDisplayMovies();
@@ -156,7 +156,7 @@
 
         setupMenuControls();
     });
-    
+
     function setupAppBanner() {
         const installBanner = document.getElementById('app-install-banner');
         const closeBannerBtn = document.getElementById('close-banner');
@@ -192,7 +192,7 @@
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = "none";
         showMainContent(true);
-        
+
         if (modalId === 'viewerModal') {
             // সমাধান ৩: ক্লোজ করার পর সঠিক জায়গায় ফিরে যাওয়া
             if (lastClickedMovieSlug) {
@@ -243,13 +243,13 @@
                 moviesArray.push({ key: child.key, ...child.val() });
             });
             moviesArray.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-            
+
             moviesArray.forEach(item => {
                 item.slug = createSlug(item.title);
                 allMovieData[item.slug] = item;
                 addMovieCard(item);
             });
-            
+
             filterMovies();
             handleDirectUrlAccess();
         });
@@ -261,16 +261,19 @@
         const homeUrl = window.location.origin + '/';
         updateMetaTags(homeTitle, homeDesc, siteSettings.mainOgImageUrl, homeUrl);
     }
-    
+
     function updateMetaTags(title, desc, imageUrl, url) {
         document.title = title;
         document.querySelector('meta[name="title"]').setAttribute('content', title);
         document.querySelector('meta[name="description"]').setAttribute('content', desc);
         document.querySelector('link[rel="canonical"]').setAttribute('href', url);
+
         document.querySelector('meta[property="og:title"]').setAttribute('content', title);
         document.querySelector('meta[property="og:description"]').setAttribute('content', desc);
         document.getElementById('og-image-meta').setAttribute('content', imageUrl);
         document.querySelector('meta[property="og:url"]').setAttribute('content', url);
+        document.querySelector('meta[property="og:type"]').setAttribute('content', 'video.movie'); // Changed to video.movie for better representation
+
         document.querySelector('meta[property="twitter:title"]').setAttribute('content', title);
         document.querySelector('meta[property="twitter:description"]').setAttribute('content', desc);
         document.getElementById('twitter-image-meta').setAttribute('content', imageUrl);
@@ -279,7 +282,7 @@
 
     function createSlug(t){return t?t.toLowerCase().replace(/ /g,"-").replace(/[^\w-]+/g,""):""}
     function escapeQuotes(t){return"string"!=typeof t?"":t.replace(/'/g,"\\'").replace(/"/g,'\\"')}
-    
+
     function addMovieCard(t) {
         const {key:e, title:a, image:o, slug:n, category:s, viewCount:i, likeCount:r} = t;
         const d = document.createElement("div");
@@ -306,37 +309,36 @@
             }
         }
     }
-    
+
     function openViewer(slug, isDirectLoad = false) {
         const movieData = allMovieData[slug];
         if (!movieData) { return; }
         const { key, title, image, link, link2, link3, category, description, director, cast, releaseDate } = movieData;
-        
+
         let messagesHTML = '';
         if (siteSettings.bengaliMessage || siteSettings.hindiMessage) {
             messagesHTML += `<div class="user-message-container">${siteSettings.bengaliMessage ? `<p class="user-message">${siteSettings.bengaliMessage}</p>` : ''}${siteSettings.hindiMessage ? `<p class="user-message">${siteSettings.hindiMessage}</p>` : ''}</div>`;
         }
-        
+
         let buttonsHTML = "";
         if (link) buttonsHTML += `<a href="${link}" target="_blank" class="watch-button">▶️ Watch Now</a>`;
         if (link2) buttonsHTML += `<a href="${link2}" target="_blank" class="download-button">Watch 720p</a>`;
         if (link3) buttonsHTML += `<a href="${link3}" target="_blank" class="download-button">Watch 360p</a>`;
         buttonsHTML += `<a href="#" id="share-btn" class="download-button" style="background-color:#007bff; display: flex; align-items: center; justify-content: center; gap: 8px;"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="#FFFFFF"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg><span>Share</span></a>`;
-        
-        const viewerContent = document.getElementById("viewerContent");
+
         viewerContent.innerHTML = `<span class="close" onclick="closeModal('viewerModal')">×</span><img src="${image}" alt="${title}"><h3>${title}</h3><div class="movie-details">${director ? `<p><strong>Director:</strong> ${director}</p>` : ''}${cast ? `<p><strong>Cast:</strong> ${cast}</p>` : ''}${releaseDate ? `<p><strong>Release Date:</strong> ${releaseDate}</p>` : ''}<p><strong>Genre:</strong> ${category || "N/A"}</p></div><p class="movie-description">${description || "No description available."}</p>${messagesHTML}<div class="download-buttons">${buttonsHTML}</div>`;
-            
+
         showMainContent(false);
         document.getElementById('viewerModal').style.display = "block";
 
-        const movieUrl = `${window.location.origin}/movie/${slug}`;
+        const movieUrl = `${window.location.origin}/movie/${slug}`; // প্রতিটি মুভির জন্য ইউনিক URL
         const shareTitle = `${title}`;
-        const shareDescription = "Watch & Download Latest HD Movies"; // সমাধান ১: শেয়ারের জন্য নির্দিষ্ট বর্ণনা
-        
+        const shareDescription = description ? description : "Watch & Download Latest HD Movies"; // মুভির বর্ণনা ব্যবহার করুন
+
         window.history.pushState({ slug: slug }, shareTitle, movieUrl);
-        updateMetaTags(shareTitle, shareDescription, image, movieUrl);
-        
-        if (!isDirectLoad) { 
+        updateMetaTags(shareTitle, shareDescription, image, movieUrl); // এখানে সঠিক তথ্য পাস করুন
+
+        if (!isDirectLoad) {
             database.ref('movies/' + key + '/viewCount').transaction(currentViews => (currentViews || 0) + 1);
         }
 
@@ -356,7 +358,7 @@
             const title = card.getAttribute("data-title");
             const category = card.getAttribute("data-category");
             const isSearchMatch = title.includes(searchQuery);
-            
+
             // সমাধান ২: আপকামিং মুভির জন্য নতুন ফিল্টার লজিক
             let isCategoryMatch;
             if (currentCategoryFilter === 'upcoming') {
@@ -366,7 +368,7 @@
             } else {
                 isCategoryMatch = (category.includes(currentCategoryFilter) && category !== 'upcoming');
             }
-            
+
             card.style.display = isSearchMatch && isCategoryMatch ? "block" : "none";
         });
     }
@@ -380,7 +382,7 @@
 
     window.onclick=function(t){if(t.target.classList.contains("modal"))closeModal(t.target.id); const e=document.getElementById('side-menu'),a=document.getElementById('menu-btn');if(e.classList.contains('open')&&!e.contains(t.target)&&!a.contains(t.target))e.classList.remove('open');document.querySelectorAll(".options-menu").forEach(e=>{if(e.style.display==='block'&&!e.contains(t.target)&&!t.target.classList.contains("more-options-btn"))e.style.display="none"})}
     window.onpopstate=function(event){closeModal('viewerModal');};
-    
+
     function toggleLike(t,e){t.stopPropagation();const o=`likedMovie_${e}`,n=t.currentTarget;if(!n.classList.contains("liked")){n.classList.add("liked");const t=n.querySelector(".heart-icon");t&&(t.innerHTML="❤️"),localStorage.setItem(o,"true"),database.ref(`movies/${e}/likeCount`).transaction(t=>(t||0)+1)}}
     function toggleOptionsMenu(t){t.stopPropagation();const e=t.target.nextElementSibling,o="block"===e.style.display;document.querySelectorAll(".options-menu").forEach(t=>t.style.display="none"),e.style.display=o?"none":"block"}
     function savePostToLocalStorage(t,e,o,n,s,a,i,l){t.preventDefault();const c={key:e,title:o,image:n,link:s,link2:a,link3:i,category:l};localStorage.setItem(`savedMovie_${e}`,JSON.stringify(c)),alert(`"${o}" has been saved!`),t.target.closest(".options-menu").style.display="none"}
@@ -389,4 +391,4 @@
 </script>
 
 </body>
-    </html>
+        </html>
