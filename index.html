@@ -131,6 +131,9 @@
     const analyticsRef = database.ref("analytics/visits");
 
     function logVisit() {
+        // To avoid logging multiple times in a single session, check a flag.
+        if (sessionStorage.getItem('visitLogged')) return;
+
         fetch('https://ipapi.co/json/').then(res => res.json()).then(data => {
             const visitData = {
                 timestamp: Date.now(),
@@ -139,6 +142,7 @@
                 path: window.location.pathname
             };
             analyticsRef.push(visitData);
+            sessionStorage.setItem('visitLogged', 'true'); // Set flag after logging
         }).catch(err => {
             console.error("Analytics error:", err);
             const visitData = {
@@ -148,26 +152,35 @@
                 path: window.location.pathname
             };
             analyticsRef.push(visitData);
+            sessionStorage.setItem('visitLogged', 'true'); // Set flag even on error
         });
     }
 
     function injectAds(adSettings) {
         if (!adSettings) return;
 
+        // Inject Pop-under Ad
         if (adSettings.popUnder) {
             const scriptContainer = document.createElement('div');
             scriptContainer.innerHTML = adSettings.popUnder;
             document.body.appendChild(scriptContainer);
         }
 
+        // Inject Banner Ad
         if (adSettings.banner) {
             const bannerContainer = document.createElement('div');
             bannerContainer.id = 'banner-ad-container';
+            // Simple styling for the banner container
+            bannerContainer.style.textAlign = 'center';
+            bannerContainer.style.margin = '15px 0';
             bannerContainer.innerHTML = adSettings.banner;
+            
             const header = document.querySelector('header');
             if(header) {
+                // Insert banner right after the header
                 header.parentNode.insertBefore(bannerContainer, header.nextSibling);
             } else {
+                 // Fallback: insert at the top of the body
                  document.body.insertBefore(bannerContainer, document.body.firstChild);
             }
         }
@@ -411,7 +424,6 @@
             database.ref('movies/' + key + '/viewCount').transaction(currentViews => (currentViews || 0) + 1);
         }
     }
-
 
     function filterMovies() {
         const searchQuery = document.getElementById("search-bar").value.toLowerCase();
