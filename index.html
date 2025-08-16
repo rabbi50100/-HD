@@ -1,27 +1,17 @@
 <!DOCTYPE html>
-<!-- Changed lang to "en" for English language website -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
 
     <!-- ================= SEO Tags Start ================= -->
-
-    <!-- Optimized Title Tag for search engines -->
     <title>Your Movie Website - Watch New Movies & Series</title>
-
-    <!-- Meta Description: This will be shown below your site title in Google search results -->
     <meta name="description" content="Watch your favorite new and classic movies and web series. Find a huge collection of films from various genres on our website. Stream online now.">
-
-    <!-- Keywords: Helps search engines categorize your site, though less critical for Google now -->
     <meta name="keywords" content="movies, web series, watch online, stream movies, new movies, movie download, latest films, online cinema">
-
-    <!-- Robots Tag: Instructs search engines to index this page and follow its links -->
     <meta name="robots" content="index, follow">
-
-    <!-- Canonical Tag: Prevents duplicate content issues by specifying the main URL. Replace with your actual domain -->
+    <!-- Replace with your actual domain -->
     <link rel="canonical" href="https://hindimovie.netlify.app/">
 
-    <!-- Open Graph (OG) Tags: For sharing on social media like Facebook, WhatsApp -->
+    <!-- Social Media OG Tags (General for the site) -->
     <meta property="og:title" content="Your Movie Website - Watch New Movies & Series">
     <meta property="og:description" content="Discover and stream a vast library of movies and web series online for free.">
     <!-- Replace with a URL to your website's logo or a relevant image -->
@@ -29,32 +19,6 @@
     <meta property="og:url" content="https://hindimovie.netlify.app/">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
-
-    <!-- Twitter Card Tags: For sharing on Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Your Movie Website - Watch New Movies & Series">
-    <meta name="twitter:description" content="Discover and stream a vast library of movies and web series online for free.">
-    <!-- Replace with a URL to your website's logo or a relevant image -->
-    <meta name="twitter:image" content="https://yourwebsite.com/images/twitter-image.jpg">
-
-    <!-- Schema Markup (JSON-LD): Helps search engines understand your site's content and structure better -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Your Movie Website",
-      "url": "https://yourwebsite.com/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://yourwebsite.com/search?q={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
-
     <!-- ================= SEO Tags End ================= -->
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -406,6 +370,15 @@
 
         let allMovies = [];
 
+        // Function to convert a movie title into a URL-friendly "slug"
+        function createSlug(title) {
+            return title
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, '') // Remove non-word chars
+                .replace(/[\s_-]+/g, '-')  // Replace spaces with -
+                .replace(/^-+|-+$/g, '');   // Remove leading/trailing dashes
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             logVisit();
             loadSiteSettings();
@@ -429,13 +402,6 @@
                     appBtn.href = settings.appDownloadUrl;
                     appBtn.style.display = 'inline-block';
                 }
-
-                const messageBar = document.getElementById('message-bar');
-                // Updated to prioritize English message if available
-                if (settings.englishMessage) {
-                    messageBar.textContent = settings.englishMessage;
-                    messageBar.style.display = 'block';
-                }
             });
         }
         
@@ -444,15 +410,35 @@
             moviesRef.orderByChild('timestamp').once('value', snapshot => {
                 const moviesData = snapshot.val();
                 if (moviesData) {
-                    allMovies = Object.entries(moviesData).map(([key, value]) => ({ key, ...value })).reverse();
+                    allMovies = Object.entries(moviesData).map(([key, value]) => ({ 
+                        key, 
+                        ...value,
+                        slug: createSlug(value.title) 
+                    })).reverse();
                     
                     const initialMovies = allMovies.filter(movie => movie.category !== 'upcoming');
                     displayMovies(initialMovies);
-                    
                     populateCategories();
+
+                    // Check the URL path to open a movie on page load
+                    handleUrlPath();
                 }
                 loader.style.display = 'none';
             });
+        }
+
+        // This function reads the URL path and opens the corresponding movie modal
+        function handleUrlPath() {
+            const path = window.location.pathname;
+            if (path.startsWith('/movie/')) {
+                const slug = path.split('/movie/')[1];
+                if (slug) {
+                    const movieToOpen = allMovies.find(movie => movie.slug === slug);
+                    if (movieToOpen) {
+                        openModal(movieToOpen, true); // Open without pushing a new history state
+                    }
+                }
+            }
         }
 
         function displayMovies(movies) {
@@ -464,7 +450,6 @@
             movies.forEach(movie => {
                 const card = document.createElement('div');
                 card.className = 'movie-card';
-                // Added alt attribute with movie title for better SEO and accessibility
                 card.innerHTML = `<img src="${movie.image}" alt="${movie.title} Poster" loading="lazy"><h3>${movie.title}</h3>`;
                 card.onclick = () => openModal(movie);
                 movieGrid.appendChild(card);
@@ -507,25 +492,28 @@
             );
             displayMovies(filteredMovies);
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            // Ensure "All" button is activated after a search
             if (document.querySelector('.filter-btn')) {
                 document.querySelector('.filter-btn').classList.add('active');
             }
         });
 
-        function openModal(movie) {
-            // Dynamically update page title when a modal is opened
-            document.title = `${movie.title} - Your Movie Website`;
+        // The openModal function now uses the History API to change the URL
+        function openModal(movie, fromUrl = false) {
+            const newUrl = `/movie/${movie.slug}`;
+            
+            // Only change the URL if the modal wasn't opened by the URL itself
+            if (!fromUrl) {
+                history.pushState({ movieId: movie.key }, movie.title, newUrl);
+            }
 
+            // Populate the modal content
+            document.title = `${movie.title} - Your Movie Website`;
             const releaseYear = movie.releaseDate ? ` (${movie.releaseDate.substring(0, 4)})` : '';
             document.getElementById('modal-title').textContent = movie.title + releaseYear;
             document.getElementById('modal-img').src = movie.image;
-            // Update alt text for the modal image
             document.getElementById('modal-img').alt = movie.title;
             document.getElementById('modal-category').textContent = movie.category || 'N/A';
-            
             document.getElementById('modal-description').innerHTML = movie.description || 'No description available.';
-            
             document.getElementById('modal-director').textContent = movie.director || 'N/A';
             document.getElementById('modal-cast').textContent = movie.cast || 'N/A';
             document.getElementById('modal-release-date').textContent = movie.releaseDate || 'N/A';
@@ -545,8 +533,9 @@
             modal.style.display = 'flex';
         }
 
+        // The closeModal function now updates the URL back to the homepage
         function closeModal() {
-            // Restore the original page title when the modal is closed
+            history.pushState(null, 'Your Movie Website', '/'); // Go back to the root URL
             document.title = 'Your Movie Website - Watch New Movies & Series';
             modal.style.display = 'none';
         }
@@ -556,6 +545,20 @@
                 closeModal();
             }
         });
+
+        // Handle browser back/forward button clicks
+        window.onpopstate = function(event) {
+            // Check if the state contains our movie data
+            if (event.state && event.state.movieId) {
+                const movieToOpen = allMovies.find(m => m.key === event.state.movieId);
+                if (movieToOpen) {
+                    openModal(movieToOpen, true); // Open modal without changing history again
+                }
+            } else {
+                // If no state, it means we are at the homepage URL
+                closeModal();
+            }
+        };
     </script>
 </body>
     </html>
