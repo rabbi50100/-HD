@@ -5,21 +5,47 @@
     <meta charset="UTF-8">
 
     <!-- ================= SEO Tags Start ================= -->
-    <title>Movie TV - Watch & Download Latest HD Movies</title>
-    <meta name="description" content="Watch your favorite new and classic movies and web series. Find a huge collection of films from various genres on our website. Stream online now.">
-    <meta name="keywords" content="movies, web series, watch online, stream movies, new movies, movie download, latest films, online cinema">
+    <title id="page-title">CineStream - Watch & Download Latest HD Movies</title>
+    <meta name="description" id="meta-description" content="Watch your favorite new and classic movies and web series. Find a huge collection of films from various genres on our website. Stream online now.">
+    <meta name="keywords" id="meta-keywords" content="movies, web series, watch online, stream movies, new movies, movie download, latest films, online cinema">
     <meta name="robots" content="index, follow">
-    <!-- Replace with your actual domain -->
-    <link rel="canonical" href="https://hindimovie.netlify.app/">
+    <link rel="canonical" id="canonical-url" href="https://hindimovie.netlify.app/">
 
-    <!-- Social Media OG Tags (General for the site) -->
-    <meta property="og:title" content="Your Movie Website - Watch New Movies & Series">
-    <meta property="og:description" content="Discover and stream a vast library of movies and web series online for free.">
-    <!-- Replace with a URL to your website's logo or a relevant image -->
-    <meta property="og:image" content="https://yourwebsite.com/images/og-image.jpg">
-    <meta property="og:url" content="https://hindimovie.netlify.app/">
-    <meta property="og:type" content="website">
+    <!-- Open Graph / Facebook / LinkedIn / Pinterest -->
+    <meta property="og:title" id="og-title" content="CineStream - Watch New Movies & Series">
+    <meta property="og:description" id="og-description" content="Discover and stream a vast library of movies and web series online for free.">
+    <meta property="og:image" id="og-image" content="https://yourwebsite.com/images/og-image.jpg"> <!-- Important: Replace with your website's actual default OG image URL -->
+    <meta property="og:url" id="og-url" content="https://hindimovie.netlify.app/">
+    <meta property="og:type" id="og-type" content="website">
     <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" id="twitter-card" content="summary_large_image">
+    <meta name="twitter:site" content="@yourtwitterhandle"> <!-- Optional: Replace with your Twitter handle -->
+    <meta name="twitter:creator" content="@yourtwitterhandle"> <!-- Optional: Replace with your Twitter handle -->
+    <meta name="twitter:title" id="twitter-title" content="CineStream - Watch New Movies & Series">
+    <meta name="twitter:description" id="twitter-description" content="Discover and stream a vast library of movies and web series online for free.">
+    <meta name="twitter:image" id="twitter-image" content="https://yourwebsite.com/images/og-image.jpg"> <!-- Important: Replace with your website's actual default Twitter image URL -->
+
+    <!-- Schema.org JSON-LD for Website (General) -->
+    <script type="application/ld+json" id="website-schema">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "CineStream",
+      "url": "https://hindimovie.netlify.app/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://hindimovie.netlify.app/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <!-- Placeholder for Movie Schema JSON-LD (Dynamically populated) -->
+    <script type="application/ld+json" id="movie-schema"></script>
     <!-- ================= SEO Tags End ================= -->
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,13 +56,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons (Added for clapperboard, search, and menu icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary-color: #ff8c00;
-            --background-color: #121212;
-            --surface-color: #1e1e1e;
-            --text-color: #e0e0e0;
+            --primary-color: #FFA500; /* Changed to orange as requested */
+            --background-color: #1a1a1a; /* Darker background for header */
+            --surface-color: #111111; /* Changed to a darker black for post backgrounds */
+            --text-color: #e0e0e0; /* Almost white */
             --font-family: 'Roboto', sans-serif;
+            --button-bg-light: #333333; /* For search button's normal state */
+            --button-border-color: #4a4a4a; /* For the search button's border */
+            --icon-color: #b0b0b0; /* Color for search icon and menu icon */
         }
         body {
             font-family: var(--font-family);
@@ -44,46 +75,150 @@
             color: var(--text-color);
             margin: 0;
             font-size: 16px;
+            box-sizing: border-box; /* Added for consistent box model */
+        }
+        *, *::before, *::after {
+            box-sizing: border-box; /* Added for consistent box model */
         }
 
         /* --- Loader --- */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--background-color); display: flex; justify-content: center;
-            align-items: center; z-index: 9999;
+            background: var(--background-color); display: flex; flex-direction: column; /* Changed to column */
+            justify-content: center; align-items: center; z-index: 9999;
+            gap: 15px; /* Added gap between spinner and text */
         }
         .spinner {
-            border: 6px solid #f3f3f330; border-top: 6px solid var(--primary-color);
+            border: 6px solid #f3f3f330; border-top: 6px solid var(--primary-color); /* Spinner color uses primary color */
             border-radius: 50%; width: 50px; height: 50px;
             animation: spin 1s linear infinite;
         }
+        #loading-text { /* Style for the loading text */
+            color: var(--text-color);
+            font-size: 1.2rem;
+            font-weight: 500;
+            animation: glowing-pulse 1.8s infinite alternate; /* New glowing pulse animation */
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes glowing-pulse {
+            0% { 
+                opacity: 0.7; 
+                transform: scale(0.98);
+                text-shadow: 0 0 5px rgba(255,165,0,0.3), 0 0 10px rgba(255,165,0,0.2);
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1); 
+                text-shadow: 0 0 10px rgba(255,165,0,0.6), 0 0 20px rgba(255,165,0,0.4);
+            }
+        }
 
         /* --- Header --- */
         header {
-            background-color: var(--surface-color); padding: 15px 20px;
-            display: flex; align-items: center; gap: 20px;
+            background-color: var(--background-color);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Distributes logo to left, controls to right */
             position: sticky; top: 0; z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            flex-wrap: wrap;
+            min-height: 60px;
         }
-        .site-title {
-            font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin: 0;
+
+        .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+            user-select: none;
+            white-space: nowrap; /* Prevent logo text from wrapping */
+            flex-shrink: 0; /* Prevent logo from shrinking */
         }
-        .search-bar {
-            flex-grow: 1; display: flex;
+        .site-logo i {
+            color: var(--primary-color);
+            font-size: 1.8rem;
         }
-        .search-bar input {
-            width: 100%; padding: 10px 15px; border-radius: 20px;
-            border: 1px solid #444; background-color: #2a2a2a; color: #fff;
+
+        .header-right-controls { /* New wrapper for search and menu button */
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Space between search and menu button */
+        }
+
+        /* Search Container Styling */
+        .search-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            background-color: var(--button-bg-light);
+            border: 1px solid var(--button-border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            width: 40px; /* Initial width (only button visible) */
+            flex-shrink: 0; /* Prevent search container from shrinking too much */
+        }
+
+        .search-container.active {
+            width: 120px; /* Adjusted: Input (80px) + Button (40px) */
+        }
+
+        .search-input {
+            width: 0; /* Hidden by default */
+            padding: 0; /* No padding initially */
+            border: none;
+            background: transparent;
+            color: var(--text-color);
             font-size: 1rem;
+            outline: none;
+            transition: width 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            box-sizing: border-box;
+            flex-shrink: 0; /* Prevent input from shrinking */
+            /* Add these for the 5-character view */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: clip; /* Ensure no ellipsis */
         }
-        .app-download-btn {
-            display: none; padding: 8px 15px; background-color: var(--primary-color);
-            color: #111; text-decoration: none; border-radius: 20px;
-            font-weight: 700; transition: background-color 0.2s;
+
+        .search-container.active .search-input {
+            width: 80px; /* Adjusted: To show ~5 characters (50px content + 30px padding) */
+            min-width: 80px; /* Ensure it doesn't shrink more */
+            padding: 10px 15px; /* Full padding when active */
+            opacity: 1;
         }
-        .app-download-btn:hover { background-color: #ffac4d; }
+        
+        /* Common styles for icon buttons (search toggle and menu toggle) */
+        .search-toggle-btn, .menu-toggle-btn {
+            background-color: transparent; /* Button itself has no background, container provides it */
+            border: none; /* No border for the button itself, container provides it */
+            border-radius: 8px; /* Match container border-radius */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .search-toggle-btn:hover, .menu-toggle-btn:hover {
+            background-color: rgba(255,255,255,0.08); /* Slight hover effect */
+        }
+        .search-toggle-btn i, .menu-toggle-btn i {
+            color: var(--icon-color);
+            font-size: 1.2rem;
+        }
+
+        /* Specific style for menu button to have its own background/border */
+        .menu-toggle-btn {
+            background-color: var(--button-bg-light);
+            border: 1px solid var(--button-border-color);
+        }
 
         /* --- Main Content --- */
         main { padding: 20px; }
@@ -98,9 +233,17 @@
             padding: 8px 18px; border: 1px solid #555; background: none; color: var(--text-color);
             border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s;
         }
-        .filter-btn.active, .filter-btn:hover {
-            background-color: var(--primary-color); color: #111; border-color: var(--primary-color);
+        .filter-btn.active { /* Active button background uses primary color */
+            background-color: var(--primary-color); 
+            color: #111; /* Text color for active button */
+            border-color: var(--primary-color);
         }
+        .filter-btn:hover { /* Hover effect for buttons */
+            background-color: var(--primary-color); 
+            color: #111; 
+            border-color: var(--primary-color);
+        }
+
 
         /* --- Movie Grid & Cards --- */
         #movie-grid {
@@ -109,17 +252,166 @@
             gap: 20px;
         }
         .movie-card {
-            background-color: var(--surface-color); border-radius: 8px; overflow: hidden;
+            background-color: var(--surface-color);
+            border-radius: 8px; overflow: hidden;
             cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 10px;
         }
         .movie-card:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
-        .movie-card img {
-            width: 100%; display: block; aspect-ratio: 2 / 3; object-fit: cover;
+        
+        /* Wrapper for poster image and its overlays */
+        .movie-poster-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            overflow: hidden;
+            border-radius: 8px 8px 0 0;
         }
+        .movie-poster-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
         .movie-card h3 {
             font-size: 1rem; padding: 10px; margin: 0; white-space: nowrap;
             overflow: hidden; text-overflow: ellipsis; text-align: center;
+            color: var(--text-color);
+            flex-grow: 1;
         }
+
+        /* Styles for Save Button (smaller with black circular background) */
+        .save-button {
+            background-color: rgba(0, 0, 0, 0.6); /* Re-added black background */
+            border: none;
+            border-radius: 50%; /* Re-added circular shape */
+            width: 30px; /* Smaller width */
+            height: 30px; /* Smaller height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: var(--text-color); /* Icon color (white/almost white) */
+            font-size: 1rem; /* Adjust icon size to fit smaller button */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Re-added box-shadow */
+            transition: background-color 0.2s;
+            z-index: 5;
+        }
+
+        .save-button:hover {
+            background-color: rgba(0, 0, 0, 0.8); /* Darker on hover */
+        }
+
+        /* Styles for Rating Display (no background) */
+        .rating-display {
+            background: none; /* Removed background */
+            color: #f5c518; /* Yellow star */
+            padding: 0; /* Removed padding */
+            border-radius: 0; /* Removed border-radius */
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            box-shadow: none; /* Removed box-shadow */
+            z-index: 5;
+        }
+
+        .rating-display span {
+            color: var(--text-color); /* White text for the rating number */
+        }
+
+
+        /* --- Side Menu (Overlay) --- */
+        #side-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1050; /* Higher than movie modal */
+            display: none; /* Hidden by default */
+            justify-content: flex-end; /* Align side menu to the right */
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        #side-menu-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        #side-menu {
+            background-color: var(--surface-color);
+            width: 250px; /* Width of the sidebar */
+            height: 100%;
+            padding: 20px;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+            transform: translateX(100%); /* Start off-screen to the right */
+            transition: transform 0.3s ease;
+            position: relative; /* For layout, no close button needed here now */
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        #side-menu-overlay.active #side-menu {
+            transform: translateX(0); /* Slide in */
+        }
+
+        .menu-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-color);
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+        .menu-logo i {
+            color: var(--primary-color);
+            font-size: 1.6rem;
+        }
+
+        .menu-options {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-options li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .menu-options li a:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        .menu-options li a i {
+            color: var(--icon-color);
+            font-size: 1.2rem;
+        }
+
 
         /* --- Movie Detail Modal --- */
         #movie-modal {
@@ -133,32 +425,37 @@
             max-width: 800px; width: 100%; max-height: 90vh;
             display: flex;
             padding: 20px; overflow-y: auto;
-            position: relative;
+            position: relative; /* This is the main modal content container */
             flex-direction: column;
             align-items: center;
             text-align: center;
             gap: 0;
         }
         
+        /* Modal Close Button: Positioned relative to .modal-poster now */
         .modal-close {
             position: absolute;
-            top: -15px;
-            right: -15px;
-            width: 38px;
-            height: 38px;
-            background-color: #f5c518;
-            color: #111;
+            top: 5px; /* Moved closer to the corner */
+            right: 5px; /* Moved closer to the corner */
+            width: 30px; /* Smaller button */
+            height: 30px; /* Smaller button */
+            background-color: rgba(0, 0, 0, 0.7); /* Black background */
+            color: var(--text-color); /* White/almost white cross icon */
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.4rem; /* Adjusted icon size */
             font-weight: 700;
             line-height: 1;
             cursor: pointer;
-            z-index: 10;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            border: 2px solid var(--surface-color);
+            z-index: 10; /* Ensure it's above the image */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Adjusted shadow */
+            border: none; /* No border for the button itself */
+            transition: background-color 0.2s;
+        }
+        .modal-close:hover {
+            background-color: rgba(0, 0, 0, 0.9); /* Darker on hover */
         }
         
         #modal-top-banner-container {
@@ -171,14 +468,25 @@
             align-items: center;
         }
 
-        .modal-poster img {
-            max-width: 280px;
+        /* Modal Poster Container: Now relative to hold the close button */
+        .modal-poster {
+            position: relative; /* Added for modal close button positioning */
+            max-width: 280px; /* Maintain the max-width */
             width: 100%;
             border-radius: 8px;
             margin-bottom: 15px;
+            /* No height here, img aspect-ratio will control it */
         }
+
+        .modal-poster img {
+            width: 100%;
+            height: auto; /* Allow height to adjust naturally */
+            border-radius: 8px;
+            display: block;
+        }
+
         .modal-title-custom {
-            color: #f5c518;
+            color: var(--text-color);
             font-size: 1.8rem;
             font-weight: bold;
             margin-bottom: 20px;
@@ -191,6 +499,7 @@
             gap: 12px;
             margin-bottom: 25px;
         }
+        /* Professional Watch Now Buttons */
         .modal-link-btn {
             padding: 12px 20px;
             color: #ffffff;
@@ -204,10 +513,38 @@
             justify-content: center;
             align-items: center;
             gap: 8px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease; /* Added transitions */
         }
-        .modal-link-btn.watch-now { background-color: #d90429; }
-        .modal-link-btn.watch-360p { background-color: #2b9348; }
-        .modal-link-btn.watch-720p { background-color: #0077b6; }
+
+        .modal-link-btn.watch-now {
+            background-color: var(--primary-color); /* Orange for main action */
+            color: #111; /* Dark text for contrast on orange */
+            font-size: 1.2rem; /* Slightly larger for main action */
+            padding: 14px 22px; /* Slightly more prominent padding */
+        }
+        .modal-link-btn.watch-now:hover {
+            background-color: #e69500; /* Darker orange on hover */
+            box-shadow: 0 6px 15px rgba(255,165,0,0.4); /* Orange shadow */
+            transform: translateY(-2px); /* Slight lift */
+        }
+
+        .modal-link-btn.watch-360p {
+            background-color: #2e7d32; /* A professional, deeper green */
+        }
+        .modal-link-btn.watch-360p:hover {
+            background-color: #256a2a; /* Darker green on hover */
+            box-shadow: 0 4px 10px rgba(46,125,50,0.4); /* Green shadow */
+            transform: translateY(-1px);
+        }
+
+        .modal-link-btn.watch-720p {
+            background-color: #1565c0; /* A professional, deeper blue */
+        }
+        .modal-link-btn.watch-720p:hover {
+            background-color: #0d47a1; /* Darker blue on hover */
+            box-shadow: 0 4px 10px rgba(21,101,192,0.4); /* Blue shadow */
+            transform: translateY(-1px);
+        }
 
         .info-table {
             width: 90%;
@@ -229,6 +566,10 @@
             width: 120px;
             flex-shrink: 0;
         }
+        /* Ensure the values next to labels are white */
+        #modal-director, #modal-category, #modal-cast, #modal-release-date, #modal-rating {
+            color: var(--text-color);
+        }
         
         #modal-ad-banner-container {
             width: 90%;
@@ -246,7 +587,7 @@
             text-align: left;
         }
         .description-title {
-            color: #e0e0e0;
+            color: var(--text-color);
             font-size: 1.4rem;
             font-weight: bold;
             margin-bottom: 10px;
@@ -254,29 +595,189 @@
         
         #modal-description {
             line-height: 1.6;
-            color: #ccc;
+            color: var(--text-color);
             font-size: 0.95rem;
             text-align: justify;
         }
 
+        /* --- App Download Banner --- */
+        #app-download-banner {
+            position: fixed;
+            bottom: 20px; /* From bottom */
+            left: 50%;
+            transform: translateX(-50%); /* Center horizontally */
+            width: 90%; /* Responsive width */
+            max-width: 500px; /* Max width to keep it compact on large screens */
+            background-color: var(--surface-color); /* Dark background */
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            z-index: 1000; /* Above main content, below modal/menu */
+            display: flex; /* Use flexbox for layout */
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            opacity: 0;
+            transition: opacity 0.5s ease; /* Smooth transition for appearance */
+        }
+
+        #app-download-banner.show {
+            opacity: 1;
+        }
+
+        .banner-content {
+            display: flex;
+            align-items: center;
+            flex-grow: 1; /* Allows content to take available space */
+            gap: 10px;
+        }
+
+        .app-logo {
+            width: 50px; /* Size of the logo */
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0; /* Prevent logo from shrinking */
+        }
+
+        .banner-text {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .banner-title {
+            color: var(--primary-color); /* Orange color for title */
+            font-weight: 700;
+            font-size: 1.1rem;
+            white-space: nowrap; /* Prevent wrapping for title */
+        }
+
+        .banner-description {
+            color: var(--text-color);
+            font-size: 0.85rem;
+            white-space: nowrap; /* Prevent wrapping for description */
+        }
+
+        .download-app-btn {
+            background-color: var(--primary-color); /* Orange button */
+            color: #111; /* Dark text for button */
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex-shrink: 0; /* Prevent button from shrinking */
+        }
+
+        .download-app-btn:hover {
+            background-color: #e69500; /* Slightly darker orange on hover */
+        }
+
+        .close-banner-btn {
+            background: none;
+            border: none;
+            color: var(--icon-color); /* Grayish color for close icon */
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 5px; /* Small padding for click area */
+            flex-shrink: 0;
+        }
+
+        .close-banner-btn:hover {
+            color: var(--primary-color);
+        }
+
+
+        /* Responsive adjustments */
         @media (max-width: 600px) {
-            header { flex-direction: column; }
-            .modal-poster img { max-width: 220px; }
-            .modal-close { top: 5px; right: 5px; width: 34px; height: 34px; }
+            header {
+                padding: 8px 15px;
+                gap: 10px;
+            }
+            .site-logo {
+                font-size: 1.3rem;
+                gap: 8px;
+            }
+            .site-logo i {
+                font-size: 1.6rem;
+            }
+            .header-right-controls {
+                gap: 8px;
+            }
+            .search-container.active {
+                width: 116px;
+            }
+            .search-container.active .search-input {
+                width: 80px;
+                min-width: 80px;
+                padding: 8px 10px;
+            }
+            .search-toggle-btn, .menu-toggle-btn {
+                width: 36px;
+                height: 36px;
+            }
+            .search-toggle-btn i, .menu-toggle-btn i {
+                font-size: 1.1rem;
+            }
+            #side-menu {
+                width: 200px; /* Smaller width for mobile */
+            }
+
+            /* App banner adjustments for smaller screens */
+            #app-download-banner {
+                width: calc(100% - 20px); /* 10px padding on each side */
+                padding: 10px;
+                gap: 10px;
+            }
+            .app-logo {
+                width: 40px;
+                height: 40px;
+            }
+            .banner-title {
+                font-size: 1rem;
+            }
+            .banner-description {
+                font-size: 0.75rem;
+            }
+            .download-app-btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            .close-banner-btn {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
     <script type='text/javascript' src='//pl27426947.profitableratecpm.com/d3/fe/7a/d3fe7aca9abd2f57e8dfcc0ce1fcc180.js'></script>
 
-    <div id="loader"><div class="spinner"></div></div>
+    <div id="loader">
+        <div class="spinner"></div>
+        <span id="loading-text">Movie Loading</span>
+    </div>
 
     <header>
-        <h1 class="site-title">Movie TV</h1>
-        <div class="search-bar">
-            <input type="search" id="search-input" placeholder="Search for a movie...">
+        <div class="site-logo">
+            <i class="fas fa-clapperboard"></i>
+            <span class="site-title-text">CineStream</span>
         </div>
-        <a href="#" id="app-download-btn" class="app-download-btn" target="_blank">Download App</a>
+        
+        <div class="header-right-controls">
+            <div class="search-container">
+                <input type="search" id="search-input" class="search-input" placeholder="Search...">
+                <button class="search-toggle-btn">
+                    <i class="fas fa-magnifying-glass"></i>
+                </button>
+            </div>
+            <!-- Main menu toggle button -->
+            <button class="menu-toggle-btn" id="main-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
     </header>
 
     <main>
@@ -285,9 +786,23 @@
         <div id="movie-grid"></div>
     </main>
 
+    <!-- Side Menu (Overlay) -->
+    <div id="side-menu-overlay">
+        <div id="side-menu">
+            <div class="menu-logo">
+                <i class="fas fa-clapperboard"></i>
+                <span>CineStream</span>
+            </div>
+            <ul class="menu-options">
+                <li><a href="#" id="menu-home-btn"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" id="menu-saved-movies-btn"><i class="fas fa-bookmark"></i> Saved Movies</a></li>
+                <!-- Add more menu items here if needed -->
+            </ul>
+        </div>
+    </div>
+
     <div id="movie-modal">
         <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
             
             <div id="modal-top-banner-container">
                 <script type="text/javascript">
@@ -304,10 +819,11 @@
 
             <div class="modal-poster">
                 <img id="modal-img" src="" alt="Movie Poster">
+                <span class="modal-close" onclick="closeModal()">&times;</span>
             </div>
 
             <h2 id="modal-title" class="modal-title-custom"></h2>
-
+            
             <div id="modal-links" class="modal-links-custom"></div>
 
             <div class="info-table">
@@ -326,6 +842,10 @@
                  <div class="info-row">
                     <span class="info-label">Release Date</span>
                     <span id="modal-release-date"></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Rating</span>
+                    <span id="modal-rating"></span>
                 </div>
             </div>
             
@@ -349,6 +869,19 @@
         </div>
     </div>
 
+    <!-- App Download Banner -->
+    <div id="app-download-banner">
+        <div class="banner-content">
+            <img src="https://via.placeholder.com/60/111111/FFFFFF?text=App" alt="App Logo" class="app-logo"> <!-- Dummy logo with dark background -->
+            <div class="banner-text">
+                <span class="banner-title">CineStream App</span>
+                <span class="banner-description">Get a better experience with our app.</span>
+            </div>
+        </div>
+        <button class="download-app-btn">Download App</button>
+        <button class="close-banner-btn">&times;</button>
+    </div>
+
     <script>
         // --- Firebase Config ---
         const firebaseConfig = {
@@ -360,17 +893,40 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const moviesRef = database.ref('movies');
-        const settingsRef = database.ref('siteSettings');
         const analyticsRef = database.ref('analytics/visits');
+        const siteSettingsRef = database.ref('siteSettings'); 
 
         // --- DOM Elements ---
         const loader = document.getElementById('loader');
         const movieGrid = document.getElementById('movie-grid');
         const categoryFilters = document.getElementById('category-filters');
-        const searchInput = document.getElementById('search-input');
         const modal = document.getElementById('movie-modal');
+        
+        // Search elements
+        const searchInput = document.getElementById('search-input');
+        const searchToggleBtn = document.querySelector('.search-toggle-btn');
+        const searchContainer = document.querySelector('.search-container');
+        
+        // Menu elements
+        const mainMenuToggle = document.getElementById('main-menu-toggle');
+        const sideMenuOverlay = document.getElementById('side-menu-overlay');
+        const menuSavedMoviesBtn = document.getElementById('menu-saved-movies-btn');
+        const menuHomeBtn = document.getElementById('menu-home-btn');
+
+        // App Download Banner elements
+        const appDownloadBanner = document.getElementById('app-download-banner');
+        const closeBannerBtn = appDownloadBanner.querySelector('.close-banner-btn');
+        const bannerTitleElement = appDownloadBanner.querySelector('.banner-title');
+        const bannerDescElement = appDownloadBanner.querySelector('.banner-description');
+        const bannerDownloadBtn = appDownloadBanner.querySelector('.download-app-btn');
+        const bannerAppLogo = appDownloadBanner.querySelector('.app-logo');
+
+        // Modal Rating Display Element
+        const modalRatingDisplay = document.getElementById('modal-rating');
 
         let allMovies = [];
+        let savedMovieIds = new Set(); // To store IDs of saved movies
+        let appBannerData = null; // To store fetched banner data
 
         // Function to convert a movie title into a URL-friendly "slug"
         function createSlug(title) {
@@ -381,9 +937,92 @@
                 .replace(/^-+|-+$/g, '');   // Remove leading/trailing dashes
         }
 
+        // --- SEO Helper Functions ---
+        function updateMetaTag(name, content, isProperty = false) {
+            let element;
+            if (isProperty) {
+                element = document.querySelector(`meta[property="${name}"]`);
+                if (!element) {
+                    element = document.createElement('meta');
+                    element.setAttribute('property', name);
+                    document.head.appendChild(element);
+                }
+            } else {
+                element = document.querySelector(`meta[name="${name}"]`);
+                if (!element) {
+                    element = document.createElement('meta');
+                    element.setAttribute('name', name);
+                    document.head.appendChild(element);
+                }
+            }
+            element.setAttribute('content', content);
+        }
+
+        function generateMovieSchema(movie) {
+            const schema = {
+                "@context": "https://schema.org",
+                "@type": "Movie",
+                "name": movie.title,
+                "image": movie.image,
+                "description": movie.description,
+                "director": {
+                    "@type": "Person",
+                    "name": movie.director || 'Unknown'
+                },
+                "actor": (movie.cast ? movie.cast.split(',').map(name => ({
+                    "@type": "Person",
+                    "name": name.trim()
+                })) : []),
+                "genre": movie.category,
+                "datePublished": movie.releaseDate,
+                "url": window.location.href,
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": parseFloat(movie.rating) || 7.0, // Ensure it's a number
+                    "ratingCount": "1" // Assuming one admin rating, adjust if you track user ratings
+                }
+            };
+            return JSON.stringify(schema);
+        }
+
+        // Default site meta values (to revert to)
+        const defaultPageTitle = "CineStream - Watch & Download Latest HD Movies";
+        const defaultMetaDescription = "Watch your favorite new and classic movies and web series. Find a huge collection of films from various genres on our website. Stream online now.";
+        const defaultOgTitle = "CineStream - Watch New Movies & Series";
+        const defaultOgDescription = "Discover and stream a vast library of movies and web series online for free.";
+        const defaultOgImage = document.getElementById('og-image').content; // Get initial default from HTML
+        const defaultOgUrl = document.getElementById('canonical-url').href; // Get initial default from HTML
+        const defaultOgType = "website";
+        const defaultTwitterTitle = document.getElementById('twitter-title').content; // Get initial default from HTML
+        const defaultTwitterDescription = document.getElementById('twitter-description').content; // Get initial default from HTML
+        const defaultTwitterImage = document.getElementById('twitter-image').content; // Get initial default from HTML
+
+
+        function resetMetaTags() {
+            document.title = defaultPageTitle;
+            document.getElementById('page-title').textContent = defaultPageTitle; // Update the actual title tag content
+            document.getElementById('canonical-url').setAttribute('href', defaultOgUrl);
+
+            updateMetaTag('description', defaultMetaDescription);
+            updateMetaTag('og:title', defaultOgTitle, true);
+            updateMetaTag('og:description', defaultOgDescription, true);
+            updateMetaTag('og:image', defaultOgImage, true);
+            updateMetaTag('og:url', defaultOgUrl, true);
+            updateMetaTag('og:type', defaultOgType, true);
+
+            updateMetaTag('twitter:title', defaultTwitterTitle);
+            updateMetaTag('twitter:description', defaultTwitterDescription);
+            updateMetaTag('twitter:image', defaultTwitterImage);
+
+            // Clear movie schema
+            document.getElementById('movie-schema').textContent = '';
+        }
+        // --- End SEO Helper Functions ---
+
         document.addEventListener('DOMContentLoaded', () => {
             logVisit();
-            loadSiteSettings();
+            loadSavedMoviesFromLocalStorage();
+            resetMetaTags(); // Ensure default SEO is set initially
             loadMovies();
         });
         
@@ -393,43 +1032,134 @@
                 referrer: document.referrer
             }).catch(error => console.error("Analytics error:", error));
         }
-
-        function loadSiteSettings() {
-            settingsRef.once('value', snapshot => {
-                const settings = snapshot.val();
-                if (!settings) return;
-
-                const appBtn = document.getElementById('app-download-btn');
-                if (settings.appDownloadUrl) {
-                    appBtn.href = settings.appDownloadUrl;
-                    appBtn.style.display = 'inline-block';
-                }
-            });
-        }
         
+        function loadSavedMoviesFromLocalStorage() {
+            const saved = localStorage.getItem('cineStreamSavedMovies');
+            if (saved) {
+                try {
+                    savedMovieIds = new Set(JSON.parse(saved));
+                } catch (e) {
+                    console.error("Error parsing saved movies from localStorage:", e);
+                    savedMovieIds = new Set();
+                }
+            }
+        }
+
+        function saveMoviesToLocalStorage() {
+            localStorage.setItem('cineStreamSavedMovies', JSON.stringify(Array.from(savedMovieIds)));
+        }
+
+        function toggleSaveMovie(movieId, buttonElement) {
+            if (savedMovieIds.has(movieId)) {
+                savedMovieIds.delete(movieId);
+                if (buttonElement) {
+                    buttonElement.querySelector('i').classList.replace('fas', 'far'); // Change to outline icon
+                }
+                showMessage('Movie removed from saved!', 'orange');
+            } else {
+                savedMovieIds.add(movieId);
+                if (buttonElement) {
+                    buttonElement.querySelector('i').classList.replace('far', 'fas'); // Change to solid icon
+                }
+                showMessage('Movie added to saved!', 'green');
+            }
+            saveMoviesToLocalStorage(); // Update localStorage
+            
+            // Re-render movies if currently showing only saved movies
+            if (document.querySelector('.filter-btn.active')?.textContent === 'Saved') {
+                displaySavedMovies();
+            }
+        }
+
+        function showMessage(message, type = 'info') {
+            const messageBar = document.getElementById('message-bar');
+            messageBar.textContent = message;
+            messageBar.style.display = 'block';
+            let bgColor = '#ff8c0022'; // Default info
+            let borderColor = 'var(--primary-color)';
+
+            if (type === 'green') {
+                bgColor = '#28a74522';
+                borderColor = '#28a745';
+            } else if (type === 'orange') {
+                bgColor = '#ff8c0022';
+                borderColor = 'var(--primary-color)';
+            }
+            
+            messageBar.style.backgroundColor = bgColor;
+            messageBar.style.borderColor = borderColor;
+
+            setTimeout(() => {
+                messageBar.style.display = 'none';
+            }, 3000); // Hide after 3 seconds
+        }
+
         function loadMovies() {
             loader.style.display = 'flex';
-            moviesRef.orderByChild('timestamp').once('value', snapshot => {
-                const moviesData = snapshot.val();
+            Promise.all([
+                moviesRef.orderByChild('timestamp').once('value'),
+                siteSettingsRef.once('value') // Load site settings
+            ])
+            .then(([moviesSnapshot, settingsSnapshot]) => {
+                const moviesData = moviesSnapshot.val();
+                const settingsData = settingsSnapshot.val();
+
                 if (moviesData) {
                     allMovies = Object.entries(moviesData).map(([key, value]) => ({ 
                         key, 
                         ...value,
-                        slug: createSlug(value.title) 
+                        slug: createSlug(value.title),
+                        rating: value.rating || (Math.random() * 2 + 7).toFixed(1) // Keep existing fallback
                     })).reverse();
                     
                     const initialMovies = allMovies.filter(movie => movie.category !== 'upcoming');
                     displayMovies(initialMovies);
                     populateCategories();
-
-                    // Check the URL path to open a movie on page load
                     handleUrlPath();
                 }
+
+                if (settingsData && settingsData.appBanner) {
+                    appBannerData = settingsData.appBanner; // Store fetched banner data
+                    updateAppBanner(); // Update banner content
+                }
+
                 loader.style.display = 'none';
+                // Show banner after movies load, if not dismissed and 'showBanner' is true
+                if (!localStorage.getItem('appBannerDismissed') && appBannerData && appBannerData.showBanner) {
+                    setTimeout(() => {
+                        appDownloadBanner.style.display = 'flex'; // Make it visible for animation
+                        // Force a reflow to ensure display:flex takes effect before transition
+                        void appDownloadBanner.offsetWidth; 
+                        appDownloadBanner.classList.add('show');
+                    }, 5000); // 5 seconds delay
+                }
+
+            })
+            .catch(error => {
+                console.error("Failed to load data:", error);
+                loader.style.display = 'none';
+                showMessage('Failed to load content. Please try again later.', 'orange');
             });
         }
 
-        // This function reads the URL path and opens the corresponding movie modal
+        // New function to update banner content from Firebase
+        function updateAppBanner() {
+            if (appBannerData) {
+                bannerTitleElement.textContent = appBannerData.title || 'CineStream App';
+                bannerDescElement.textContent = appBannerData.description || 'Get a better experience with our app.';
+                bannerDownloadBtn.textContent = appBannerData.buttonText || 'Download App';
+                bannerAppLogo.src = appBannerData.imageUrl || 'https://via.placeholder.com/60/111111/FFFFFF?text=App'; // Fallback dummy image
+                // Ensure download link is set for the button
+                bannerDownloadBtn.onclick = () => {
+                    if (appBannerData.appLink) {
+                        window.open(appBannerData.appLink, '_blank');
+                    }
+                    appDownloadBanner.classList.remove('show');
+                    localStorage.setItem('appBannerDismissed', 'true');
+                };
+            }
+        }
+
         function handleUrlPath() {
             const path = window.location.pathname;
             if (path.startsWith('/movie/')) {
@@ -437,7 +1167,7 @@
                 if (slug) {
                     const movieToOpen = allMovies.find(movie => movie.slug === slug);
                     if (movieToOpen) {
-                        openModal(movieToOpen, true); // Open without pushing a new history state
+                        openModal(movieToOpen, true);
                     }
                 }
             }
@@ -450,16 +1180,44 @@
                 return;
             }
             movies.forEach(movie => {
+                const isSaved = savedMovieIds.has(movie.key);
+                const bookmarkIconClass = isSaved ? 'fas' : 'far'; // fas for solid, far for regular (outline)
+
                 const card = document.createElement('div');
                 card.className = 'movie-card';
-                card.innerHTML = `<img src="${movie.image}" alt="${movie.title} Poster" loading="lazy"><h3>${movie.title}</h3>`;
-                card.onclick = () => openModal(movie);
+                card.innerHTML = `
+                    <div class="movie-poster-wrapper">
+                        <img src="${movie.image}" alt="${movie.title} Poster" loading="lazy">
+                        <button class="save-button" data-movie-id="${movie.key}">
+                            <i class="${bookmarkIconClass} fa-bookmark"></i>
+                        </button>
+                        <div class="rating-display">
+                            <i class="fas fa-star"></i> <span>${movie.rating}</span>
+                        </div>
+                    </div>
+                    <h3>${movie.title}</h3>
+                `;
+                // Attach click listener for opening modal to the wrapper and title
+                card.querySelector('.movie-poster-wrapper').addEventListener('click', () => openModal(movie));
+                card.querySelector('h3').addEventListener('click', () => openModal(movie));
+
+                // Attach click listener for the save button specifically
+                card.querySelector('.save-button').addEventListener('click', (event) => {
+                    event.stopPropagation(); // Prevent modal from opening when clicking save button
+                    toggleSaveMovie(movie.key, event.currentTarget);
+                });
+
                 movieGrid.appendChild(card);
             });
         }
 
         function populateCategories() {
             const categories = ['All', ...new Set(allMovies.map(m => m.category))];
+            // Add 'Saved' as a category option only if not already there
+            if (!categories.includes('Saved')) {
+                categories.push('Saved');
+            }
+
             categoryFilters.innerHTML = '';
             categories.forEach(category => {
                 const btn = document.createElement('button');
@@ -480,13 +1238,40 @@
             let filteredMovies;
             if (category === 'All') {
                 filteredMovies = allMovies.filter(movie => movie.category !== 'upcoming');
-            } else {
+            } else if (category === 'Saved') {
+                displaySavedMovies();
+                return; // Exit as displaySavedMovies will handle display
+            }
+            else {
                 filteredMovies = allMovies.filter(movie => movie.category === category);
             }
-            
             displayMovies(filteredMovies);
         }
+
+        function displaySavedMovies() {
+            const savedMovies = allMovies.filter(movie => savedMovieIds.has(movie.key));
+            displayMovies(savedMovies);
+            if (savedMovies.length === 0) {
+                movieGrid.innerHTML = '<p style="text-align: center; margin-top: 50px;">No saved movies yet. Click the bookmark icon on any movie to save it!</p>';
+            }
+        }
         
+        // --- Search functionality ---
+        searchToggleBtn.addEventListener('click', () => {
+            searchContainer.classList.toggle('active');
+            if (searchContainer.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                const allButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn => btn.textContent === 'All');
+                if (allButton) {
+                    allButton.classList.add('active');
+                }
+                displayMovies(allMovies.filter(movie => movie.category !== 'upcoming'));
+            }
+        });
+
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const filteredMovies = allMovies.filter(movie => 
@@ -494,22 +1279,90 @@
             );
             displayMovies(filteredMovies);
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            if (document.querySelector('.filter-btn')) {
-                document.querySelector('.filter-btn').classList.add('active');
+        });
+
+        searchInput.addEventListener('blur', () => {
+            if (searchInput.value.trim() === '') {
+                searchContainer.classList.remove('active');
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                const allButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn => btn.textContent === 'All');
+                if (allButton) {
+                    allButton.classList.add('active');
+                }
+                displayMovies(allMovies.filter(movie => movie.category !== 'upcoming'));
             }
         });
 
-        // The openModal function now uses the History API to change the URL
+        // --- Side Menu Button Functionality ---
+        mainMenuToggle.addEventListener('click', () => {
+            sideMenuOverlay.classList.add('active');
+        });
+
+        closeBannerBtn.addEventListener('click', () => { // Event listener for the banner's close button
+            appDownloadBanner.classList.remove('show');
+            localStorage.setItem('appBannerDismissed', 'true'); // Remember dismissal
+        });
+
+        sideMenuOverlay.addEventListener('click', (e) => {
+            if (e.target === sideMenuOverlay) { // Only close if clicking the dim background
+                sideMenuOverlay.classList.remove('active');
+            }
+        });
+
+        // "Saved Movies" option in the side menu
+        menuSavedMoviesBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default link behavior
+            sideMenuOverlay.classList.remove('active'); // Close menu
+            // Activate "Saved" filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const savedButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn => btn.textContent === 'Saved');
+            if (savedButton) {
+                savedButton.classList.add('active');
+            }
+            displaySavedMovies();
+        });
+
+        // "Home" option in the side menu
+        menuHomeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sideMenuOverlay.classList.remove('active'); // Close menu
+            // Activate "All" filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const allButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn => btn.textContent === 'All');
+            if (allButton) {
+                allButton.classList.add('active');
+            }
+            displayMovies(allMovies.filter(movie => movie.category !== 'upcoming'));
+        });
+
+
         function openModal(movie, fromUrl = false) {
             const newUrl = `/movie/${movie.slug}`;
             
-            // Only change the URL if the modal wasn't opened by the URL itself
             if (!fromUrl) {
                 history.pushState({ movieId: movie.key }, movie.title, newUrl);
             }
 
-            // Populate the modal content
-            document.title = `${movie.title} - Your Movie Website`;
+            // --- Update SEO for specific movie ---
+            document.title = `${movie.title} - CineStream`;
+            document.getElementById('page-title').textContent = document.title;
+            document.getElementById('canonical-url').setAttribute('href', window.location.href);
+
+            const movieDescription = movie.description ? movie.description.substring(0, 150) + (movie.description.length > 150 ? '...' : '') : `Watch ${movie.title} on CineStream. Directed by ${movie.director || 'N/A'}.`;
+            updateMetaTag('description', movieDescription);
+            updateMetaTag('og:title', movie.title, true);
+            updateMetaTag('og:description', movieDescription, true);
+            updateMetaTag('og:image', movie.image, true);
+            updateMetaTag('og:url', window.location.href, true);
+            updateMetaTag('og:type', 'video.movie', true); // Specific type for movies
+
+            updateMetaTag('twitter:title', movie.title);
+            updateMetaTag('twitter:description', movieDescription);
+            updateMetaTag('twitter:image', movie.image);
+
+            document.getElementById('movie-schema').textContent = generateMovieSchema(movie);
+            // --- End SEO Update ---
+
             const releaseYear = movie.releaseDate ? ` (${movie.releaseDate.substring(0, 4)})` : '';
             document.getElementById('modal-title').textContent = movie.title + releaseYear;
             document.getElementById('modal-img').src = movie.image;
@@ -519,6 +1372,8 @@
             document.getElementById('modal-director').textContent = movie.director || 'N/A';
             document.getElementById('modal-cast').textContent = movie.cast || 'N/A';
             document.getElementById('modal-release-date').textContent = movie.releaseDate || 'N/A';
+            
+            modalRatingDisplay.textContent = movie.rating || 'N/A';
 
             const linksContainer = document.getElementById('modal-links');
             linksContainer.innerHTML = '';
@@ -535,10 +1390,12 @@
             modal.style.display = 'flex';
         }
 
-        // The closeModal function now updates the URL back to the homepage
         function closeModal() {
-            history.pushState(null, 'Your Movie Website', '/'); // Go back to the root URL
-            document.title = 'Your Movie Website - Watch New Movies & Series';
+            history.pushState(null, defaultPageTitle, '/');
+            document.title = defaultPageTitle;
+            
+            resetMetaTags(); // Reset all dynamic meta tags and schema
+
             modal.style.display = 'none';
         }
         
@@ -548,19 +1405,16 @@
             }
         });
 
-        // Handle browser back/forward button clicks
         window.onpopstate = function(event) {
-            // Check if the state contains our movie data
             if (event.state && event.state.movieId) {
                 const movieToOpen = allMovies.find(m => m.key === event.state.movieId);
                 if (movieToOpen) {
-                    openModal(movieToOpen, true); // Open modal without changing history again
+                    openModal(movieToOpen, true);
                 }
             } else {
-                // If no state, it means we are at the homepage URL
                 closeModal();
             }
         };
     </script>
 </body>
-    </html>
+        </html>
