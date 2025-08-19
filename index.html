@@ -1352,13 +1352,13 @@
             updateMetaTag('description', movieDescription);
             updateMetaTag('og:title', movie.title, true);
             updateMetaTag('og:description', movieDescription, true);
-            updateMetaTag('og:image', movie.image, true);
+            updateMetaTag('og:image', movie.image, true); // <--- এটিই ফেসবুক প্রিভিউ ছবির জন্য দায়ী
             updateMetaTag('og:url', window.location.href, true);
             updateMetaTag('og:type', 'video.movie', true); // Specific type for movies
 
             updateMetaTag('twitter:title', movie.title);
             updateMetaTag('twitter:description', movieDescription);
-            updateMetaTag('twitter:image', movie.image);
+            updateMetaTag('twitter:image', movie.image); // <--- এটিই টুইটার প্রিভিউ ছবির জন্য দায়ী
 
             document.getElementById('movie-schema').textContent = generateMovieSchema(movie);
             // --- End SEO Update ---
