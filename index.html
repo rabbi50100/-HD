@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- প্রাথমিক অ্যাড স্ক্রিপ্ট - এটি অ্যাসিঙ্ক্রোনাসভাবে লোড হবে যাতে পেজ লোডিং ব্লক না হয় -->
+    <script async>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',9704632,document.createElement('script'))</script>
     <meta charset="UTF-8">
 
     <!-- ================= SEO Tags Start ================= -->
@@ -466,7 +468,7 @@
             background-color: rgba(0, 0, 0, 0.9);
         }
 
-        #modal-top-banner-container {
+        #modal-top-ad-container { /* Changed ID to reflect direct ad placement */
             width: 100%;
             max-width: 320px;
             min-height: 50px;
@@ -613,7 +615,7 @@
             color: var(--text-color);
         }
 
-        #modal-ad-banner-container, #modal-ad-banner-container-initial {
+        #modal-ad-banner-container-initial {
             width: 90%;
             max-width: 400px;
             margin-bottom: 20px;
@@ -795,7 +797,8 @@
     </style>
 </head>
 <body>
-    <!-- এই স্ক্রিপ্টগুলি এখন JavaScript দ্বারা ডায়নামিকভাবে লোড হবে -->
+    <!-- এই স্ক্রিপ্টটি অ্যাসিঙ্ক্রোনাসভাবে লোড হবে এবং এটি আপনার সাইটের শুরুতে লোড হতে পারে -->
+    <script async type='text/javascript' src='//pl27426947.profitableratecpm.com/d3/fe/7a/d3fe7aca9abd2f57e8dfcc0ce1fcc180.js'></script>
 
     <div id="loader">
         <div class="spinner"></div>
@@ -846,9 +849,20 @@
     <div id="movie-modal">
         <div class="modal-content">
 
-            <div id="modal-top-banner-container">
-                <!-- অ্যাড স্ক্রিপ্ট এখানে JavaScript দ্বারা ডায়নামিকভাবে লোড হবে -->
+            <!-- আপনার দেওয়া অ্যাড স্ক্রিপ্ট এখানে সরাসরি বসানো হয়েছে -->
+            <div id="modal-top-ad-container" style="display: flex; justify-content: center; align-items: center; width: 100%; max-width: 320px; min-height: 50px; margin-bottom: 15px;">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '4fd4f9b283da8f12b3162d7d1cb23317',
+                        'format' : 'iframe',
+                        'height' : 50,
+                        'width' : 320,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/4fd4f9b283da8f12b3162d7d1cb23317/invoke.js"></script>
             </div>
+
 
             <!-- The common close button for the modal -->
             <span class="modal-close" onclick="closeModal()">&times;</span>
@@ -896,6 +910,7 @@
                 </div>
                  <div class="info-row">
                     <span class="info-label">Release Date</span>
+                    <span class="info-label">Release Date</span>
                     <span id="modal-release-date"></span>
                 </div>
                 <div class="info-row">
@@ -926,7 +941,7 @@
             </div>
         </div>
         <button class="download-app-btn">Download App</button>
-        <button class="close-banner-btn">&times;</span>
+        <button class="close-banner-btn">&times;</button>
     </div>
 
     <script>
@@ -985,7 +1000,6 @@
         let savedMovieIds = new Set(); // To store IDs of saved movies
         let appBannerData = null; // To store fetched banner data
         let currentMovieData = null; // To hold the movie data for the currently open modal
-        let adSettingsFromFirebase = {}; // Global object to hold ad configurations from Firebase
 
         // Function to convert a movie title into a URL-friendly "slug"
         function createSlug(title) {
@@ -1153,26 +1167,6 @@
             }, 3000); // Hide after 3 seconds
         }
 
-        // নতুন ফাংশন: গ্লোবাল অ্যাড স্ক্রিপ্ট লোড করার জন্য
-        function applyGlobalAdScripts() {
-            // Head Script
-            if (adSettingsFromFirebase.headScript?.enabled && adSettingsFromFirebase.headScript?.src) {
-                const headScript = document.createElement('script');
-                headScript.async = true;
-                headScript.src = adSettingsFromFirebase.headScript.src;
-                document.head.appendChild(headScript);
-            }
-
-            // Body Script
-            if (adSettingsFromFirebase.bodyScript?.enabled && adSettingsFromFirebase.bodyScript?.src) {
-                const bodyScript = document.createElement('script');
-                bodyScript.async = true;
-                bodyScript.type = 'text/javascript'; // Original snippet had this
-                bodyScript.src = adSettingsFromFirebase.bodyScript.src;
-                document.body.appendChild(bodyScript);
-            }
-        }
-
         function loadMovies() {
             loader.style.display = 'flex';
             Promise.all([
@@ -1197,18 +1191,9 @@
                     handleUrlPath();
                 }
 
-                if (settingsData) {
-                    // অ্যাপ ব্যানার ডেটা লোড করুন
-                    if (settingsData.appBanner) {
-                        appBannerData = settingsData.appBanner; // Store fetched banner data
-                        updateAppBanner(); // Update banner content
-                    }
-
-                    // অ্যাড সেটিংস ডেটা লোড করুন এবং গ্লোবাল অ্যাড স্ক্রিপ্ট ইনজেক্ট করুন
-                    if (settingsData.ads) {
-                        adSettingsFromFirebase = settingsData.ads;
-                        applyGlobalAdScripts(); // Call new function to inject head/body ads
-                    }
+                if (settingsData && settingsData.appBanner) {
+                    appBannerData = settingsData.appBanner; // Store fetched banner data
+                    updateAppBanner(); // Update banner content
                 }
 
                 loader.style.display = 'none';
@@ -1450,13 +1435,11 @@
             displayMovies(allMovies.filter(movie => movie.category !== 'upcoming'));
         });
 
-        // অ্যাড লোড করার জন্য নতুন ফাংশন
+        // অ্যাড লোড করার জন্য নতুন ফাংশন (এই ফাংশনটি এখন শুধুমাত্র নিচের ব্যানার অ্যাড এর জন্য ব্যবহার হবে)
         function loadModalAd(containerId, adKey, adFormat, adHeight, adWidth) {
             const container = document.getElementById(containerId);
             if (!container) return;
             container.innerHTML = ''; // ডুপ্লিকেট অ্যাড এড়াতে বিদ্যমান কন্টেন্ট মুছে ফেলুন
-
-            if (!adKey) return; // যদি কোনো অ্যাড কী না থাকে তাহলে লোড করবে না
 
             const scriptOptions = document.createElement('script');
             scriptOptions.type = 'text/javascript';
@@ -1492,28 +1475,8 @@
             adButton.disabled = false;                       // অ্যাড বাটন এনাবেল থাকবে
             adButton.textContent = 'Watch Ad to Play';       // অ্যাড বাটনের টেক্সট রিসেট করবে
 
-            // ডায়নামিকভাবে অ্যাড লোড করুন - এখন Firebase থেকে key ব্যবহার করবে
-            // Modal Top Banner
-            if (adSettingsFromFirebase.modalTopBanner?.enabled && adSettingsFromFirebase.modalTopBanner?.key) {
-                loadModalAd('modal-top-banner-container',
-                            adSettingsFromFirebase.modalTopBanner.key,
-                            adSettingsFromFirebase.modalTopBanner.format,
-                            adSettingsFromFirebase.modalTopBanner.height,
-                            adSettingsFromFirebase.modalTopBanner.width);
-            } else {
-                document.getElementById('modal-top-banner-container').innerHTML = ''; // অ্যাড অক্ষম হলে কন্টেইনার খালি করুন
-            }
-
-            // Modal Initial Banner
-            if (adSettingsFromFirebase.modalInitialBanner?.enabled && adSettingsFromFirebase.modalInitialBanner?.key) {
-                loadModalAd('modal-ad-banner-container-initial',
-                            adSettingsFromFirebase.modalInitialBanner.key,
-                            adSettingsFromFirebase.modalInitialBanner.format,
-                            adSettingsFromFirebase.modalInitialBanner.height,
-                            adSettingsFromFirebase.modalInitialBanner.width);
-            } else {
-                document.getElementById('modal-ad-banner-container-initial').innerHTML = ''; // অ্যাড অক্ষম হলে কন্টেইনার খালি করুন
-            }
+            // ডায়নামিকভাবে অ্যাড লোড করুন (শুধুমাত্র নিচের ব্যানার অ্যাড এর জন্য, উপরেরটা সরাসরি HTML এ বসানো হয়েছে)
+            loadModalAd('modal-ad-banner-container-initial', 'ca89ce47317b6a13d35e3c7e04813e6a', 'iframe', 250, 300);
 
             const newUrl = `/movie/${movie.slug}`;
             if (!fromUrl) {
@@ -1630,11 +1593,6 @@
             adButton.disabled = false; // Re-enable ad button for next time
             adButton.textContent = 'Watch Ad to Play'; // Reset text
 
-            // মোডাল বন্ধ করার সময় অ্যাড কন্টেইনারগুলি খালি করুন
-            document.getElementById('modal-top-banner-container').innerHTML = '';
-            document.getElementById('modal-ad-banner-container-initial').innerHTML = '';
-
-
             modal.style.display = 'none';
         }
 
@@ -1658,5 +1616,4 @@
         };
     </script>
 </body>
-    </html>
-```
+        </html>
