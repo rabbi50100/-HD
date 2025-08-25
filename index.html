@@ -71,6 +71,11 @@
             --button-bg-light: #333333; /* For search button's normal state */
             --button-border-color: #4a4a4a; /* For the search button's border */
             --icon-color: #b0b0b0; /* Color for search icon and menu icon */
+            /* UPDATED: Footer colors for single dark tone */
+            --footer-bg-color: var(--background-color); /* Matches main background */
+            --footer-text-color: #aaaaaa;
+            --footer-link-color: #ffffff;
+            --footer-social-color: var(--primary-color); /* Social icons now primary color */
         }
         body {
             font-family: var(--font-family);
@@ -79,6 +84,9 @@
             margin: 0;
             font-size: 16px;
             box-sizing: border-box; /* Added for consistent box model */
+            display: flex; /* Make body a flex container */
+            flex-direction: column; /* Stack header, main, footer vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
         }
         *, *::before, *::after {
             box-sizing: border-box; /* Added for consistent box model */
@@ -148,7 +156,7 @@
         .header-right-controls { /* New wrapper for search and menu button */
             display: flex;
             align-items: center;
-            gap: 15px; /* Space between search and menu button */
+            gap: 10px; /* Reduced gap */
         }
 
         /* Search Container Styling */
@@ -161,70 +169,81 @@
             border-radius: 8px;
             overflow: hidden;
             transition: all 0.3s ease;
-            width: 40px; /* Initial width (only button visible) */
             flex-shrink: 0; /* Prevent search container from shrinking too much */
+            min-width: 36px; /* Ensure it's at least the width of the button */
         }
 
-        .search-container.active {
-            width: 120px; /* Adjusted: Input (80px) + Button (40px) */
-        }
+        /* REMOVED: .search-container.active width setting */
 
         .search-input {
+            flex-grow: 0; /* Don't grow initially */
             width: 0; /* Hidden by default */
             padding: 0; /* No padding initially */
             border: none;
             background: transparent;
             color: var(--text-color);
-            font-size: 1rem;
+            font-size: 0.9rem; /* Adjusted font size */
             outline: none;
-            transition: width 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+            transition: all 0.3s ease; /* Transition for flex-grow, width, padding, opacity */
             opacity: 0;
             box-sizing: border-box;
-            flex-shrink: 0; /* Prevent input from shrinking */
-            /* Add these for the 5-character view */
             overflow: hidden;
             white-space: nowrap;
             text-overflow: clip; /* Ensure no ellipsis */
         }
 
         .search-container.active .search-input {
-            width: 80px; /* Adjusted: To show ~5 characters (50px content + 30px padding) */
-            min-width: 80px; /* Ensure it doesn't shrink more */
-            padding: 10px 15px; /* Full padding when active */
+            flex-grow: 1; /* Allow to grow */
+            width: auto; /* Let flexbox calculate width */
+            max-width: 100px; /* Maximum width for the input field */
+            padding: 8px 10px; /* Full padding when active */
             opacity: 1;
         }
 
         /* Common styles for icon buttons (search toggle and menu toggle) */
-        .search-toggle-btn, .menu-toggle-btn {
+        .search-toggle-btn, .menu-toggle-btn, .app-icon-btn { /* Added .app-icon-btn here */
             background-color: transparent; /* Button itself has no background, container provides it */
             border: none; /* No border for the button itself, container provides it */
             border-radius: 8px; /* Match container border-radius */
-            width: 40px;
-            height: 40px;
+            width: 36px; /* Smaller */
+            height: 36px; /* Smaller */
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             transition: background-color 0.2s;
             flex-shrink: 0; /* Prevent shrinking */
+            padding: 0; /* Ensure no extra padding */
         }
 
-        .search-toggle-btn:hover, .menu-toggle-btn:hover {
+        .search-toggle-btn:hover, .menu-toggle-btn:hover, .app-icon-btn:hover { /* Added .app-icon-btn here */
             background-color: rgba(255,255,255,0.08); /* Slight hover effect */
         }
         .search-toggle-btn i, .menu-toggle-btn i {
             color: var(--icon-color);
-            font-size: 1.2rem;
+            font-size: 1rem; /* Smaller */
         }
 
         /* Specific style for menu button to have its own background/border */
-        .menu-toggle-btn {
+        .menu-toggle-btn, .app-icon-btn { /* Both have their own background/border now */
             background-color: var(--button-bg-light);
             border: 1px solid var(--button-border-color);
         }
 
+        /* Styles for the App Icon Image inside the button */
+        .app-icon-btn .app-icon-img {
+            width: 100%; /* Fill button width */
+            height: 100%; /* Fill button height */
+            object-fit: contain; /* Ensure image fits without cropping */
+            display: block; /* Remove extra space below image */
+            border-radius: 6px; /* Match button's border-radius for visual harmony */
+        }
+
         /* --- Main Content --- */
-        main { padding: 20px; }
+        main {
+            padding: 20px;
+            flex-grow: 1; /* Allow main content to grow and push footer to bottom */
+        }
         #message-bar {
             background-color: #ff8c0022; border: 1px solid var(--primary-color);
             padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;
@@ -644,98 +663,204 @@
             text-align: justify;
         }
 
-        /* --- App Download Banner --- */
-        #app-download-banner {
+        /* NEW: How to Watch Video Modal Styles */
+        #how-to-watch-video-modal {
             position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 500px;
-            background-color: var(--surface-color);
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            z-index: 1000;
-            display: flex;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1100; /* Higher than other modals */
+            display: none;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            gap: 15px;
+            padding: 20px;
+            box-sizing: border-box;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
         }
-
-        #app-download-banner.show {
+        #how-to-watch-video-modal.active {
+            display: flex;
             opacity: 1;
         }
 
-        .banner-content {
+        .how-to-watch-content {
+            background-color: var(--surface-color);
+            border-radius: 8px;
+            width: 95%;
+            max-width: 800px; /* Larger max width for content */
+            max-height: 90%;
+            overflow-y: auto;
+            padding: 25px;
+            position: relative;
+            display: flex;
+            flex-direction: row; /* Desktop: text on left, video on right */
+            gap: 20px;
+            align-items: flex-start; /* Align content to the top */
+            color: var(--text-color);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        .how-to-watch-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: var(--text-color);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            flex-grow: 1;
-            gap: 10px;
-        }
-
-        .app-logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-
-        .banner-text {
-            display: flex;
-            flex-direction: column;
-            font-size: 0.9rem;
-            line-height: 1.3;
-        }
-
-        .banner-title {
-            color: var(--primary-color);
+            justify-content: center;
+            font-size: 1.4rem;
             font-weight: 700;
-            font-size: 1.1rem;
-            white-space: nowrap;
-        }
-
-        .banner-description {
-            color: var(--text-color);
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-
-        .download-app-btn {
-            background-color: var(--primary-color);
-            color: #111;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-weight: 600;
+            line-height: 1;
             cursor: pointer;
+            z-index: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            border: none;
             transition: background-color 0.2s;
-            flex-shrink: 0;
+        }
+        .how-to-watch-close:hover {
+            background-color: rgba(0, 0, 0, 0.9);
         }
 
-        .download-app-btn:hover {
-            background-color: #e69500;
+        .how-to-watch-text {
+            flex: 1; /* Takes available space */
+            padding-right: 10px; /* Space between text and video */
         }
-
-        .close-banner-btn {
-            background: none;
-            border: none;
-            color: var(--icon-color);
+        .how-to-watch-text h3 {
             font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0 5px;
-            flex-shrink: 0;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .how-to-watch-text ol {
+            padding-left: 20px;
+            margin: 0;
+            list-style-type: decimal;
+        }
+        .how-to-watch-text li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            font-size: 0.95rem;
         }
 
-        .close-banner-btn:hover {
+        .how-to-watch-video-container {
+            flex: 1; /* Takes available space */
+            position: relative;
+            width: 100%;
+            padding-bottom: 28.125%; /* 16:9 aspect ratio (56.25% / 2 because of flex:1) */
+            height: 0;
+            overflow: hidden;
+            background: #000;
+            border-radius: 5px;
+        }
+        .how-to-watch-video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* --- Footer Styles --- */
+        footer {
+            background-color: var(--footer-bg-color); /* Now matches --background-color */
+            color: var(--footer-text-color);
+            padding: 20px 15px; /* Reduced vertical padding */
+            text-align: center;
+            margin-top: auto; /* Push footer to the bottom */
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        }
+
+        .footer-logo-section {
+            margin-bottom: 15px; /* Reduced margin */
+        }
+
+        .footer-logo {
+            font-size: 2rem; /* Slightly smaller for mobile */
+            font-weight: 700;
             color: var(--primary-color);
+            margin-bottom: 5px; /* Reduced margin */
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+        .footer-tagline {
+            font-size: 0.9rem; /* Slightly smaller */
+            color: var(--footer-text-color);
+            margin-bottom: 15px; /* Reduced margin */
+        }
+
+        .footer-nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto 20px auto; /* Reduced margin */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px 15px; /* Reduced gap */
+            max-width: 600px;
+        }
+
+        .footer-nav ul li a {
+            color: var(--footer-link-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem; /* Slightly smaller */
+            transition: color 0.2s ease;
+        }
+        .footer-nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto 20px auto; /* Reduced margin */
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Reduced gap */
+            max-width: 300px;
+        }
+
+        .social-links a {
+            color: var(--footer-social-color); /* Now using primary color for icons */
+            font-size: 1.4rem; /* Slightly smaller */
+            transition: color 0.2s ease;
+        }
+        .social-links a:hover {
+            color: var(--footer-link-color); /* Hover to white */
+        }
+
+        .footer-copyright {
+            font-size: 0.8rem; /* Slightly smaller */
+            color: var(--footer-text-color);
+        }
+        .footer-copyright span {
+            color: var(--primary-color);
+            font-weight: 500;
         }
 
 
         /* Responsive adjustments */
+        @media (max-width: 768px) { /* Adjust breakpoint for how-to-watch modal */
+            .how-to-watch-content {
+                flex-direction: column; /* Stack vertically on smaller screens */
+                padding: 15px;
+                gap: 15px;
+            }
+            .how-to-watch-text {
+                padding-right: 0;
+            }
+            .how-to-watch-video-container {
+                padding-bottom: 56.25%; /* Full 16:9 aspect ratio when stacked */
+            }
+        }
+
         @media (max-width: 600px) {
             header {
                 padding: 8px 15px;
@@ -751,47 +876,46 @@
             .header-right-controls {
                 gap: 8px;
             }
-            .search-container.active {
-                width: 116px;
-            }
+            /* REMOVED: .search-container.active width here */
             .search-container.active .search-input {
-                width: 80px;
-                min-width: 80px;
+                max-width: 70px; /* Even smaller for very small screens */
                 padding: 8px 10px;
             }
-            .search-toggle-btn, .menu-toggle-btn {
+            .search-toggle-btn, .menu-toggle-btn, .app-icon-btn { /* Added app-icon-btn */
                 width: 36px;
                 height: 36px;
             }
             .search-toggle-btn i, .menu-toggle-btn i {
                 font-size: 1.1rem;
             }
+            .app-icon-btn .app-icon-img { /* Adjusted app-icon-img for mobile */
+                width: 100%;
+                height: 100%;
+            }
             #side-menu {
                 width: 200px;
             }
-
-            /* App banner adjustments for smaller screens */
-            #app-download-banner {
-                width: calc(100% - 20px);
-                padding: 10px;
-                gap: 10px;
+            /* Footer specific adjustments for very small screens */
+            footer {
+                padding: 20px 10px;
             }
-            .app-logo {
-                width: 40px;
-                height: 40px;
+            .footer-logo {
+                font-size: 1.8rem;
             }
-            .banner-title {
-                font-size: 1rem;
+            .footer-tagline {
+                font-size: 0.85rem;
             }
-            .banner-description {
-                font-size: 0.75rem;
+            .footer-nav ul {
+                gap: 8px 10px;
             }
-            .download-app-btn {
-                padding: 8px 12px;
+            .footer-nav ul li a {
                 font-size: 0.9rem;
             }
-            .close-banner-btn {
+            .social-links a {
                 font-size: 1.2rem;
+            }
+            .footer-copyright {
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -818,6 +942,10 @@
                     <i class="fas fa-magnifying-glass"></i>
                 </button>
             </div>
+            <!-- New app icon button with APK logo -->
+            <button class="app-icon-btn" id="header-app-button" style="display: none;">
+                <img src="https://ia800509.us.archive.org/0/items/68ab-4def-1a-22d-download-prev-ui/68ab4def1a22d_download_prev_ui.png" alt="Download APK" class="app-icon-img">
+            </button>
             <!-- Main menu toggle button -->
             <button class="menu-toggle-btn" id="main-menu-toggle">
                 <i class="fas fa-bars"></i>
@@ -841,6 +969,8 @@
             <ul class="menu-options">
                 <li><a href="#" id="menu-home-btn"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="#" id="menu-saved-movies-btn"><i class="fas fa-bookmark"></i> Saved Movies</a></li>
+                <!-- New "How to Watch" menu item -->
+                <li><a href="#" id="menu-how-to-watch-btn"><i class="fas fa-circle-question"></i> How to Watch Movies</a></li>
                 <!-- Add more menu items here if needed -->
             </ul>
         </div>
@@ -910,7 +1040,6 @@
                 </div>
                  <div class="info-row">
                     <span class="info-label">Release Date</span>
-                    <span class="info-label">Release Date</span>
                     <span id="modal-release-date"></span>
                 </div>
                 <div class="info-row">
@@ -930,19 +1059,51 @@
         </div>
     </div>
 
-    <!-- App Download Banner -->
-    <div id="app-download-banner">
-        <div class="banner-content">
-            <!-- আপনার অ্যাপের লোগো এখানে যুক্ত করুন -->
-            <img src="https://via.placeholder.com/60/111111/FFFFFF?text=App" alt="App Logo" class="app-logo"> <!-- Dummy logo with dark background -->
-            <div class="banner-text">
-                <span class="banner-title">CineStream App</span>
-                <span class="banner-description">Get a better experience with our app.</span>
+    <!-- NEW: How to Watch Video Modal -->
+    <div id="how-to-watch-video-modal">
+        <div class="how-to-watch-content">
+            <span class="how-to-watch-close" onclick="closeHowToWatchModal()">&times;</span>
+            <div class="how-to-watch-text">
+                <h3>How to Watch Movies</h3>
+                <ol>
+                    <li>Browse the categories or use the search bar.</li>
+                    <li>Click on a movie card to open its details.</li>
+                    <li>Click 'Watch Now' on the movie details screen.</li>
+                    <li>You may need to watch a short ad before the movie starts. Click 'Watch Ad to Play'.</li>
+                    <li>After watching the ad, click 'Play Movie' to start streaming!</li>
+                </ol>
+            </div>
+            <div class="how-to-watch-video-container">
+                <iframe id="how-to-watch-iframe" src="" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
-        <button class="download-app-btn">Download App</button>
-        <button class="close-banner-btn">&times;</button>
     </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-logo-section">
+            <h3 class="footer-logo">CineStream</h3>
+            <p class="footer-tagline">Your ultimate destination for cinematic moods <i class="fas fa-clapperboard"></i></p>
+        </div>
+
+        <nav class="footer-nav">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Movies</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </nav>
+
+        <ul class="social-links">
+            <li><a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="https://youtube.com" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a></li>
+        </ul>
+
+        <p class="footer-copyright">© <span id="current-year"></span> <span>CineStream</span>. All Rights Reserved.</p>
+    </footer>
 
     <script>
         // --- Firebase Config ---
@@ -969,24 +1130,20 @@
         const searchToggleBtn = document.querySelector('.search-toggle-btn');
         const searchContainer = document.querySelector('.search-container');
 
+        // Header App Icon Button (for direct download)
+        const headerAppButton = document.getElementById('header-app-button');
+
         // Menu elements
         const mainMenuToggle = document.getElementById('main-menu-toggle');
         const sideMenuOverlay = document.getElementById('side-menu-overlay');
         const menuSavedMoviesBtn = document.getElementById('menu-saved-movies-btn');
         const menuHomeBtn = document.getElementById('menu-home-btn');
-
-        // App Download Banner elements
-        const appDownloadBanner = document.getElementById('app-download-banner');
-        const closeBannerBtn = appDownloadBanner.querySelector('.close-banner-btn');
-        const bannerTitleElement = appDownloadBanner.querySelector('.banner-title');
-        const bannerDescElement = appDownloadBanner.querySelector('.banner-description');
-        const bannerDownloadBtn = appDownloadBanner.querySelector('.download-app-btn');
-        const bannerAppLogo = appDownloadBanner.querySelector('.app-logo');
+        const menuHowToWatchBtn = document.getElementById('menu-how-to-watch-btn');
 
         // Modal Rating Display Element
         const modalRatingDisplay = document.getElementById('modal-rating');
 
-        // New elements for movie playback flow
+        // Elements for movie playback flow
         const modalInitialInfoView = document.getElementById('modal-initial-info-view');
         const videoPlayerView = document.getElementById('video-player-view');
         const moviePlayerIframe = document.getElementById('movie-player-iframe');
@@ -996,9 +1153,13 @@
         const finalWatchNowButton = document.getElementById('final-watch-now-button');
         const mainWatchNowTrigger = document.getElementById('main-watch-now-trigger');
 
+        // How to Watch Modal Elements
+        const howToWatchVideoModal = document.getElementById('how-to-watch-video-modal');
+        const howToWatchIframe = document.getElementById('how-to-watch-iframe');
+        let howToWatchVideoLink = ''; // To store the video link from Firebase
+
         let allMovies = [];
         let savedMovieIds = new Set(); // To store IDs of saved movies
-        let appBannerData = null; // To store fetched banner data
         let currentMovieData = null; // To hold the movie data for the currently open modal
 
         // Function to convert a movie title into a URL-friendly "slug"
@@ -1097,12 +1258,28 @@
             loadSavedMoviesFromLocalStorage();
             resetMetaTags(); // Ensure default SEO is set initially
             loadMovies();
+
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
         });
 
-        function logVisit() {
+        // UPDATED logVisit function to include country
+        async function logVisit() {
+            let country = 'Unknown Country';
+            try {
+                const response = await fetch('http://ip-api.com/json/');
+                const data = await response.json();
+                if (data.status === 'success' && data.country) {
+                    country = data.country;
+                }
+            } catch (error) {
+                console.error("Error fetching IP geolocation:", error);
+            }
+
             analyticsRef.push({
                 timestamp: Date.now(),
-                referrer: document.referrer
+                referrer: document.referrer,
+                country: country // Add country information
             }).catch(error => console.error("Analytics error:", error));
         }
 
@@ -1185,52 +1362,41 @@
                         rating: value.rating || (Math.random() * 2 + 7).toFixed(1) // Keep existing fallback
                     })).reverse();
 
+                    // Initial display: Exclude 'upcoming' movies
                     const initialMovies = allMovies.filter(movie => movie.category !== 'upcoming');
                     displayMovies(initialMovies);
                     populateCategories();
                     handleUrlPath();
                 }
 
-                if (settingsData && settingsData.appBanner) {
-                    appBannerData = settingsData.appBanner; // Store fetched banner data
-                    updateAppBanner(); // Update banner content
+                if (settingsData) {
+                    // Store howToWatchVideoLink
+                    howToWatchVideoLink = settingsData.howToWatchVideoLink || '';
+
+                    // Handle the app download icon link
+                    const appDownloadFileLink = settingsData.appDownloadFileLink; // Assuming a new field in Firebase
+                    console.log("appDownloadFileLink from Firebase:", appDownloadFileLink); // DEBUG: Check value from Firebase
+                    if (appDownloadFileLink) {
+                        headerAppButton.style.display = 'flex'; // Show button
+                        headerAppButton.onclick = () => {
+                            window.open(appDownloadFileLink, '_blank'); // Open link (for direct download)
+                        };
+                    } else {
+                        headerAppButton.style.display = 'none'; // Hide if no link
+                        console.log("appDownloadFileLink is empty or not set in Firebase. Hiding app button."); // DEBUG
+                    }
+                } else {
+                    headerAppButton.style.display = 'none'; // Hide if no site settings
+                    console.log("siteSettings is empty or not available. Hiding app button."); // DEBUG
                 }
 
                 loader.style.display = 'none';
-                // Show banner after movies load, if not dismissed and 'showBanner' is true
-                if (!localStorage.getItem('appBannerDismissed') && appBannerData && appBannerData.showBanner) {
-                    setTimeout(() => {
-                        appDownloadBanner.style.display = 'flex'; // Make it visible for animation
-                        // Force a reflow to ensure display:flex takes effect before transition
-                        void appDownloadBanner.offsetWidth;
-                        appDownloadBanner.classList.add('show');
-                    }, 5000); // 5 seconds delay
-                }
-
             })
             .catch(error => {
                 console.error("Failed to load data:", error);
                 loader.style.display = 'none';
                 showMessage('Failed to load content. Please try again later.', 'orange');
             });
-        }
-
-        // New function to update banner content from Firebase
-        function updateAppBanner() {
-            if (appBannerData) {
-                bannerTitleElement.textContent = appBannerData.title || 'CineStream App';
-                bannerDescElement.textContent = appBannerData.description || 'Get a better experience with our app.';
-                bannerDownloadBtn.textContent = appBannerData.buttonText || 'Download App';
-                bannerAppLogo.src = appBannerData.imageUrl || 'https://via.placeholder.com/60/111111/FFFFFF?text=App'; // Fallback dummy image
-                // Ensure download link is set for the button
-                bannerDownloadBtn.onclick = () => {
-                    if (appBannerData.appLink) {
-                        window.open(appBannerData.appLink, '_blank');
-                    }
-                    appDownloadBanner.classList.remove('show');
-                    localStorage.setItem('appBannerDismissed', 'true');
-                };
-            }
         }
 
         function handleUrlPath() {
@@ -1313,6 +1479,7 @@
                 const btn = document.createElement('button');
                 btn.className = 'filter-btn';
                 btn.textContent = category;
+                // 'All' ক্যাটাগরি ডিফল্টভাবে সক্রিয় থাকবে
                 if (category === 'All') {
                     btn.classList.add('active');
                 }
@@ -1327,12 +1494,14 @@
 
             let filteredMovies;
             if (category === 'All') {
+                // 'All' ক্যাটাগরিতে 'upcoming' মুভিগুলো বাদ দেওয়া হবে
                 filteredMovies = allMovies.filter(movie => movie.category !== 'upcoming');
             } else if (category === 'Saved') {
                 displaySavedMovies();
                 return; // Exit as displaySavedMovies will handle display
             }
             else {
+                // অন্য কোনো নির্দিষ্ট ক্যাটাগরির জন্য, শুধু সেই ক্যাটাগরির মুভিগুলো দেখানো হবে
                 filteredMovies = allMovies.filter(movie => movie.category === category);
             }
             displayMovies(filteredMovies);
@@ -1354,21 +1523,23 @@
                 searchInput.focus();
             } else {
                 searchInput.value = '';
-                // Search বন্ধ হলে "All" ক্যাটাগরি সক্রিয় করুন
+                // Search বন্ধ হলে "All" ক্যাটাগরি সক্রিয় করুন এবং 'upcoming' বাদ দিন
                 document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                 const allButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn => btn.textContent === 'All');
                 if (allButton) {
                     allButton.classList.add('active');
                 }
-                displayMovies(allMovies.filter(movie => movie.category !== 'upcoming'));
+                displayMovies(allMovies.filter(movie => movie.category !== 'upcoming')); // 'upcoming' বাদ দিয়ে 'All' দেখাবে
             }
         });
 
-        // সার্চ ইনপুটে ডিবাউন্স করা হয়েছে
+        // সার্চ ইনপুটে ডিবাউন্স করা হয়েছে (upcoming মুভি সার্চ রেজাল্ট থেকে বাদ যাবে না)
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 const searchTerm = e.target.value.toLowerCase();
+                // এখানে 'upcoming' মুভিগুলো সার্চ রেজাল্ট থেকে ফিল্টার করা হবে না।
+                // সমস্ত মুভি (allMovies) থেকে সার্চ করা হবে।
                 const filteredMovies = allMovies.filter(movie =>
                     movie.title.toLowerCase().includes(searchTerm)
                 );
@@ -1383,24 +1554,19 @@
             // সার্চ ইনপুট খালি হলে এবং ফোকাস চলে গেলে সার্চবার ছোট হবে
             if (searchInput.value.trim() === '') {
                 searchContainer.classList.remove('active');
-                // সার্চ বন্ধ হলে "All" ক্যাটাগরি সক্রিয় করুন
+                // সার্চ বন্ধ হলে "All" ক্যাটাগরি সক্রিয় করুন এবং 'upcoming' বাদ দিন
                 document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                 const allButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn => btn.textContent === 'All');
                 if (allButton) {
                     allButton.classList.add('active');
                 }
-                displayMovies(allMovies.filter(movie => movie.category !== 'upcoming'));
+                displayMovies(allMovies.filter(movie => movie.category !== 'upcoming')); // 'upcoming' বাদ দিয়ে 'All' দেখাবে
             }
         });
 
         // --- Side Menu Button Functionality ---
         mainMenuToggle.addEventListener('click', () => {
             sideMenuOverlay.classList.add('active');
-        });
-
-        closeBannerBtn.addEventListener('click', () => { // Event listener for the banner's close button
-            appDownloadBanner.classList.remove('show');
-            localStorage.setItem('appBannerDismissed', 'true'); // Remember dismissal
         });
 
         sideMenuOverlay.addEventListener('click', (e) => {
@@ -1426,14 +1592,44 @@
         menuHomeBtn.addEventListener('click', (e) => {
             e.preventDefault();
             sideMenuOverlay.classList.remove('active'); // Close menu
-            // Activate "All" filter button
+            // Activate "All" filter button এবং 'upcoming' মুভি বাদ দিন
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             const allButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn => btn.textContent === 'All');
             if (allButton) {
                 allButton.classList.add('active');
             }
-            displayMovies(allMovies.filter(movie => movie.category !== 'upcoming'));
+            displayMovies(allMovies.filter(movie => movie.category !== 'upcoming')); // 'upcoming' বাদ দিয়ে 'All' দেখাবে
         });
+
+        // "How to Watch Movies" option in the side menu - now opens custom modal
+        menuHowToWatchBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sideMenuOverlay.classList.remove('active'); // Close main menu
+            openHowToWatchModal();
+        });
+
+        function openHowToWatchModal() {
+            if (howToWatchVideoLink) {
+                howToWatchIframe.src = howToWatchVideoLink; // Set video source
+            } else {
+                howToWatchIframe.src = ''; // Clear iframe if no link, or set a default "video not available"
+                console.warn("How to Watch Video Link is not configured in Firebase siteSettings.");
+            }
+            howToWatchVideoModal.classList.add('active');
+        }
+
+        function closeHowToWatchModal() {
+            howToWatchVideoModal.classList.remove('active');
+            howToWatchIframe.src = ''; // Stop video playback by clearing src
+        }
+
+        // Close How to Watch modal when clicking outside the content
+        howToWatchVideoModal.addEventListener('click', (e) => {
+            if (e.target === howToWatchVideoModal) {
+                closeHowToWatchModal();
+            }
+        });
+
 
         // অ্যাড লোড করার জন্য নতুন ফাংশন (এই ফাংশনটি এখন শুধুমাত্র নিচের ব্যানার অ্যাড এর জন্য ব্যবহার হবে)
         function loadModalAd(containerId, adKey, adFormat, adHeight, adWidth) {
